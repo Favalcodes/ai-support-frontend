@@ -7,3 +7,5 @@ export { Badge } from './Badge';
 export { Card, CardHeader, CardBody, CardFooter } from './Card';
 export { Modal, ModalFooter } from './Modal';
 export { Spinner, LoadingOverlay } from './Spinner';
+export { RichTextEditor } from './RichTextEditor';
+export { MultiSelectDropdown } from './MultiSelectDropdown';

@@ -8,39 +8,23 @@ export const useMessages = (conversationId: string | null) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSending, setIsSending] = useState(false);
+  const messageStore = useMessageStore();
 
-  // At the top of the file, add:
+  // Load messages from API
+  const loadMessages = useCallback(async () => {
+    if (!conversationId) return;
 
-// Then in the hook, replace loadMessages with:
-const loadMessages = useCallback(async () => {
-  if (!conversationId) return;
-
-  try {
-    setIsLoading(true);
-    // Get from store instead of API for testing
-    const data = useMessageStore.getState().getMessages(conversationId);
-    setMessages(data);
-  } catch (error) {
-    console.error('Failed to load messages:', error);
-  } finally {
-    setIsLoading(false);
-  }
-}, [conversationId]);
-
-  // Load messages
-//   const loadMessages = useCallback(async () => {
-//     if (!conversationId) return;
-
-//     try {
-//       setIsLoading(true);
-//       const data = await messageService.getConversationMessages(conversationId);
-//       setMessages(data);
-//     } catch (error) {
-//       console.error('Failed to load messages:', error);
-//     } finally {
-//       setIsLoading(false);
-//     }
-//   }, [conversationId]);
+    try {
+      setIsLoading(true);
+      const data = await messageService.getConversationMessages(conversationId);
+      setMessages(data);
+      messageStore.setMessages(conversationId, data);
+    } catch (error) {
+      console.error('Failed to load messages:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [conversationId, messageStore]);
 
   // Send message
   const sendMessage = useCallback(
@@ -51,6 +35,7 @@ const loadMessages = useCallback(async () => {
         setIsSending(true);
         const message = await messageService.sendMessage(conversationId, content, userId);
         setMessages((prev) => [...prev, message]);
+        messageStore.addMessage(conversationId, message);
         return { success: true };
       } catch (error: any) {
         return {
@@ -61,13 +46,16 @@ const loadMessages = useCallback(async () => {
         setIsSending(false);
       }
     },
-    [conversationId]
+    [conversationId, messageStore]
   );
 
   // Add message to list (from socket)
   const addMessage = useCallback((message: Message) => {
     setMessages((prev) => [...prev, message]);
-  }, []);
+    if (message.conversation_id) {
+      messageStore.addMessage(message.conversation_id, message);
+    }
+  }, [messageStore]);
 
   // Setup socket listeners for real-time messages
   useEffect(() => {

@@ -17,7 +17,7 @@ export const ChatButton: React.FC<ChatButtonProps> = ({
       onClick={onClick}
       className={`
         relative w-16 h-16 rounded-full shadow-2xl
-        bg-gradient-to-br from-cyan-500 to-sky-400
+        bg-cyan-500
         hover:scale-110 active:scale-95
         transition-all duration-300 ease-out
         flex items-center justify-center

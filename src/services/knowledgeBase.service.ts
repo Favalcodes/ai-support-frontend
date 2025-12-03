@@ -16,12 +16,12 @@ class KnowledgeBaseService {
   }
 
   /**
-   * Get all FAQs for a company
+   * Get all FAQs for a company (uses auth token for company filtering)
    */
   async getFAQs(companyId: string, categoryId?: string): Promise<FAQ[]> {
     try {
-      const params = categoryId ? { category_id: categoryId } : {};
-      const response = await this.api.get(`/api/companies/${companyId}/faqs`, { params });
+      const params = categoryId ? { categoryId } : {};
+      const response = await this.api.get('/api/v1/knowledge/faqs', { params });
       return response.data.data || [];
     } catch (error) {
       console.error('Failed to load FAQs:', error);
@@ -30,12 +30,12 @@ class KnowledgeBaseService {
   }
 
   /**
-   * Get all knowledge articles for a company
+   * Get all knowledge articles for a company (uses auth token for company filtering)
    */
   async getArticles(companyId: string, categoryId?: string): Promise<Article[]> {
     try {
-      const params = categoryId ? { category_id: categoryId } : {};
-      const response = await this.api.get(`/api/companies/${companyId}/articles`, { params });
+      const params = categoryId ? { categoryId } : {};
+      const response = await this.api.get('/api/v1/knowledge', { params });
       return response.data.data || [];
     } catch (error) {
       console.error('Failed to load articles:', error);
@@ -48,7 +48,7 @@ class KnowledgeBaseService {
    */
   async getArticle(articleId: string): Promise<Article | null> {
     try {
-      const response = await this.api.get(`/api/articles/${articleId}`);
+      const response = await this.api.get(`/api/v1/knowledge/${articleId}`);
       return response.data.data;
     } catch (error) {
       console.error('Failed to load article:', error);
@@ -57,16 +57,23 @@ class KnowledgeBaseService {
   }
 
   /**
-   * Search FAQs and Articles
+   * Search FAQs and Articles (uses auth token for company filtering)
    */
   async search(companyId: string, query: string): Promise<{ faqs: FAQ[]; articles: Article[] }> {
     try {
-      const response = await this.api.get(`/api/companies/${companyId}/search`, {
-        params: { q: query },
+      // Search FAQs
+      const faqsResponse = await this.api.get('/api/v1/knowledge/faqs', {
+        params: { search: query },
       });
+
+      // Search Articles
+      const articlesResponse = await this.api.get('/api/v1/knowledge', {
+        params: { search: query },
+      });
+
       return {
-        faqs: response.data.data.faqs || [],
-        articles: response.data.data.articles || [],
+        faqs: faqsResponse.data.data || [],
+        articles: articlesResponse.data.data || [],
       };
     } catch (error) {
       console.error('Failed to search:', error);
@@ -75,11 +82,11 @@ class KnowledgeBaseService {
   }
 
   /**
-   * Get categories for a company
+   * Get categories for a company (uses auth token for company filtering)
    */
   async getCategories(companyId: string): Promise<Category[]> {
     try {
-      const response = await this.api.get(`/api/companies/${companyId}/categories`);
+      const response = await this.api.get('/api/v1/knowledge/categories');
       return response.data.data || [];
     } catch (error) {
       console.error('Failed to load categories:', error);
@@ -88,11 +95,13 @@ class KnowledgeBaseService {
   }
 
   /**
-   * Mark FAQ as helpful
+   * Mark FAQ as helpful (Note: Backend endpoint doesn't exist yet)
    */
   async markFAQHelpful(faqId: string): Promise<void> {
     try {
-      await this.api.post(`/api/faqs/${faqId}/helpful`);
+      // TODO: Backend endpoint needs to be created
+      console.warn('markFAQHelpful: Backend endpoint not implemented yet');
+      // await this.api.post(`/api/v1/knowledge/faqs/${faqId}/helpful`);
     } catch (error) {
       console.error('Failed to mark FAQ as helpful:', error);
     }

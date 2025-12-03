@@ -19,6 +19,7 @@ export const useChat = (companyId: string) => {
     setConversation,
     addMessage,
     setMessages,
+    updateMessages,
     setIsConnected,
     setIsAiTyping,
     setIsAgentTyping,
@@ -52,7 +53,30 @@ export const useChat = (companyId: string) => {
 
     // Listen for new messages
     socketService.onNewMessage(({ message }) => {
-      addMessage(message);
+      // If this is a user message echoed back, replace the optimistic temp message
+      if (message.role === 'USER' && message.user_id === user.id) {
+        updateMessages((prevMessages) => {
+          // Find and replace temp message with real one
+          const tempMsgIndex = prevMessages.findIndex(
+            (m) => m.id.startsWith('temp-') && m.content === message.content
+          );
+          if (tempMsgIndex !== -1) {
+            const newMessages = [...prevMessages];
+            newMessages[tempMsgIndex] = message;
+            return newMessages;
+          }
+          // If no temp message found, check if this exact message already exists
+          const existingMsg = prevMessages.find((m) => m.id === message.id);
+          if (existingMsg) {
+            return prevMessages; // Don't add duplicate
+          }
+          // Otherwise add it
+          return [...prevMessages, message];
+        });
+      } else {
+        // For AI/Agent/System messages, just add them (addMessage has duplicate check)
+        addMessage(message);
+      }
       setIsAiTyping(false);
       setIsAgentTyping(false);
     });

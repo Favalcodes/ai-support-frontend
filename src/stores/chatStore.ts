@@ -15,6 +15,7 @@ interface ChatState {
   messages: Message[];
   addMessage: (message: Message) => void;
   setMessages: (messages: Message[]) => void;
+  updateMessages: (updater: (messages: Message[]) => Message[]) => void;
   clearMessages: () => void;
 
   // Widget state
@@ -81,16 +82,29 @@ export const useChatStore = create<ChatState>((set) => ({
   setConversation: (conversation) => set({ conversation }),
 
   addMessage: (message) =>
-    set((state) => ({
-      messages: [...state.messages, message],
-      // Increment unread if widget is closed and message is not from user
-      unreadCount:
-        state.widgetState === ChatWidgetState.CLOSED && message.role !== 'USER'
-          ? state.unreadCount + 1
-          : state.unreadCount,
-    })),
+    set((state) => {
+      // Check if message already exists (prevent duplicates)
+      const messageExists = state.messages.some((m) => m.id === message.id);
+      if (messageExists) {
+        return state; // No changes if message already exists
+      }
+
+      return {
+        messages: [...state.messages, message],
+        // Increment unread if widget is closed and message is not from user
+        unreadCount:
+          state.widgetState === ChatWidgetState.CLOSED && message.role !== 'USER'
+            ? state.unreadCount + 1
+            : state.unreadCount,
+      };
+    }),
 
   setMessages: (messages) => set({ messages }),
+
+  updateMessages: (updater) =>
+    set((state) => ({
+      messages: updater(state.messages),
+    })),
 
   clearMessages: () => set({ messages: [] }),
 

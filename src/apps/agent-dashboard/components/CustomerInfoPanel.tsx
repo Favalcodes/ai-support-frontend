@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { Mail, Calendar, Building, Star } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Mail, Calendar, Building, Save, CheckCircle } from 'lucide-react';
 import { Conversation } from '../../../types/conversation.types';
 import { Avatar, Badge, Button, Textarea } from '../../../components/ui';
 import { formatDate } from '../../../utils/formatters';
+import { conversationService } from '../../../services/conversation.service';
 
 interface CustomerInfoPanelProps {
   conversation: Conversation;
@@ -13,15 +14,58 @@ export const CustomerInfoPanel: React.FC<CustomerInfoPanelProps> = ({
 }) => {
   const [notes, setNotes] = useState('');
   const [isSavingNotes, setIsSavingNotes] = useState(false);
+  const [isLoadingNotes, setIsLoadingNotes] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
+
+  // Load notes when conversation changes
+  useEffect(() => {
+    const loadNotes = async () => {
+      if (!conversation.id) return;
+      
+      try {
+        setIsLoadingNotes(true);
+        const existingNotes = await conversationService.getConversationNotes(conversation.id);
+        setNotes(existingNotes);
+      } catch (error) {
+        console.error('Failed to load notes:', error);
+      } finally {
+        setIsLoadingNotes(false);
+      }
+    };
+
+    loadNotes();
+  }, [conversation.id]);
 
   const handleSaveNotes = async () => {
-    setIsSavingNotes(true);
-    // TODO: Call API to save notes
-    setTimeout(() => {
+    if (!notes.trim() || !conversation.id) return;
+
+    try {
+      setIsSavingNotes(true);
+      await conversationService.saveConversationNotes(conversation.id, notes);
+      setSaveSuccess(true);
+      
+      // Hide success message after 2 seconds
+      setTimeout(() => {
+        setSaveSuccess(false);
+      }, 2000);
+    } catch (error) {
+      console.error('Failed to save notes:', error);
+      alert('Failed to save notes. Please try again.');
+    } finally {
       setIsSavingNotes(false);
-      setNotes('');
-    }, 1000);
+    }
   };
+
+  // Auto-save notes after 2 seconds of inactivity
+  useEffect(() => {
+    if (!notes.trim() || isLoadingNotes) return;
+
+    const timer = setTimeout(() => {
+      handleSaveNotes();
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, [notes]);
 
   const userName = `${conversation.user?.first_name} ${conversation.user?.last_name}`;
 
@@ -38,11 +82,11 @@ export const CustomerInfoPanel: React.FC<CustomerInfoPanelProps> = ({
         {/* Quick Stats */}
         <div className="grid grid-cols-2 gap-3 mb-6">
           <div className="bg-gradient-to-br from-blush-50 to-sky-50 rounded-lg p-3 text-center">
-            <p className="text-2xl font-bold text-gray-900">8</p>
+            <p className="text-2xl font-bold text-gray-900">-</p>
             <p className="text-xs text-gray-600">Total Chats</p>
           </div>
           <div className="bg-gradient-to-br from-blush-50 to-sky-50 rounded-lg p-3 text-center">
-            <p className="text-2xl font-bold text-gray-900">4.8</p>
+            <p className="text-2xl font-bold text-gray-900">-</p>
             <p className="text-xs text-gray-600">Avg Rating</p>
           </div>
         </div>
@@ -62,7 +106,9 @@ export const CustomerInfoPanel: React.FC<CustomerInfoPanelProps> = ({
               </div>
               <div className="flex items-center gap-3 text-sm">
                 <Building className="w-4 h-4 text-gray-400 flex-shrink-0" />
-                <span className="text-gray-600">Acme Corporation</span>
+                <span className="text-gray-600">
+                  {conversation.company?.name || 'N/A'}
+                </span>
               </div>
               <div className="flex items-center gap-3 text-sm">
                 <Calendar className="w-4 h-4 text-gray-400 flex-shrink-0" />
@@ -106,55 +152,42 @@ export const CustomerInfoPanel: React.FC<CustomerInfoPanelProps> = ({
             </div>
           </div>
 
-          {/* Recent History */}
-          <div>
-            <h4 className="text-xs font-semibold text-gray-500 uppercase mb-3">
-              Recent History
-            </h4>
-            <div className="space-y-2">
-              <div className="p-3 bg-gray-50 rounded-lg">
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-sm font-medium text-gray-900">
-                    Password Reset
-                  </span>
-                  <span className="text-xs text-gray-500">2 days ago</span>
-                </div>
-                <p className="text-xs text-gray-600">Resolved by Mike Chen</p>
-              </div>
-              <div className="p-3 bg-gray-50 rounded-lg">
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-sm font-medium text-gray-900">
-                    Feature Request
-                  </span>
-                  <span className="text-xs text-gray-500">1 week ago</span>
-                </div>
-                <p className="text-xs text-gray-600">Resolved by You</p>
-              </div>
-            </div>
-          </div>
-
           {/* Internal Notes */}
           <div>
-            <h4 className="text-xs font-semibold text-gray-500 uppercase mb-3">
-              Internal Notes
-            </h4>
+            <div className="flex items-center justify-between mb-3">
+              <h4 className="text-xs font-semibold text-gray-500 uppercase">
+                Internal Notes
+              </h4>
+              {saveSuccess && (
+                <div className="flex items-center gap-1 text-green-600">
+                  <CheckCircle className="w-3 h-3" />
+                  <span className="text-xs">Saved</span>
+                </div>
+              )}
+            </div>
             <Textarea
-              placeholder="Add private notes about this customer..."
+              placeholder="Add private notes about this customer... (auto-saves)"
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
+              disabled={isLoadingNotes}
               rows={4}
               className="resize-none text-sm"
             />
-            <Button
-              onClick={handleSaveNotes}
-              loading={isSavingNotes}
-              disabled={!notes.trim() || isSavingNotes}
-              variant="secondary"
-              size="sm"
-              className="w-full mt-2"
-            >
-              Save Note
-            </Button>
+            <div className="flex items-center justify-between mt-2">
+              <span className="text-xs text-gray-500">
+                {isSavingNotes ? 'Saving...' : 'Auto-save enabled'}
+              </span>
+              <Button
+                onClick={handleSaveNotes}
+                loading={isSavingNotes}
+                disabled={!notes.trim() || isSavingNotes || isLoadingNotes}
+                variant="secondary"
+                size="sm"
+              >
+                <Save className="w-3 h-3 mr-1" />
+                Save Now
+              </Button>
+            </div>
           </div>
 
           {/* Actions */}

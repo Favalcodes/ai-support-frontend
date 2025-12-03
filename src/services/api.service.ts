@@ -34,7 +34,7 @@ class ApiService {
    */
   async startConversation(data: StartConversationRequest): Promise<StartConversationResponse> {
     try {
-      const response = await this.api.post('/api/conversations/start', data);
+      const response = await this.api.post('/conversation', data);
       return response.data.data;
     } catch (error) {
       console.error('Failed to start conversation:', error);
@@ -47,7 +47,7 @@ class ApiService {
    */
   async getConversationHistory(conversationId: string): Promise<Message[]> {
     try {
-      const response = await this.api.get(`/api/conversations/${conversationId}/messages`);
+      const response = await this.api.get(`/conversation/${conversationId}/messages`);
       return response.data.data || [];
     } catch (error) {
       console.error('Failed to load conversation history:', error);
@@ -64,7 +64,7 @@ class ApiService {
     userId: string
   ): Promise<Message> {
     try {
-      const response = await this.api.post(`/api/conversations/${conversationId}/messages`, {
+      const response = await this.api.post(`/conversation/${conversationId}/messages`, {
         message,
         userId,
       });

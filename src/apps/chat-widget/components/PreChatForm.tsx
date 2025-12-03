@@ -174,7 +174,7 @@ export const PreChatForm: React.FC<PreChatFormProps> = ({
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full mt-6 px-4 py-3 bg-gradient-to-r from-cyan-500 to-sky-400 text-white rounded-lg font-medium hover:from-cyan-600 hover:to-sky-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center gap-2"
+          className="w-full mt-6 px-4 py-3 bg-cyan-500 text-white rounded-lg font-medium hover:bg-cyan-600 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center gap-2"
         >
           {isLoading ? (
             <>

@@ -16,7 +16,10 @@ export interface Conversation {
   active: boolean;
   needs_human_agent: boolean;
   created_at: string;
+  updated_at: string;
   last_activity: string;
+  last_message?: string;
+  department_name?: string;
   user?: User;
   assignedStaff?: User;
   category?: Category;

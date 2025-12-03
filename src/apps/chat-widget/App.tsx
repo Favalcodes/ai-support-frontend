@@ -101,7 +101,10 @@ export const ChatWidgetApp: React.FC = () => {
       </div>
 
       {/* Chat Widget */}
-      <ChatWidgetContainer position="bottom-right" />
+      <ChatWidgetContainer
+        companyId="d37e75b2-e62f-4c76-a339-e8b125d85706"
+        position="bottom-right"
+      />
     </div>
   );
 };

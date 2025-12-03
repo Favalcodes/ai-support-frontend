@@ -8,6 +8,9 @@ import {
   BookOpen,
   Settings,
   LogOut,
+  UserCog,
+  Boxes,
+  Briefcase,
 } from 'lucide-react';
 import { useAuth } from '../../../hooks';
 import { useConversationStore } from '../../../stores';
@@ -43,6 +46,21 @@ export const Sidebar: React.FC = () => {
       to: '/dashboard/knowledge',
       icon: BookOpen,
       label: 'Knowledge Base',
+    },
+    {
+      to: '/dashboard/staff',
+      icon: UserCog,
+      label: 'Staff Management',
+    },
+    {
+      to: '/dashboard/departments',
+      icon: Briefcase,
+      label: 'Departments',
+    },
+    {
+      to: '/dashboard/widget',
+      icon: Boxes,
+      label: 'Chat Widget',
     },
   ];
 

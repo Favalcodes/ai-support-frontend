@@ -172,7 +172,7 @@ export const ContactSection: React.FC = () => {
             </div>
 
             {/* Office Hours */}
-            <div className="bg-gradient-to-br from-cyan-500 to-sky-400 rounded-2xl shadow-lg p-8 text-white">
+            <div className="bg-cyan-500 rounded-2xl shadow-lg p-8 text-white">
               <h3 className="text-2xl font-bold mb-4">Office Hours</h3>
               <div className="space-y-2">
                 <div className="flex justify-between">

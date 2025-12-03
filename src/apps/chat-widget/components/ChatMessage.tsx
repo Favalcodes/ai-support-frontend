@@ -37,7 +37,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
     return (
       <div className="flex justify-end">
         <div className="max-w-[75%]">
-          <div className="bg-gradient-to-r from-cyan-500 to-sky-400 text-white rounded-lg rounded-tr-none p-3 shadow-sm">
+          <div className="bg-cyan-500 text-white rounded-lg rounded-tr-none p-3 shadow-sm">
             <p className="text-sm whitespace-pre-wrap">{message.content}</p>
           </div>
           <p className="text-xs text-gray-500 mt-1 text-right">
@@ -54,7 +54,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
       <Avatar
         name="AI"
         size="sm"
-        className="bg-gradient-to-br from-cyan-500 to-sky-400 flex-shrink-0"
+        className="bg-cyan-500 flex-shrink-0"
       />
       <div className="max-w-[75%]">
         <div className="bg-white rounded-lg rounded-tl-none p-3 shadow-sm border border-gray-200">

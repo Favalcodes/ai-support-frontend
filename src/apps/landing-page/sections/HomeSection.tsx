@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowRight, CheckCircle } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { Button } from '../../../components/ui';
 
 export const HeroSection: React.FC = () => {
@@ -29,7 +30,7 @@ export const HeroSection: React.FC = () => {
             {/* Heading */}
             <h1 className="text-5xl lg:text-7xl font-bold mb-6 leading-tight">
               Support that
-              <span className="block bg-gradient-to-r from-cyan-400 to-sky-300 bg-clip-text text-transparent">
+              <span className="block text-cyan-400">
                 never sleeps
               </span>
             </h1>
@@ -42,21 +43,25 @@ export const HeroSection: React.FC = () => {
 
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row gap-4 mb-8">
-              <Button
-                variant="primary"
-                size="lg"
-                rightIcon={<ArrowRight className="w-5 h-5" />}
-                className="shadow-glow-cyan"
-              >
-                Start Free Trial
-              </Button>
-              <Button
-                variant="ghost"
-                size="lg"
-                className="text-white border-white/30 hover:bg-white/10"
-              >
-                Watch Demo
-              </Button>
+              <Link to="/dashboard">
+                <Button
+                  variant="primary"
+                  size="lg"
+                  rightIcon={<ArrowRight className="w-5 h-5" />}
+                  className="shadow-glow-cyan"
+                >
+                  Start Free Trial
+                </Button>
+              </Link>
+              <Link to="/demo">
+                <Button
+                  variant="ghost"
+                  size="lg"
+                  className="text-white border-white/30 hover:bg-white/10"
+                >
+                  Watch Demo
+                </Button>
+              </Link>
             </div>
 
             {/* Features List */}
@@ -110,7 +115,7 @@ export const HeroSection: React.FC = () => {
             {/* Chat Window Mockup */}
             <div className="relative bg-white rounded-2xl shadow-2xl overflow-hidden border-4 border-cyan-500/20">
               {/* Chat Header */}
-              <div className="bg-gradient-to-r from-cyan-500 to-sky-400 p-4">
+              <div className="bg-cyan-500 p-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
                     <span className="text-white font-bold">AI</span>
@@ -126,7 +131,7 @@ export const HeroSection: React.FC = () => {
               <div className="p-4 space-y-3 bg-gray-50 h-80">
                 {/* AI Message */}
                 <div className="flex gap-2">
-                  <div className="w-8 h-8 bg-gradient-to-br from-cyan-500 to-sky-400 rounded-full flex items-center justify-center flex-shrink-0">
+                  <div className="w-8 h-8 bg-cyan-500 rounded-full flex items-center justify-center flex-shrink-0">
                     <span className="text-white text-xs font-bold">AI</span>
                   </div>
                   <div className="bg-white rounded-lg rounded-tl-none p-3 shadow-sm max-w-xs">
@@ -136,14 +141,14 @@ export const HeroSection: React.FC = () => {
 
                 {/* User Message */}
                 <div className="flex justify-end">
-                  <div className="bg-gradient-to-r from-cyan-500 to-sky-400 rounded-lg rounded-tr-none p-3 shadow-sm max-w-xs">
+                  <div className="bg-cyan-500 rounded-lg rounded-tr-none p-3 shadow-sm max-w-xs">
                     <p className="text-sm text-white">I need help with billing</p>
                   </div>
                 </div>
 
                 {/* AI Response */}
                 <div className="flex gap-2">
-                  <div className="w-8 h-8 bg-gradient-to-br from-cyan-500 to-sky-400 rounded-full flex items-center justify-center flex-shrink-0">
+                  <div className="w-8 h-8 bg-cyan-500 rounded-full flex items-center justify-center flex-shrink-0">
                     <span className="text-white text-xs font-bold">AI</span>
                   </div>
                   <div className="bg-white rounded-lg rounded-tl-none p-3 shadow-sm max-w-xs">
@@ -153,7 +158,7 @@ export const HeroSection: React.FC = () => {
 
                 {/* Typing Indicator */}
                 <div className="flex gap-2">
-                  <div className="w-8 h-8 bg-gradient-to-br from-cyan-500 to-sky-400 rounded-full flex items-center justify-center flex-shrink-0">
+                  <div className="w-8 h-8 bg-cyan-500 rounded-full flex items-center justify-center flex-shrink-0">
                     <span className="text-white text-xs font-bold">AI</span>
                   </div>
                   <div className="bg-white rounded-lg rounded-tl-none p-3 shadow-sm">

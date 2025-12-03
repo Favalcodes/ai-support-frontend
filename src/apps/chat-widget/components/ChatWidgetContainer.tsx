@@ -50,11 +50,12 @@
 // };
 
 
-import React from 'react';
+import React, { useState } from 'react';
 import { ChatButton } from './ChatButton';
-import { ChatWindow } from './ChatWindow';
+import { ChatWindowWithHistory } from './ChatWindowWithHistory';
 import { PreChatForm } from './PreChatForm';
 import { KnowledgeBaseView } from './KnowledgeBase';
+import { DepartmentSelection } from './DepartmentSelection';
 import { useChat } from '@/hooks/useChat';
 import { useChatStore } from '@/stores/chatStore';
 import { ChatWidgetState } from '@/types/widget-states';
@@ -73,8 +74,8 @@ export const ChatWidgetContainer: React.FC<ChatWidgetContainerProps> = ({
 }) => {
   const {
     conversation,
+    user,
     startConversation,
-    isInitializing,
   } = useChat(companyId);
 
   const {
@@ -84,15 +85,41 @@ export const ChatWidgetContainer: React.FC<ChatWidgetContainerProps> = ({
     resetUnreadCount,
   } = useChatStore();
 
-  // Handle opening widget - goes to FAQ/Articles first
+  // Track selected department
+  const [selectedDepartmentId, setSelectedDepartmentId] = useState<string | undefined>();
+
+  // Handle opening widget - goes to department selection first
   const handleOpenWidget = () => {
-    setWidgetState(ChatWidgetState.FAQ_ARTICLES);
+    setWidgetState(ChatWidgetState.DEPARTMENT_SELECT);
     resetUnreadCount();
   };
 
-  // Handle closing widget
+  // Handle department selection
+  const handleSelectDepartment = (departmentId: string) => {
+    setSelectedDepartmentId(departmentId);
+    setWidgetState(ChatWidgetState.PRE_CHAT_FORM);
+  };
+
+  // Handle closing widget (ends conversation)
   const handleCloseWidget = () => {
     setWidgetState(ChatWidgetState.CLOSED);
+  };
+
+  // Handle minimizing widget (preserves conversation)
+  const handleMinimizeWidget = () => {
+    setWidgetState(ChatWidgetState.MINIMIZED);
+  };
+
+  // Handle reopening minimized widget
+  const handleReopenWidget = () => {
+    // If there's an active conversation, reopen to chat active
+    if (conversation && user) {
+      setWidgetState(ChatWidgetState.CHAT_ACTIVE);
+    } else {
+      // Otherwise go to department selection
+      setWidgetState(ChatWidgetState.DEPARTMENT_SELECT);
+    }
+    resetUnreadCount();
   };
 
   // Handle "Chat with Support" button from FAQ/Articles view
@@ -109,7 +136,11 @@ export const ChatWidgetContainer: React.FC<ChatWidgetContainerProps> = ({
   }) => {
     try {
       setWidgetState(ChatWidgetState.LOADING);
-      await startConversation(userData);
+      // Include selected department as category_id
+      await startConversation({
+        ...userData,
+        category_id: selectedDepartmentId || userData.category_id,
+      });
       setWidgetState(ChatWidgetState.CHAT_ACTIVE);
     } catch (error) {
       console.error('Failed to start conversation:', error);
@@ -132,6 +163,24 @@ export const ChatWidgetContainer: React.FC<ChatWidgetContainerProps> = ({
         />
       )}
 
+      {/* State: MINIMIZED - Show button with indicator if conversation exists */}
+      {widgetState === ChatWidgetState.MINIMIZED && (
+        <ChatButton
+          isOpen={false}
+          onClick={handleReopenWidget}
+          unreadCount={unreadCount}
+        />
+      )}
+
+      {/* State: DEPARTMENT_SELECT - Show department selection */}
+      {widgetState === ChatWidgetState.DEPARTMENT_SELECT && (
+        <DepartmentSelection
+          companyId={companyId}
+          onSelectDepartment={handleSelectDepartment}
+          onClose={handleCloseWidget}
+        />
+      )}
+
       {/* State: FAQ_ARTICLES - Show knowledge base */}
       {widgetState === ChatWidgetState.FAQ_ARTICLES && (
         <KnowledgeBaseView
@@ -146,13 +195,13 @@ export const ChatWidgetContainer: React.FC<ChatWidgetContainerProps> = ({
         <div className="w-96 h-[600px] bg-white rounded-lg shadow-2xl overflow-hidden animate-slide-up">
           <div className="h-full flex flex-col">
             {/* Header */}
-            <div className="px-4 py-3 bg-gradient-to-r from-cyan-500 to-sky-400 text-white flex items-center justify-between">
+            <div className="px-4 py-3 bg-cyan-500 text-white flex items-center justify-between">
               <div>
                 <h3 className="font-semibold">Start a Conversation</h3>
                 <p className="text-xs opacity-90">We're here to help!</p>
               </div>
               <button
-                onClick={() => setWidgetState(ChatWidgetState.FAQ_ARTICLES)}
+                onClick={() => setWidgetState(ChatWidgetState.DEPARTMENT_SELECT)}
                 className="text-white hover:bg-white/20 rounded-full p-1 transition-colors"
               >
                 ← Back
@@ -180,12 +229,16 @@ export const ChatWidgetContainer: React.FC<ChatWidgetContainerProps> = ({
         </div>
       )}
 
-      {/* State: CHAT_ACTIVE - Show chat window */}
-      {widgetState === ChatWidgetState.CHAT_ACTIVE && conversation && (
+      {/* State: CHAT_ACTIVE - Show chat window with history */}
+      {widgetState === ChatWidgetState.CHAT_ACTIVE && conversation && user && (
         <div className="mb-4">
-          <ChatWindow
+          <ChatWindowWithHistory
             onClose={handleCloseWidget}
+            onMinimize={handleMinimizeWidget}
             companyId={companyId}
+            userId={user.id}
+            currentConversationId={conversation.id}
+            departmentId={selectedDepartmentId}
           />
         </div>
       )}

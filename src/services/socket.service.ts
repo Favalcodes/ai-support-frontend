@@ -15,7 +15,7 @@ class SocketService {
   private maxReconnectAttempts = 5;
 
   constructor() {
-    this.baseURL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+    this.baseURL = import.meta.env.VITE_SOCKET_URL || import.meta.env.VITE_API_URL?.replace('/api/v1', '') || 'http://localhost:4001';
   }
 
   /**

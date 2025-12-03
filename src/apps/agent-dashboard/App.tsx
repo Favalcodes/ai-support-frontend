@@ -1,74 +1,47 @@
 import { WebSocketProvider } from '@/components/shared/webSocketProvider';
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { LoginPage } from './pages/Login';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { ProtectedRoute } from '@/components/shared/protectedRoute';
 import { DashboardLayout } from './layouts/layout';
 import { ConversationsPage } from './pages/Conversations';
 import { QueuePage } from './pages/Queue';
-// import { ProtectedRoute } from '../../components/shared/ProtectedRoute';
-// import { WebSocketProvider } from '../../components/shared/WebSocketProvider';
-// import { DashboardLayout } from './layouts/DashboardLayout';
-// import { LoginPage } from './pages/LoginPage';
-// import { ConversationsPage } from './pages/ConversationsPage';
-// import { QueuePage } from './pages/QueuePage';
-
-// Placeholder pages
-const ResolvedPage = () => (
-  <div className="p-6">
-    <h1 className="text-2xl font-bold">Resolved Conversations</h1>
-  </div>
-);
-
-const AnalyticsPage = () => (
-  <div className="p-6">
-    <h1 className="text-2xl font-bold">Analytics</h1>
-  </div>
-);
-
-const KnowledgePage = () => (
-  <div className="p-6">
-    <h1 className="text-2xl font-bold">Knowledge Base</h1>
-  </div>
-);
-
-const SettingsPage = () => (
-  <div className="p-6">
-    <h1 className="text-2xl font-bold">Settings</h1>
-  </div>
-);
+import { ResolvedPage } from './pages/Resolved';
+import { AnalyticsPage } from './pages/Analytics';
+import { SettingsPage } from './pages/Settings';
+import { KnowledgePage } from './pages/Knowledge';
+import { KnowledgeArticleEditor } from './pages/KnowledgeArticleEditor';
+import { StaffPage } from './pages/Staff';
+import { WidgetSettingsPage } from './pages/WidgetSettings';
+import { DepartmentsPage } from './pages/Departments';
+import { UserRole } from '@/types/user.types';
 
 export const AgentDashboardApp: React.FC = () => {
   return (
-    <BrowserRouter>
-      <WebSocketProvider>
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/login" element={<LoginPage />} />
-
-          {/* Protected Dashboard Routes */}
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute requireRole="COMPANY_STAFF">
-                <DashboardLayout />
-              </ProtectedRoute>
-            }
-          >
-            <Route index element={<Navigate to="/dashboard/conversations" replace />} />
-            <Route path="conversations" element={<ConversationsPage />} />
-            <Route path="queue" element={<QueuePage />} />
-            <Route path="resolved" element={<ResolvedPage />} />
-            <Route path="analytics" element={<AnalyticsPage />} />
-            <Route path="knowledge" element={<KnowledgePage />} />
-            <Route path="settings" element={<SettingsPage />} />
-          </Route>
-
-          {/* Default redirect */}
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
-          <Route path="*" element={<Navigate to="/dashboard" replace />} />
-        </Routes>
-      </WebSocketProvider>
-    </BrowserRouter>
+    <WebSocketProvider>
+      <Routes>
+        {/* Protected Dashboard Routes - Accessible by COMPANY_STAFF and above */}
+        <Route
+          path="/*"
+          element={
+            <ProtectedRoute requireRole={UserRole.COMPANY_STAFF}>
+              <DashboardLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<Navigate to="conversations" replace />} />
+          <Route path="conversations" element={<ConversationsPage />} />
+          <Route path="queue" element={<QueuePage />} />
+          <Route path="resolved" element={<ResolvedPage />} />
+          <Route path="analytics" element={<AnalyticsPage />} />
+          <Route path="knowledge" element={<KnowledgePage />} />
+          <Route path="knowledge/article/new" element={<KnowledgeArticleEditor />} />
+          <Route path="knowledge/article/:id" element={<KnowledgeArticleEditor />} />
+          <Route path="staff" element={<StaffPage />} />
+          <Route path="departments" element={<DepartmentsPage />} />
+          <Route path="widget" element={<WidgetSettingsPage />} />
+          <Route path="settings" element={<SettingsPage />} />
+        </Route>
+      </Routes>
+    </WebSocketProvider>
   );
 };

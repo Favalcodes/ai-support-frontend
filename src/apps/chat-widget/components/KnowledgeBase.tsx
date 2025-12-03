@@ -24,6 +24,13 @@ export const KnowledgeBaseView: React.FC<KnowledgeBaseViewProps> = ({
   const [expandedFAQs, setExpandedFAQs] = useState<Set<string>>(new Set());
   const [isLoading, setIsLoading] = useState(true);
 
+  // Helper function to strip HTML tags from content
+  const stripHtml = (html: string): string => {
+    const tmp = document.createElement('div');
+    tmp.innerHTML = html;
+    return tmp.textContent || tmp.innerText || '';
+  };
+
   // Load initial data
   useEffect(() => {
     loadData();
@@ -104,10 +111,11 @@ export const KnowledgeBaseView: React.FC<KnowledgeBaseViewProps> = ({
     : faqs;
 
   const filteredArticles = searchQuery
-    ? articles.filter(article =>
-        article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        article.content.toLowerCase().includes(searchQuery.toLowerCase())
-      )
+    ? articles.filter(article => {
+        const plainTextContent = stripHtml(article.content);
+        return article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+               plainTextContent.toLowerCase().includes(searchQuery.toLowerCase());
+      })
     : articles;
 
   return (
@@ -227,9 +235,10 @@ export const KnowledgeBaseView: React.FC<KnowledgeBaseViewProps> = ({
                 {selectedArticle.category_name}
               </span>
             )}
-            <div className="prose prose-sm max-w-none text-gray-700">
-              {selectedArticle.content}
-            </div>
+            <div
+              className="prose prose-sm max-w-none text-gray-700"
+              dangerouslySetInnerHTML={{ __html: selectedArticle.content }}
+            />
           </div>
         ) : activeTab === 'faqs' ? (
           /* FAQs List */
@@ -293,11 +302,9 @@ export const KnowledgeBaseView: React.FC<KnowledgeBaseViewProps> = ({
                   <h4 className="font-medium text-gray-900 text-sm mb-1 group-hover:text-cyan-600 transition-colors">
                     {article.title}
                   </h4>
-                  {article.excerpt && (
-                    <p className="text-xs text-gray-600 line-clamp-2 mb-2">
-                      {article.excerpt}
-                    </p>
-                  )}
+                  <p className="text-xs text-gray-600 line-clamp-2 mb-2">
+                    {article.excerpt || stripHtml(article.content).substring(0, 150) + '...'}
+                  </p>
                   {article.category_name && (
                     <span className="inline-block px-2 py-0.5 bg-gray-100 text-gray-600 text-xs rounded">
                       {article.category_name}

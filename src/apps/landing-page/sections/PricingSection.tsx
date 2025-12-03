@@ -81,7 +81,7 @@ export const PricingSection: React.FC = () => {
               {/* Badge */}
               {plan.badge && (
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                  <span className="inline-flex items-center px-4 py-1 bg-gradient-to-r from-cyan-500 to-sky-400 text-white text-sm font-semibold rounded-full shadow-lg">
+                  <span className="inline-flex items-center px-4 py-1 bg-cyan-500 text-white text-sm font-semibold rounded-full shadow-lg">
                     <Zap className="w-4 h-4 mr-1" />
                     {plan.badge}
                   </span>

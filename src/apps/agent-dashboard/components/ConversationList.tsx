@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Search } from 'lucide-react';
-import { Conversation } from '../../../types/conversation.types';
+import { Search, Filter, X } from 'lucide-react';
+import { Conversation, ConversationStatus } from '../../../types/conversation.types';
 import { Avatar, Badge } from '../../../components/ui';
 import { formatRelativeTime } from '../../../utils/formatters';
 
@@ -11,6 +11,13 @@ interface ConversationListProps {
   isLoading?: boolean;
 }
 
+interface Filters {
+  status: ConversationStatus | 'ALL';
+  dateRange: 'all' | 'today' | 'week' | 'month';
+  assignedOnly: boolean;
+  escalatedOnly: boolean;
+}
+
 export const ConversationList: React.FC<ConversationListProps> = ({
   conversations,
   activeConversationId,
@@ -18,13 +25,78 @@ export const ConversationList: React.FC<ConversationListProps> = ({
   isLoading = false,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [showFilters, setShowFilters] = useState(false);
+  const [filters, setFilters] = useState<Filters>({
+    status: 'ALL',
+    dateRange: 'all',
+    assignedOnly: false,
+    escalatedOnly: false,
+  });
+
+  const isWithinDateRange = (date: string, range: string): boolean => {
+    const conversationDate = new Date(date);
+    const now = new Date();
+    const diffMs = now.getTime() - conversationDate.getTime();
+    const diffDays = diffMs / (1000 * 60 * 60 * 24);
+
+    switch (range) {
+      case 'today':
+        return diffDays < 1;
+      case 'week':
+        return diffDays < 7;
+      case 'month':
+        return diffDays < 30;
+      default:
+        return true;
+    }
+  };
 
   const filteredConversations = conversations.filter((conv) => {
+    // Search filter
     const searchLower = searchQuery.toLowerCase();
     const userName = `${conv.user?.first_name} ${conv.user?.last_name}`.toLowerCase();
     const userEmail = conv.user?.email?.toLowerCase() || '';
-    return userName.includes(searchLower) || userEmail.includes(searchLower);
+    const matchesSearch = userName.includes(searchLower) || userEmail.includes(searchLower);
+
+    if (!matchesSearch) return false;
+
+    // Status filter
+    if (filters.status !== 'ALL' && conv.status !== filters.status) {
+      return false;
+    }
+
+    // Date range filter
+    if (!isWithinDateRange(conv.last_activity, filters.dateRange)) {
+      return false;
+    }
+
+    // Assigned only filter
+    if (filters.assignedOnly && !conv.assigned_staff_id) {
+      return false;
+    }
+
+    // Escalated only filter
+    if (filters.escalatedOnly && !conv.needs_human_agent) {
+      return false;
+    }
+
+    return true;
   });
+
+  const resetFilters = () => {
+    setFilters({
+      status: 'ALL',
+      dateRange: 'all',
+      assignedOnly: false,
+      escalatedOnly: false,
+    });
+  };
+
+  const hasActiveFilters =
+    filters.status !== 'ALL' ||
+    filters.dateRange !== 'all' ||
+    filters.assignedOnly ||
+    filters.escalatedOnly;
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -70,10 +142,23 @@ export const ConversationList: React.FC<ConversationListProps> = ({
     <div className="flex flex-col h-full">
       {/* Header */}
       <div className="p-4 border-b border-gray-200">
-        <h2 className="text-lg font-semibold text-gray-900 mb-1">
-          My Conversations
-        </h2>
-        <p className="text-xs text-gray-500">{conversations.length} active</p>
+        <div className="flex items-center justify-between mb-1">
+          <h2 className="text-lg font-semibold text-gray-900">My Conversations</h2>
+          <button
+            onClick={() => setShowFilters(!showFilters)}
+            className={`p-2 rounded-lg transition-colors ${
+              showFilters || hasActiveFilters
+                ? 'bg-cyan-100 text-cyan-600'
+                : 'hover:bg-gray-100 text-gray-600'
+            }`}
+            title="Toggle filters"
+          >
+            <Filter className="w-4 h-4" />
+          </button>
+        </div>
+        <p className="text-xs text-gray-500">
+          {filteredConversations.length} of {conversations.length} conversations
+        </p>
       </div>
 
       {/* Search */}
@@ -82,13 +167,92 @@ export const ConversationList: React.FC<ConversationListProps> = ({
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <input
             type="text"
-            placeholder="Search conversations..."
+            placeholder="Search by name or email..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 text-sm"
           />
         </div>
       </div>
+
+      {/* Filters Panel */}
+      {showFilters && (
+        <div className="p-4 border-b border-gray-200 bg-gray-50">
+          <div className="space-y-3">
+            {/* Status Filter */}
+            <div>
+              <label className="block text-xs font-medium text-gray-700 mb-1">
+                Status
+              </label>
+              <select
+                value={filters.status}
+                onChange={(e) =>
+                  setFilters({ ...filters, status: e.target.value as ConversationStatus | 'ALL' })
+                }
+                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+              >
+                <option value="ALL">All Status</option>
+                <option value="OPEN">Open</option>
+                <option value="RESOLVED">Resolved</option>
+                <option value="CLOSED">Closed</option>
+              </select>
+            </div>
+
+            {/* Date Range Filter */}
+            <div>
+              <label className="block text-xs font-medium text-gray-700 mb-1">
+                Date Range
+              </label>
+              <select
+                value={filters.dateRange}
+                onChange={(e) =>
+                  setFilters({ ...filters, dateRange: e.target.value as Filters['dateRange'] })
+                }
+                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+              >
+                <option value="all">All Time</option>
+                <option value="today">Today</option>
+                <option value="week">Last 7 Days</option>
+                <option value="month">Last 30 Days</option>
+              </select>
+            </div>
+
+            {/* Checkbox Filters */}
+            <div className="space-y-2">
+              <label className="flex items-center text-sm text-gray-700">
+                <input
+                  type="checkbox"
+                  checked={filters.assignedOnly}
+                  onChange={(e) => setFilters({ ...filters, assignedOnly: e.target.checked })}
+                  className="w-4 h-4 text-cyan-600 border-gray-300 rounded focus:ring-cyan-500"
+                />
+                <span className="ml-2">Assigned to me only</span>
+              </label>
+
+              <label className="flex items-center text-sm text-gray-700">
+                <input
+                  type="checkbox"
+                  checked={filters.escalatedOnly}
+                  onChange={(e) => setFilters({ ...filters, escalatedOnly: e.target.checked })}
+                  className="w-4 h-4 text-cyan-600 border-gray-300 rounded focus:ring-cyan-500"
+                />
+                <span className="ml-2">Escalated only</span>
+              </label>
+            </div>
+
+            {/* Reset Button */}
+            {hasActiveFilters && (
+              <button
+                onClick={resetFilters}
+                className="w-full px-3 py-2 text-sm text-cyan-600 hover:text-cyan-700 hover:bg-cyan-50 rounded-lg transition-colors flex items-center justify-center gap-2"
+              >
+                <X className="w-4 h-4" />
+                Reset Filters
+              </button>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Conversation List */}
       <div className="flex-1 overflow-y-auto">
