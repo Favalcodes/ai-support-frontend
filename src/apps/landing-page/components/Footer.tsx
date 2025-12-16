@@ -1,4 +1,5 @@
 import React from 'react';
+import Logo from '../../../assets/logo.png'
 
 export const Footer: React.FC = () => {
   const footerLinks = {
@@ -22,16 +23,17 @@ export const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="bg-navy-900 text-white py-12 px-6 lg:px-8">
+    <footer className="bg-dark-900 text-white py-12 px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="grid md:grid-cols-4 gap-8 mb-8">
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 bg-cyan-500 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">AI</span>
+              <div className="w-8 h-8 bg-transparent rounded-lg flex items-center justify-center">
+                {/* <span className="text-white font-bold text-sm">AI</span> */}
+                <img src={Logo} alt="logo" className='w-full h-full object-cover' />
               </div>
-              <span className="text-lg font-bold">SupportHub</span>
+              <span className="text-lg font-bold">getLync</span>
             </div>
             <p className="text-gray-400 text-sm">
               AI-powered customer support platform for modern businesses
@@ -83,7 +85,7 @@ export const Footer: React.FC = () => {
 
         {/* Bottom Bar */}
         <div className="border-t border-gray-800 pt-8 text-center text-sm text-gray-400">
-          <p>&copy; 2025 SupportHub. All rights reserved.</p>
+          <p>&copy; 2025 getLync. All rights reserved.</p>
         </div>
       </div>
     </footer>

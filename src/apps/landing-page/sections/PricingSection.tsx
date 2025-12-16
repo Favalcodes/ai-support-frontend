@@ -6,7 +6,7 @@ export const PricingSection: React.FC = () => {
   const plans = [
     {
       name: 'Starter',
-      price: 49,
+      price: 19,
       description: 'Perfect for small teams getting started',
       features: [
         '1,000 conversations/month',
@@ -20,7 +20,7 @@ export const PricingSection: React.FC = () => {
     },
     {
       name: 'Professional',
-      price: 149,
+      price: 49,
       description: 'For growing businesses with more needs',
       features: [
         '10,000 conversations/month',
@@ -74,14 +74,14 @@ export const PricingSection: React.FC = () => {
               key={index}
               className={`relative rounded-2xl border-2 p-8 ${
                 plan.highlighted
-                  ? 'border-cyan-500 shadow-xl scale-105'
+                  ? 'border-primary-500 shadow-xl scale-105'
                   : 'border-gray-200 hover:border-gray-300'
               } transition-all duration-300`}
             >
               {/* Badge */}
               {plan.badge && (
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                  <span className="inline-flex items-center px-4 py-1 bg-cyan-500 text-white text-sm font-semibold rounded-full shadow-lg">
+                  <span className="inline-flex items-center px-4 py-1 bg-primary-500 text-white text-sm font-semibold rounded-full shadow-lg">
                     <Zap className="w-4 h-4 mr-1" />
                     {plan.badge}
                   </span>
@@ -128,7 +128,7 @@ export const PricingSection: React.FC = () => {
                 </p>
                 {plan.features.map((feature, idx) => (
                   <div key={idx} className="flex items-start gap-3">
-                    <Check className="w-5 h-5 text-cyan-600 flex-shrink-0 mt-0.5" />
+                    <Check className="w-5 h-5 text-primary-600 flex-shrink-0 mt-0.5" />
                     <span className="text-gray-600 text-sm">{feature}</span>
                   </div>
                 ))}
@@ -141,7 +141,7 @@ export const PricingSection: React.FC = () => {
         <div className="text-center mt-12">
           <p className="text-gray-600">
             Have questions?{' '}
-            <a href="#contact" className="text-cyan-600 hover:text-cyan-700 font-medium">
+            <a href="#contact" className="text-primary-600 hover:text-primary-700 font-medium">
               Contact our sales team
             </a>
           </p>

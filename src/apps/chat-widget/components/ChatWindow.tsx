@@ -71,7 +71,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ onClose, onMinimize, com
   return (
     <div className="w-96 h-[600px] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-slide-up">
       {/* Header */}
-      <div className="bg-gradient-to-r from-cyan-500 to-sky-400 p-4 flex items-center justify-between">
+      <div className="bg-gradient-to-r from-primary-500 to-secondary-400 p-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
             <span className="text-white font-bold">AI</span>
@@ -106,8 +106,8 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ onClose, onMinimize, com
       </div>
 
       {/* Welcome Banner */}
-      <div className="bg-cyan-50 border-b border-cyan-100 p-3">
-        <p className="text-sm text-cyan-900">
+      <div className="bg-primary-50 border-b border-primary-100 p-3">
+        <p className="text-sm text-primary-900">
           <span className="font-semibold">👋 Hi there!</span> We typically reply in a few minutes.
         </p>
       </div>
@@ -121,7 +121,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ onClose, onMinimize, com
         {/* Typing Indicator */}
         {isTyping && (
           <div className="flex items-start gap-2">
-            <Avatar name="AI" size="sm" className="bg-gradient-to-br from-cyan-500 to-sky-400" />
+            <Avatar name="AI" size="sm" className="bg-gradient-to-br from-primary-500 to-secondary-400" />
             <div className="bg-white rounded-lg rounded-tl-none p-3 shadow-sm">
               <div className="flex gap-1">
                 <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
@@ -138,7 +138,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ onClose, onMinimize, com
       {/* Powered By */}
       <div className="px-4 py-2 bg-gray-50 border-t border-gray-200">
         <p className="text-center text-xs text-gray-500">
-          Powered by <span className="font-semibold text-cyan-600">SupportHub AI</span>
+          Powered by <span className="font-semibold text-primary-600">getLync AI</span>
         </p>
       </div>
 
@@ -146,7 +146,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ onClose, onMinimize, com
       <div className="border-t border-gray-200 bg-white p-4">
         <div className="flex items-end gap-2">
           <button
-            className="p-2 text-gray-400 hover:text-cyan-600 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-2 text-gray-400 hover:text-primary-600 hover:bg-gray-100 rounded-lg transition-colors"
             aria-label="Attach file"
           >
             <Paperclip className="w-5 h-5" />
@@ -166,7 +166,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ onClose, onMinimize, com
           <button
             onClick={handleSend}
             disabled={!inputValue.trim()}
-            className="p-2 bg-gradient-to-r from-cyan-500 to-sky-400 text-white rounded-lg hover:from-cyan-600 hover:to-sky-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+            className="p-2 bg-gradient-to-r from-primary-500 to-secondary-400 text-white rounded-lg hover:from-primary-600 hover:to-secondary-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             aria-label="Send message"
           >
             <Send className="w-5 h-5" />

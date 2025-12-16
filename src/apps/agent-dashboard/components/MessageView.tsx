@@ -61,9 +61,9 @@ export const MessageView: React.FC<MessageViewProps> = ({
         ) : messages.length === 0 ? (
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
-              <div className="w-16 h-16 bg-cyan-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg
-                  className="w-8 h-8 text-cyan-600"
+                  className="w-8 h-8 text-primary-600"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -130,7 +130,7 @@ export const MessageView: React.FC<MessageViewProps> = ({
         <div className="flex items-end gap-3">
           {/* Attachment Button */}
           <button
-            className="p-2 text-gray-400 hover:text-cyan-600 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-2 text-gray-400 hover:text-primary-600 hover:bg-gray-100 rounded-lg transition-colors"
             title="Attach file"
           >
             <Paperclip className="w-5 h-5" />

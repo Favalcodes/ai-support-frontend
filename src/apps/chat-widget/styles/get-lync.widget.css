@@ -1,0 +1,21 @@
+/* src/styles/get-lync-widget.css */
+
+.get-lync-root * { box-sizing: border-box; }
+.get-lync-root { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+
+/* position container added by loader; widget container uses this root class */
+.get-lync-widget {
+  width: 400px;
+  height: 650px;
+  max-height: 90vh;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* keep the rest of your component classes unchanged; just prefixed helpers if needed */
+.get-lync-header { /* optional styles */ }
+.get-lync-messages { overflow-y: auto; flex: 1; padding: 12px; background: #f8fafc; }

@@ -80,7 +80,7 @@ export const ConnectedChatWindow: React.FC<ConnectedChatWindowProps> = ({
         {/* Typing Indicators */}
         {isAiTyping && (
           <div className="flex gap-2">
-            <div className="w-8 h-8 bg-cyan-500 rounded-full flex items-center justify-center flex-shrink-0">
+            <div className="w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center flex-shrink-0">
               <span className="text-white text-xs font-bold">AI</span>
             </div>
             <div className="bg-white rounded-lg rounded-tl-none p-3 shadow-sm">
@@ -111,13 +111,13 @@ export const ConnectedChatWindow: React.FC<ConnectedChatWindowProps> = ({
             onKeyDown={handleKeyDown}
             placeholder="Type your message..."
             rows={1}
-            className="flex-1 resize-none border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-500 text-sm"
+            className="flex-1 resize-none border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
             disabled={isSendingMessage || !isConnected}
           />
           <button
             onClick={handleSend}
             disabled={!inputValue.trim() || isSendingMessage || !isConnected}
-            className="px-4 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+            className="px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
           >
             <Send className="w-5 h-5" />
           </button>

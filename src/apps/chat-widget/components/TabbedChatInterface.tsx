@@ -32,7 +32,7 @@ export const TabbedChatInterface: React.FC<TabbedChatInterfaceProps> = ({ childr
               onClick={() => setActiveTab(tab.id)}
               className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium transition-colors ${
                 activeTab === tab.id
-                  ? 'text-cyan-600 border-b-2 border-cyan-600 bg-cyan-50'
+                  ? 'text-primary-600 border-b-2 border-primary-600 bg-primary-50'
                   : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
               }`}
             >

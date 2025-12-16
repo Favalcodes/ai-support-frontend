@@ -89,7 +89,7 @@ export const FAQTab: React.FC<FAQTabProps> = ({ companyId, departmentId, onStart
       <div className="flex-1 overflow-y-auto p-4 min-h-0">
         {isLoading ? (
           <div className="flex flex-col items-center justify-center h-full">
-            <Loader2 className="w-8 h-8 text-cyan-500 animate-spin mb-3" />
+            <Loader2 className="w-8 h-8 text-primary-500 animate-spin mb-3" />
             <p className="text-sm text-gray-600">Loading FAQs...</p>
           </div>
         ) : faqs.length === 0 ? (
@@ -102,7 +102,7 @@ export const FAQTab: React.FC<FAQTabProps> = ({ companyId, departmentId, onStart
             {onStartChat && (
               <button
                 onClick={onStartChat}
-                className="mt-4 px-4 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 transition-colors"
+                className="mt-4 px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors"
               >
                 Chat with Support
               </button>
@@ -121,7 +121,7 @@ export const FAQTab: React.FC<FAQTabProps> = ({ companyId, departmentId, onStart
                 >
                   <div className="flex-1 pr-4">
                     {faq.category && (
-                      <span className="inline-block px-2 py-0.5 text-xs font-medium text-cyan-700 bg-cyan-100 rounded mb-1">
+                      <span className="inline-block px-2 py-0.5 text-xs font-medium text-primary-700 bg-primary-100 rounded mb-1">
                         {faq.category}
                       </span>
                     )}
@@ -148,11 +148,11 @@ export const FAQTab: React.FC<FAQTabProps> = ({ companyId, departmentId, onStart
       {/* Footer - Still need help? */}
       {!isLoading && faqs.length > 0 && onStartChat && (
         <div className="p-4 bg-white border-t border-gray-200 flex-shrink-0">
-          <div className="bg-cyan-50 rounded-lg p-3 text-center">
+          <div className="bg-primary-50 rounded-lg p-3 text-center">
             <p className="text-sm text-gray-700 mb-2">Still need help?</p>
             <button
               onClick={onStartChat}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 transition-colors text-sm font-medium"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors text-sm font-medium"
             >
               <MessageSquare className="w-4 h-4" />
               Chat with Support

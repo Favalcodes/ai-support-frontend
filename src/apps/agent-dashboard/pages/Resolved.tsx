@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { CheckCircle, Calendar, User, MessageSquare, Search, Filter } from 'lucide-react';
 import { useAuth, useConversation } from '../../../hooks';
+import { usePermissions } from '../../../hooks/usePermissions';
+import { Permission } from '../../../types/permission.types';
 import { Conversation } from '../../../types/conversation.types';
 import { formatDate } from '../../../utils/formatters';
 import { Badge, Button, Input, Spinner } from '../../../components/ui';
 
 export const ResolvedPage: React.FC = () => {
   const { user } = useAuth();
-  const { loadAgentConversations } = useConversation();
+  const { permissions } = usePermissions();
+  const { loadAgentConversations, loadCompanyConversations } = useConversation();
   const [resolvedConversations, setResolvedConversations] = useState<Conversation[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -19,7 +22,19 @@ export const ResolvedPage: React.FC = () => {
 
       try {
         setIsLoading(true);
-        const conversations = await loadAgentConversations(user.id, 'RESOLVED');
+
+        // Admins with VIEW_ALL_CONVERSATIONS permission see all company resolved conversations
+        // Regular staff see only their resolved conversations
+        const hasViewAllPermission = permissions.includes(Permission.VIEW_ALL_CONVERSATIONS);
+
+        let conversations;
+        if (hasViewAllPermission) {
+          const result = await loadCompanyConversations({ status: 'CLOSED' });
+          conversations = result.data;
+        } else {
+          conversations = await loadAgentConversations(user.id, 'CLOSED');
+        }
+
         setResolvedConversations(conversations || []);
       } catch (error) {
         console.error('Failed to load resolved conversations:', error);
@@ -29,7 +44,7 @@ export const ResolvedPage: React.FC = () => {
     };
 
     loadResolvedConversations();
-  }, [user, loadAgentConversations]);
+  }, [user?.id, permissions, loadAgentConversations, loadCompanyConversations]);
 
   // Filter conversations based on search and period
   const filteredConversations = resolvedConversations.filter((conv) => {
@@ -182,7 +197,7 @@ export const ResolvedPage: React.FC = () => {
                   <div className="flex items-center gap-2 text-sm">
                     <CheckCircle className="w-4 h-4 text-gray-400" />
                     <span className="text-gray-600">
-                      Resolved {formatDate(conversation.updated_at, 'MMM dd, yyyy')}
+                      Resolved {formatDate(conversation?.last_activity, 'MMM dd, yyyy')}
                     </span>
                   </div>
                   <div className="flex items-center gap-2 text-sm">

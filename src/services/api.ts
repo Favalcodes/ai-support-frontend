@@ -24,6 +24,9 @@ api.interceptors.request.use(
   }
 );
 
+// Track if we're already handling a logout to prevent multiple redirects
+let isLoggingOut = false;
+
 // Response interceptor - Handle errors globally
 api.interceptors.response.use(
   (response) => response,
@@ -32,10 +35,29 @@ api.interceptors.response.use(
       // Handle specific error codes
       switch (error.response.status) {
         case 401:
-          // Unauthorized - clear auth and redirect to login
-          localStorage.removeItem('auth_token');
-          localStorage.removeItem('user');
-          window.location.href = '/login';
+          // Unauthorized - Token expired or invalid
+          if (!isLoggingOut) {
+            isLoggingOut = true;
+
+            // Clear all auth data
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('user');
+            localStorage.removeItem('permissions');
+
+            // Show a message to the user
+            const errorMessage = (error.response.data as any)?.message || 'Your session has expired. Please login again.';
+
+            // Store the error message to show on login page
+            // sessionStorage.setItem('auth_error', errorMessage);
+
+            // Redirect to login page
+            window.location.href = '/login';
+
+            // Reset flag after a short delay
+            setTimeout(() => {
+              isLoggingOut = false;
+            }, 1000);
+          }
           break;
         case 403:
           console.error('Forbidden - insufficient permissions');

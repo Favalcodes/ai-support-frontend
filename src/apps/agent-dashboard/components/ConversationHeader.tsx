@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { MoreVertical, UserCheck, X } from 'lucide-react';
+import { MoreVertical, UserCheck, X, Star } from 'lucide-react';
 import { Conversation } from '../../../types/conversation.types';
 import { Avatar, Button, Badge } from '../../../components/ui';
 import { useConversation } from '../../../hooks';
+import { RatingModal } from './RatingModal';
 
 interface ConversationHeaderProps {
   conversation: Conversation;
@@ -14,6 +15,7 @@ export const ConversationHeader: React.FC<ConversationHeaderProps> = ({
   const { resolveConversation } = useConversation();
   const [showMenu, setShowMenu] = useState(false);
   const [isResolving, setIsResolving] = useState(false);
+  const [showRatingModal, setShowRatingModal] = useState(false);
 
   const userName = `${conversation.user?.first_name} ${conversation.user?.last_name}`;
 
@@ -52,11 +54,21 @@ export const ConversationHeader: React.FC<ConversationHeaderProps> = ({
 
       {/* Right Side - Actions */}
       <div className="flex items-center gap-2">
+        {/* Rating Display for Closed Conversations */}
+        {conversation.status === 'CLOSED' && conversation.rating && (
+          <div className="flex items-center gap-1 px-3 py-1 bg-yellow-50 border border-yellow-200 rounded-lg">
+            <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+            <span className="text-sm font-medium text-yellow-700">
+              {conversation.rating}/5
+            </span>
+          </div>
+        )}
+
         {/* Status Badge */}
         {conversation.needs_human_agent && (
           <Badge variant="warning">Escalated</Badge>
         )}
-        
+
         {conversation.status === 'OPEN' && (
           <>
             {/* Transfer Button */}
@@ -77,6 +89,18 @@ export const ConversationHeader: React.FC<ConversationHeaderProps> = ({
               Resolve
             </Button>
           </>
+        )}
+
+        {/* Rate Button for Closed Conversations without Rating */}
+        {conversation.status === 'CLOSED' && !conversation.rating && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setShowRatingModal(true)}
+          >
+            <Star className="w-4 h-4 mr-2" />
+            Rate
+          </Button>
         )}
 
         {/* More Menu */}
@@ -104,6 +128,17 @@ export const ConversationHeader: React.FC<ConversationHeaderProps> = ({
           )}
         </div>
       </div>
+
+      {/* Rating Modal */}
+      <RatingModal
+        conversationId={conversation.id}
+        isOpen={showRatingModal}
+        onClose={() => setShowRatingModal(false)}
+        onSuccess={() => {
+          // Optionally refresh the conversation data
+          window.location.reload();
+        }}
+      />
     </div>
   );
 };

@@ -21,11 +21,11 @@ export const WidgetInstallWizard: React.FC<WidgetInstallWizardProps> = ({ onClos
   const [currentStep, setCurrentStep] = useState(1);
   const [config, setConfig] = useState<Partial<WidgetConfig>>({
     position: 'bottom-right',
-    primary_color: '#0891b2',
+    primary_color: '#713600',
     title: 'Support Chat',
     welcome_message: 'Hi! How can we help you today?',
     placeholder_text: 'Type your message...',
-    auto_open: false,
+    auto_open: true,
     auto_open_delay: 0,
     is_active: true,
   });
@@ -83,7 +83,7 @@ export const WidgetInstallWizard: React.FC<WidgetInstallWizardProps> = ({ onClos
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
         {/* Header */}
-        <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-cyan-50 to-blue-50">
+        <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-primary-50 to-blue-50">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-2xl font-bold text-gray-900">Widget Installation Wizard</h2>
@@ -109,7 +109,7 @@ export const WidgetInstallWizard: React.FC<WidgetInstallWizardProps> = ({ onClos
                       step < currentStep
                         ? 'bg-green-500 text-white'
                         : step === currentStep
-                        ? 'bg-cyan-600 text-white'
+                        ? 'bg-primary-600 text-white'
                         : 'bg-gray-200 text-gray-600'
                     }`}
                   >
@@ -146,8 +146,8 @@ export const WidgetInstallWizard: React.FC<WidgetInstallWizardProps> = ({ onClos
           {currentStep === 1 && (
             <div className="space-y-6">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 bg-cyan-100 rounded-full flex items-center justify-center">
-                  <Palette className="w-6 h-6 text-cyan-600" />
+                <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center">
+                  <Palette className="w-6 h-6 text-primary-600" />
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900">Widget Appearance</h3>
@@ -172,7 +172,7 @@ export const WidgetInstallWizard: React.FC<WidgetInstallWizardProps> = ({ onClos
                         onClick={() => updateConfig({ position: option.value as any })}
                         className={`p-4 border-2 rounded-lg text-left transition-all ${
                           config.position === option.value
-                            ? 'border-cyan-600 bg-cyan-50'
+                            ? 'border-primary-600 bg-primary-50'
                             : 'border-gray-200 hover:border-gray-300'
                         }`}
                       >
@@ -197,8 +197,8 @@ export const WidgetInstallWizard: React.FC<WidgetInstallWizardProps> = ({ onClos
                       type="text"
                       value={config.primary_color}
                       onChange={(e) => updateConfig({ primary_color: e.target.value })}
-                      className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
-                      placeholder="#0891b2"
+                      className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      placeholder="#713600"
                     />
                   </div>
                   <p className="text-sm text-gray-500 mt-2">
@@ -214,7 +214,7 @@ export const WidgetInstallWizard: React.FC<WidgetInstallWizardProps> = ({ onClos
                     type="text"
                     value={config.title}
                     onChange={(e) => updateConfig({ title: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                     placeholder="Support Chat"
                   />
                 </div>
@@ -226,8 +226,8 @@ export const WidgetInstallWizard: React.FC<WidgetInstallWizardProps> = ({ onClos
           {currentStep === 2 && (
             <div className="space-y-6">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 bg-cyan-100 rounded-full flex items-center justify-center">
-                  <MessageSquare className="w-6 h-6 text-cyan-600" />
+                <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center">
+                  <MessageSquare className="w-6 h-6 text-primary-600" />
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900">Welcome Messages</h3>
@@ -244,7 +244,7 @@ export const WidgetInstallWizard: React.FC<WidgetInstallWizardProps> = ({ onClos
                     value={config.welcome_message}
                     onChange={(e) => updateConfig({ welcome_message: e.target.value })}
                     rows={3}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent resize-none"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
                     placeholder="Hi! How can we help you today?"
                   />
                   <p className="text-sm text-gray-500 mt-2">
@@ -260,7 +260,7 @@ export const WidgetInstallWizard: React.FC<WidgetInstallWizardProps> = ({ onClos
                     type="text"
                     value={config.placeholder_text}
                     onChange={(e) => updateConfig({ placeholder_text: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                     placeholder="Type your message..."
                   />
                   <p className="text-sm text-gray-500 mt-2">
@@ -275,8 +275,8 @@ export const WidgetInstallWizard: React.FC<WidgetInstallWizardProps> = ({ onClos
           {currentStep === 3 && (
             <div className="space-y-6">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 bg-cyan-100 rounded-full flex items-center justify-center">
-                  <Globe className="w-6 h-6 text-cyan-600" />
+                <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center">
+                  <Globe className="w-6 h-6 text-primary-600" />
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900">Widget Behavior</h3>
@@ -299,7 +299,7 @@ export const WidgetInstallWizard: React.FC<WidgetInstallWizardProps> = ({ onClos
                       onChange={(e) => updateConfig({ auto_open: e.target.checked })}
                       className="sr-only peer"
                     />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-cyan-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-cyan-600"></div>
+                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
                   </label>
                 </div>
 
@@ -316,7 +316,7 @@ export const WidgetInstallWizard: React.FC<WidgetInstallWizardProps> = ({ onClos
                       onChange={(e) =>
                         updateConfig({ auto_open_delay: parseInt(e.target.value) || 0 })
                       }
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                     />
                     <p className="text-sm text-gray-500 mt-2">
                       Delay before auto-opening (0 for immediate)
@@ -376,20 +376,20 @@ export const WidgetInstallWizard: React.FC<WidgetInstallWizardProps> = ({ onClos
                   </div>
                 </div>
 
-                <div className="bg-gradient-to-br from-cyan-50 to-blue-50 border-2 border-cyan-200 rounded-lg p-6">
+                <div className="bg-gradient-to-br from-primary-50 to-blue-50 border-2 border-primary-200 rounded-lg p-6">
                   <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                    <Code className="w-5 h-5 text-cyan-600" />
+                    <Code className="w-5 h-5 text-primary-600" />
                     How to Install
                   </h4>
                   <ol className="space-y-3 text-sm text-gray-700">
                     <li className="flex gap-3">
-                      <span className="flex-shrink-0 w-6 h-6 bg-cyan-600 text-white rounded-full flex items-center justify-center text-xs font-semibold">
+                      <span className="flex-shrink-0 w-6 h-6 bg-primary-600 text-white rounded-full flex items-center justify-center text-xs font-semibold">
                         1
                       </span>
                       <span>Copy the installation code above</span>
                     </li>
                     <li className="flex gap-3">
-                      <span className="flex-shrink-0 w-6 h-6 bg-cyan-600 text-white rounded-full flex items-center justify-center text-xs font-semibold">
+                      <span className="flex-shrink-0 w-6 h-6 bg-primary-600 text-white rounded-full flex items-center justify-center text-xs font-semibold">
                         2
                       </span>
                       <span>
@@ -397,7 +397,7 @@ export const WidgetInstallWizard: React.FC<WidgetInstallWizardProps> = ({ onClos
                       </span>
                     </li>
                     <li className="flex gap-3">
-                      <span className="flex-shrink-0 w-6 h-6 bg-cyan-600 text-white rounded-full flex items-center justify-center text-xs font-semibold">
+                      <span className="flex-shrink-0 w-6 h-6 bg-primary-600 text-white rounded-full flex items-center justify-center text-xs font-semibold">
                         3
                       </span>
                       <span>
@@ -409,7 +409,7 @@ export const WidgetInstallWizard: React.FC<WidgetInstallWizardProps> = ({ onClos
                       </span>
                     </li>
                     <li className="flex gap-3">
-                      <span className="flex-shrink-0 w-6 h-6 bg-cyan-600 text-white rounded-full flex items-center justify-center text-xs font-semibold">
+                      <span className="flex-shrink-0 w-6 h-6 bg-primary-600 text-white rounded-full flex items-center justify-center text-xs font-semibold">
                         4
                       </span>
                       <span>Save and deploy your changes</span>

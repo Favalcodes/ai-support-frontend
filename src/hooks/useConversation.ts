@@ -33,6 +33,23 @@ export const useConversation = () => {
     [setConversations, setLoading]
   );
 
+  const loadCompanyConversations = useCallback(
+    async (params?: { page?: number; limit?: number; status?: string }) => {
+      try {
+        setLoading(true);
+        const result = await conversationService.getCompanyConversations(params);
+        setConversations(result.data);
+        return result;
+      } catch (error) {
+        console.error('Failed to load company conversations:', error);
+        return { data: [], total: 0, page: 1, limit: 20, totalPages: 0 };
+      } finally {
+        setLoading(false);
+      }
+    },
+    [setConversations, setLoading]
+  );
+
   const loadUnassignedConversations = useCallback(
     async (companyId: string) => {
       try {
@@ -116,6 +133,7 @@ export const useConversation = () => {
     unassignedCount,
     isLoading,
     loadAgentConversations,
+    loadCompanyConversations,
     loadUnassignedConversations,
     assignToAgent,
     transferToAgent,

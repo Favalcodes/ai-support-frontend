@@ -94,7 +94,7 @@ export const QueuePage: React.FC = () => {
         <Card>
           <CardBody>
             <div className="text-center py-12">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-sky-600 mx-auto"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-secondary-600 mx-auto"></div>
               <p className="mt-4 text-gray-600">Loading queue...</p>
             </div>
           </CardBody>
@@ -138,9 +138,9 @@ export const QueuePage: React.FC = () => {
         <Card>
           <CardBody>
             <div className="text-center py-12">
-              <div className="w-16 h-16 bg-sky-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-secondary-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg
-                  className="w-8 h-8 text-sky-600"
+                  className="w-8 h-8 text-secondary-600"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -170,8 +170,8 @@ export const QueuePage: React.FC = () => {
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                      <div className="w-10 h-10 bg-sky-100 rounded-full flex items-center justify-center">
-                        <span className="text-sky-600 font-semibold">
+                      <div className="w-10 h-10 bg-secondary-100 rounded-full flex items-center justify-center">
+                        <span className="text-secondary-600 font-semibold">
                           {conversation.user?.first_name?.charAt(0).toUpperCase() ||
                            conversation.user?.email?.charAt(0).toUpperCase() || 'U'}
                         </span>
@@ -206,7 +206,7 @@ export const QueuePage: React.FC = () => {
                           [conversation.id]: e.target.value,
                         }))
                       }
-                      className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent"
+                      className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary-500 focus:border-transparent"
                       disabled={assigningId === conversation.id}
                     >
                       <option value="">Select agent</option>

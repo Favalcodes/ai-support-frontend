@@ -1,3 +1,4 @@
+import toast from 'react-hot-toast';
 import React, { useState, useEffect } from 'react';
 import { Search, Plus, FileText, Edit, Trash2, Eye, HelpCircle, Folder, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -52,7 +53,7 @@ export const KnowledgePage: React.FC = () => {
       setFaqs(faqsData);
     } catch (error) {
       console.error('Failed to load data:', error);
-      alert('Failed to load knowledge base data. Please try again.');
+      toast.error('Failed to load knowledge base data. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -89,7 +90,7 @@ export const KnowledgePage: React.FC = () => {
       setArticles(articles.filter(a => a.id !== articleId));
     } catch (error) {
       console.error('Failed to delete article:', error);
-      alert('Failed to delete article. Please try again.');
+      toast.error('Failed to delete article. Please try again.');
     }
   };
 
@@ -112,7 +113,7 @@ export const KnowledgePage: React.FC = () => {
 
   const handleSaveFaq = async () => {
     if (!faqForm.question.trim() || !faqForm.answer.trim()) {
-      alert('Please fill in both question and answer');
+      toast.error('Please fill in both question and answer');
       return;
     }
 
@@ -129,7 +130,7 @@ export const KnowledgePage: React.FC = () => {
       setFaqForm({ question: '', answer: '' });
     } catch (error) {
       console.error('Failed to save FAQ:', error);
-      alert('Failed to save FAQ. Please try again.');
+      toast.error('Failed to save FAQ. Please try again.');
     } finally {
       setIsSaving(false);
     }
@@ -142,7 +143,7 @@ export const KnowledgePage: React.FC = () => {
       setFaqs(faqs.filter(f => f.id !== faqId));
     } catch (error) {
       console.error('Failed to delete FAQ:', error);
-      alert('Failed to delete FAQ. Please try again.');
+      toast.error('Failed to delete FAQ. Please try again.');
     }
   };
 
@@ -161,7 +162,7 @@ export const KnowledgePage: React.FC = () => {
 
   const handleSaveCategory = async () => {
     if (!categoryForm.name.trim()) {
-      alert('Please enter a category name');
+      toast.error('Please enter a category name');
       return;
     }
 
@@ -178,7 +179,7 @@ export const KnowledgePage: React.FC = () => {
       setCategoryForm({ name: '', description: '' });
     } catch (error) {
       console.error('Failed to save category:', error);
-      alert('Failed to save category. Please try again.');
+      toast.error('Failed to save category. Please try again.');
     } finally {
       setIsSaving(false);
     }
@@ -186,8 +187,8 @@ export const KnowledgePage: React.FC = () => {
 
   const handleDeleteCategory = async (categoryId: string) => {
     const articlesInCategory = articles.filter(a => a.category_id === categoryId);
-    if (articlesInCategory.length > 0) {
-      alert(`Cannot delete category. It contains ${articlesInCategory.length} article(s). Please move or delete the articles first.`);
+    if (articlesInCategory?.length > 0) {
+      toast.error(`Cannot delete category. It contains ${articlesInCategory?.length} article(s). Please move or delete the articles first.`);
       return;
     }
 
@@ -200,7 +201,7 @@ export const KnowledgePage: React.FC = () => {
       }
     } catch (error) {
       console.error('Failed to delete category:', error);
-      alert('Failed to delete category. Please try again.');
+      toast.error('Failed to delete category. Please try again.');
     }
   };
 
@@ -232,34 +233,34 @@ export const KnowledgePage: React.FC = () => {
             onClick={() => setActiveTab('articles')}
             className={`flex items-center gap-2 px-4 py-3 font-medium transition-colors border-b-2 ${
               activeTab === 'articles'
-                ? 'border-cyan-500 text-cyan-600'
+                ? 'border-primary-500 text-primary-600'
                 : 'border-transparent text-gray-600 hover:text-gray-900'
             }`}
           >
             <FileText className="w-4 h-4" />
-            Articles ({articles.length})
+            Articles ({articles?.length})
           </button>
           <button
             onClick={() => setActiveTab('faqs')}
             className={`flex items-center gap-2 px-4 py-3 font-medium transition-colors border-b-2 ${
               activeTab === 'faqs'
-                ? 'border-cyan-500 text-cyan-600'
+                ? 'border-primary-500 text-primary-600'
                 : 'border-transparent text-gray-600 hover:text-gray-900'
             }`}
           >
             <HelpCircle className="w-4 h-4" />
-            FAQs ({faqs.length})
+            FAQs ({faqs?.length})
           </button>
           <button
             onClick={() => setActiveTab('categories')}
             className={`flex items-center gap-2 px-4 py-3 font-medium transition-colors border-b-2 ${
               activeTab === 'categories'
-                ? 'border-cyan-500 text-cyan-600'
+                ? 'border-primary-500 text-primary-600'
                 : 'border-transparent text-gray-600 hover:text-gray-900'
             }`}
           >
             <Folder className="w-4 h-4" />
-            Categories ({categories.length})
+            Categories ({categories?.length})
           </button>
         </div>
 
@@ -280,7 +281,7 @@ export const KnowledgePage: React.FC = () => {
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
               >
                 <option value="all">All Categories</option>
                 {categories.map(cat => (
@@ -310,7 +311,7 @@ export const KnowledgePage: React.FC = () => {
         {/* Content */}
         {isLoading ? (
           <div className="text-center py-12">
-            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-cyan-600"></div>
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
             <p className="text-gray-600 mt-4">Loading...</p>
           </div>
         ) : (
@@ -318,7 +319,7 @@ export const KnowledgePage: React.FC = () => {
             {/* Articles Tab */}
             {activeTab === 'articles' && (
               <div className="space-y-4">
-                {filteredArticles.length === 0 ? (
+                {filteredArticles?.length === 0 ? (
                   <Card className="p-12 text-center">
                     <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">No articles found</h3>
@@ -381,7 +382,7 @@ export const KnowledgePage: React.FC = () => {
             {/* FAQs Tab */}
             {activeTab === 'faqs' && (
               <div className="space-y-4">
-                {filteredFaqs.length === 0 ? (
+                {filteredFaqs?.length === 0 ? (
                   <Card className="p-12 text-center">
                     <HelpCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">No FAQs found</h3>
@@ -429,7 +430,7 @@ export const KnowledgePage: React.FC = () => {
             {/* Categories Tab */}
             {activeTab === 'categories' && (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {categories.length === 0 ? (
+                {categories?.length === 0 ? (
                   <Card className="p-12 text-center col-span-full">
                     <Folder className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">No categories found</h3>
@@ -441,11 +442,10 @@ export const KnowledgePage: React.FC = () => {
                   </Card>
                 ) : (
                   categories.map((category) => {
-                    const articleCount = articles.filter(a => a.category_id === category.id).length;
                     return (
                       <Card key={category.id} className="p-6">
                         <div className="flex items-start justify-between mb-3">
-                          <Folder className="w-8 h-8 text-cyan-600" />
+                          <Folder className="w-8 h-8 text-primary-600" />
                           <div className="flex gap-1">
                             <Button variant="ghost" size="sm" onClick={() => handleEditCategory(category)}>
                               <Edit className="w-3 h-3" />
@@ -464,7 +464,7 @@ export const KnowledgePage: React.FC = () => {
                         {category.description && (
                           <p className="text-sm text-gray-600 mb-3">{category.description}</p>
                         )}
-                        <p className="text-sm text-gray-500">{articleCount} articles</p>
+                        <p className="text-sm text-gray-500">{category?.articles?.length} articles</p>
                       </Card>
                     );
                   })

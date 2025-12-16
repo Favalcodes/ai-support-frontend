@@ -22,8 +22,17 @@ export const ConversationHistory: React.FC<ConversationHistoryProps> = ({
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    loadConversations();
+    if (userId) {
+      loadConversations();
+    }
   }, [companyId, userId]);
+
+  // Reload conversations when a new conversation is selected or created
+  useEffect(() => {
+    if (currentConversationId && userId) {
+      loadConversations();
+    }
+  }, [currentConversationId]);
 
   const loadConversations = async () => {
     try {
@@ -76,7 +85,7 @@ export const ConversationHistory: React.FC<ConversationHistoryProps> = ({
       <div className="flex-1 overflow-y-auto">
         {isLoading ? (
           <div className="flex flex-col items-center justify-center h-32">
-            <Loader2 className="w-6 h-6 text-cyan-500 animate-spin mb-2" />
+            <Loader2 className="w-6 h-6 text-primary-500 animate-spin mb-2" />
             <p className="text-xs text-gray-500">Loading...</p>
           </div>
         ) : conversations.length === 0 ? (
@@ -92,7 +101,7 @@ export const ConversationHistory: React.FC<ConversationHistoryProps> = ({
                 onClick={() => onSelectConversation(conv.id)}
                 className={`w-full text-left p-3 rounded-lg transition-all ${
                   conv.id === currentConversationId
-                    ? 'bg-cyan-100 border-l-4 border-cyan-500'
+                    ? 'bg-primary-100 border-l-4 border-primary-500'
                     : 'hover:bg-white border-l-4 border-transparent'
                 }`}
               >
@@ -116,10 +125,10 @@ export const ConversationHistory: React.FC<ConversationHistoryProps> = ({
                   <div className="mt-2">
                     <span
                       className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
-                        conv.status === 'resolved'
+                        conv.status === 'CLOSED'
                           ? 'bg-green-100 text-green-800'
-                          : conv.status === 'active'
-                          ? 'bg-cyan-100 text-cyan-800'
+                          : conv.status === 'OPEN'
+                          ? 'bg-primary-100 text-primary-800'
                           : 'bg-gray-100 text-gray-800'
                       }`}
                     >

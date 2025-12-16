@@ -8,7 +8,7 @@ export const useMessages = (conversationId: string | null) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSending, setIsSending] = useState(false);
-  const messageStore = useMessageStore();
+  const { setMessages: storeSetMessages, addMessage: storeAddMessage } = useMessageStore();
 
   // Load messages from API
   const loadMessages = useCallback(async () => {
@@ -18,13 +18,13 @@ export const useMessages = (conversationId: string | null) => {
       setIsLoading(true);
       const data = await messageService.getConversationMessages(conversationId);
       setMessages(data);
-      messageStore.setMessages(conversationId, data);
+      storeSetMessages(conversationId, data);
     } catch (error) {
       console.error('Failed to load messages:', error);
     } finally {
       setIsLoading(false);
     }
-  }, [conversationId, messageStore]);
+  }, [conversationId, storeSetMessages]);
 
   // Send message
   const sendMessage = useCallback(
@@ -35,7 +35,7 @@ export const useMessages = (conversationId: string | null) => {
         setIsSending(true);
         const message = await messageService.sendMessage(conversationId, content, userId);
         setMessages((prev) => [...prev, message]);
-        messageStore.addMessage(conversationId, message);
+        storeAddMessage(conversationId, message);
         return { success: true };
       } catch (error: any) {
         return {
@@ -46,16 +46,16 @@ export const useMessages = (conversationId: string | null) => {
         setIsSending(false);
       }
     },
-    [conversationId, messageStore]
+    [conversationId, storeAddMessage]
   );
 
   // Add message to list (from socket)
   const addMessage = useCallback((message: Message) => {
     setMessages((prev) => [...prev, message]);
     if (message.conversation_id) {
-      messageStore.addMessage(message.conversation_id, message);
+      storeAddMessage(message.conversation_id, message);
     }
-  }, [messageStore]);
+  }, [storeAddMessage]);
 
   // Setup socket listeners for real-time messages
   useEffect(() => {
@@ -79,7 +79,8 @@ export const useMessages = (conversationId: string | null) => {
     } else {
       setMessages([]);
     }
-  }, [conversationId, loadMessages]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [conversationId]);
 
   return {
     messages,

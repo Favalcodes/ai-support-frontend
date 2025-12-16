@@ -93,7 +93,7 @@ export const PreChatForm: React.FC<PreChatFormProps> = ({
               id="first_name"
               value={formData.first_name}
               onChange={(e) => handleChange('first_name', e.target.value)}
-              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 ${
+              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 ${
                 errors.first_name ? 'border-red-500' : 'border-gray-300'
               }`}
               placeholder="John"
@@ -114,7 +114,7 @@ export const PreChatForm: React.FC<PreChatFormProps> = ({
               id="last_name"
               value={formData.last_name}
               onChange={(e) => handleChange('last_name', e.target.value)}
-              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 ${
+              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 ${
                 errors.last_name ? 'border-red-500' : 'border-gray-300'
               }`}
               placeholder="Doe"
@@ -135,7 +135,7 @@ export const PreChatForm: React.FC<PreChatFormProps> = ({
               id="email"
               value={formData.email}
               onChange={(e) => handleChange('email', e.target.value)}
-              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 ${
+              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 ${
                 errors.email ? 'border-red-500' : 'border-gray-300'
               }`}
               placeholder="john@example.com"
@@ -156,7 +156,7 @@ export const PreChatForm: React.FC<PreChatFormProps> = ({
                 id="category"
                 value={formData.category_id}
                 onChange={(e) => handleChange('category_id', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                 disabled={isLoading}
               >
                 <option value="">Select a category</option>
@@ -174,7 +174,7 @@ export const PreChatForm: React.FC<PreChatFormProps> = ({
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full mt-6 px-4 py-3 bg-cyan-500 text-white rounded-lg font-medium hover:bg-cyan-600 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center gap-2"
+          className="w-full mt-6 px-4 py-3 bg-primary-500 text-white rounded-lg font-medium hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center gap-2"
         >
           {isLoading ? (
             <>

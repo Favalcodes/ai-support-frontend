@@ -23,6 +23,9 @@ export interface Conversation {
   user?: User;
   assignedStaff?: User;
   category?: Category;
+  rating?: number;
+  rating_comment?: string;
+  rated_at?: string;
 }
 
 export interface Category {

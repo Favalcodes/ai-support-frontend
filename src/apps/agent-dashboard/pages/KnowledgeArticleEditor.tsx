@@ -1,3 +1,4 @@
+import toast from 'react-hot-toast';
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Save, ArrowLeft, Eye } from 'lucide-react';
@@ -41,7 +42,7 @@ export const KnowledgeArticleEditor: React.FC = () => {
       }
     } catch (error) {
       console.error('Failed to load categories:', error);
-      alert('Failed to load categories. Please try again.');
+      toast.error('Failed to load categories. Please try again.');
     }
   };
 
@@ -52,11 +53,11 @@ export const KnowledgeArticleEditor: React.FC = () => {
       setFormData({
         title: article.title,
         content: article.content,
-        category_id: article.category_id,
+        category_id: article?.category?.id,
       });
     } catch (error) {
       console.error('Failed to load article:', error);
-      alert('Failed to load article. Please try again.');
+      toast.error('Failed to load article. Please try again.');
       navigate('/dashboard/knowledge');
     } finally {
       setIsLoading(false);
@@ -65,7 +66,7 @@ export const KnowledgeArticleEditor: React.FC = () => {
 
   const handleSave = async () => {
     if (!formData.title.trim() || !formData.content.trim() || !formData.category_id) {
-      alert('Please fill in all required fields');
+      toast.error('Please fill in all required fields');
       return;
     }
 
@@ -73,15 +74,15 @@ export const KnowledgeArticleEditor: React.FC = () => {
     try {
       if (isEditMode && id) {
         await knowledgeService.updateArticle(id, formData);
-        alert('Article updated successfully!');
+        toast.success('Article updated successfully!');
       } else {
         await knowledgeService.createArticle(formData);
-        alert('Article created successfully!');
+        toast.success('Article created successfully!');
       }
       navigate('/dashboard/knowledge');
     } catch (error) {
       console.error('Failed to save article:', error);
-      alert('Failed to save article. Please try again.');
+      toast.error('Failed to save article. Please try again.');
     } finally {
       setIsSaving(false);
     }
@@ -95,7 +96,7 @@ export const KnowledgeArticleEditor: React.FC = () => {
     return (
       <div className="h-full bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-cyan-600 mb-4"></div>
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mb-4"></div>
           <p className="text-gray-600">Loading article...</p>
         </div>
       </div>
@@ -176,7 +177,7 @@ export const KnowledgeArticleEditor: React.FC = () => {
                   <select
                     value={formData.category_id}
                     onChange={(e) => setFormData({ ...formData, category_id: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                   >
                     <option value="">Select a category</option>
                     {categories.map(cat => (

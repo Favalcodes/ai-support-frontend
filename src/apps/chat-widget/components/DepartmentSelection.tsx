@@ -38,7 +38,7 @@ export const DepartmentSelection: React.FC<DepartmentSelectionProps> = ({
   return (
     <div className="w-96 h-[600px] bg-white rounded-lg shadow-2xl overflow-hidden animate-slide-up">
       {/* Header */}
-      <div className="px-6 py-4 bg-cyan-500 text-white">
+      <div className="px-6 py-4 bg-primary-500 text-white">
         <div className="flex items-center justify-between">
           <div>
             <h3 className="text-xl font-semibold">How can we help?</h3>
@@ -60,7 +60,7 @@ export const DepartmentSelection: React.FC<DepartmentSelectionProps> = ({
       <div className="p-6 h-[calc(100%-88px)] overflow-y-auto">
         {isLoading ? (
           <div className="flex flex-col items-center justify-center h-full">
-            <Loader2 className="w-12 h-12 text-cyan-500 animate-spin mb-4" />
+            <Loader2 className="w-12 h-12 text-primary-500 animate-spin mb-4" />
             <p className="text-gray-600 font-medium">Loading departments...</p>
           </div>
         ) : error ? (
@@ -73,7 +73,7 @@ export const DepartmentSelection: React.FC<DepartmentSelectionProps> = ({
             <p className="text-red-600 font-medium mb-2">{error}</p>
             <button
               onClick={loadDepartments}
-              className="px-4 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 transition-colors"
+              className="px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors"
             >
               Try Again
             </button>
@@ -102,13 +102,13 @@ export const DepartmentSelection: React.FC<DepartmentSelectionProps> = ({
                   <button
                     key={dept.id}
                     onClick={() => onSelectDepartment(dept.id)}
-                    className="inline-flex items-center gap-2 px-4 py-2.5 bg-white border-2 border-gray-200 rounded-full hover:border-cyan-500 hover:bg-cyan-50 transition-all duration-200 group"
+                    className="inline-flex items-center gap-2 px-4 py-2.5 bg-white border-2 border-gray-200 rounded-full hover:border-primary-500 hover:bg-primary-50 transition-all duration-200 group"
                     style={{
                       borderColor: dept.color ? `${dept.color}40` : undefined,
                     }}
                   >
                     <span className="text-xl">{dept.icon || '📁'}</span>
-                    <span className="text-sm font-medium text-gray-900 group-hover:text-cyan-700">
+                    <span className="text-sm font-medium text-gray-900 group-hover:text-primary-700">
                       {dept.name}
                     </span>
                     <div

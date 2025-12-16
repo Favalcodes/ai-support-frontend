@@ -95,7 +95,7 @@ export const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-left flex items-center justify-between hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-colors"
+        className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-left flex items-center justify-between hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors"
       >
         <span className="text-sm text-gray-600">
           {selectedIds.length > 0
@@ -121,7 +121,7 @@ export const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder={searchPlaceholder}
-                className="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+                className="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 onClick={(e) => e.stopPropagation()}
               />
             </div>
@@ -141,14 +141,14 @@ export const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
                     type="button"
                     onClick={() => toggleOption(option.id)}
                     className={`w-full px-3 py-2 text-left hover:bg-gray-50 transition-colors flex items-center gap-3 ${
-                      selectedIds.includes(option.id) ? 'bg-cyan-50' : ''
+                      selectedIds.includes(option.id) ? 'bg-primary-50' : ''
                     }`}
                   >
                     {/* Checkbox */}
                     <div
                       className={`w-4 h-4 rounded border flex items-center justify-center ${
                         selectedIds.includes(option.id)
-                          ? 'bg-cyan-600 border-cyan-600'
+                          ? 'bg-primary-600 border-primary-600'
                           : 'border-gray-300'
                       }`}
                     >

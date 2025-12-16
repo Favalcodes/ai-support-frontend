@@ -63,7 +63,7 @@ export const ChatWindowWithHistory: React.FC<ChatWindowWithHistoryProps> = ({
       {/* Main Chat Window with Tabs */}
       <div className="w-96 h-[600px] flex flex-col relative">
         {/* Header */}
-        <div className="bg-cyan-500 p-4 flex items-center justify-between">
+        <div className="bg-primary-500 p-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             {/* History Toggle Button */}
             <button
@@ -137,7 +137,7 @@ export const ChatWindowWithHistory: React.FC<ChatWindowWithHistoryProps> = ({
       {/* Mobile History Overlay */}
       {showHistory && (
         <div className="md:hidden absolute inset-0 bg-white z-20 flex flex-col">
-          <div className="p-4 bg-cyan-500 text-white flex items-center justify-between">
+          <div className="p-4 bg-primary-500 text-white flex items-center justify-between">
             <h3 className="font-semibold">Conversations</h3>
             <button
               onClick={() => setShowHistory(false)}

@@ -350,7 +350,7 @@ export const DepartmentsPage: React.FC = () => {
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     rows={3}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent resize-none"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
                   />
                 </div>
 
@@ -365,7 +365,7 @@ export const DepartmentsPage: React.FC = () => {
                         onClick={() => setFormData({ ...formData, icon })}
                         className={`p-2 text-2xl rounded-lg border-2 transition-all ${
                           formData.icon === icon
-                            ? 'border-cyan-500 bg-cyan-50'
+                            ? 'border-primary-500 bg-primary-50'
                             : 'border-gray-200 hover:border-gray-300'
                         }`}
                       >
@@ -463,7 +463,7 @@ export const DepartmentsPage: React.FC = () => {
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     rows={3}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent resize-none"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
                   />
                 </div>
 
@@ -478,7 +478,7 @@ export const DepartmentsPage: React.FC = () => {
                         onClick={() => setFormData({ ...formData, icon })}
                         className={`p-2 text-2xl rounded-lg border-2 transition-all ${
                           formData.icon === icon
-                            ? 'border-cyan-500 bg-cyan-50'
+                            ? 'border-primary-500 bg-primary-50'
                             : 'border-gray-200 hover:border-gray-300'
                         }`}
                       >

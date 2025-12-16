@@ -174,7 +174,7 @@ export const WidgetSettingsPage: React.FC = () => {
                 onClick={() => setActiveTab('appearance')}
                 className={`px-4 py-2 font-medium transition-colors ${
                   activeTab === 'appearance'
-                    ? 'text-cyan-600 border-b-2 border-cyan-600'
+                    ? 'text-primary-600 border-b-2 border-primary-600'
                     : 'text-gray-600 hover:text-gray-900'
                 }`}
               >
@@ -185,7 +185,7 @@ export const WidgetSettingsPage: React.FC = () => {
                 onClick={() => setActiveTab('messages')}
                 className={`px-4 py-2 font-medium transition-colors ${
                   activeTab === 'messages'
-                    ? 'text-cyan-600 border-b-2 border-cyan-600'
+                    ? 'text-primary-600 border-b-2 border-primary-600'
                     : 'text-gray-600 hover:text-gray-900'
                 }`}
               >
@@ -196,7 +196,7 @@ export const WidgetSettingsPage: React.FC = () => {
                 onClick={() => setActiveTab('behavior')}
                 className={`px-4 py-2 font-medium transition-colors ${
                   activeTab === 'behavior'
-                    ? 'text-cyan-600 border-b-2 border-cyan-600'
+                    ? 'text-primary-600 border-b-2 border-primary-600'
                     : 'text-gray-600 hover:text-gray-900'
                 }`}
               >
@@ -207,7 +207,7 @@ export const WidgetSettingsPage: React.FC = () => {
                 onClick={() => setActiveTab('install')}
                 className={`px-4 py-2 font-medium transition-colors ${
                   activeTab === 'install'
-                    ? 'text-cyan-600 border-b-2 border-cyan-600'
+                    ? 'text-primary-600 border-b-2 border-primary-600'
                     : 'text-gray-600 hover:text-gray-900'
                 }`}
               >
@@ -239,7 +239,7 @@ export const WidgetSettingsPage: React.FC = () => {
                                 position: e.target.value as WidgetConfig['position'],
                               })
                             }
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                           >
                             <option value="bottom-right">Bottom Right</option>
                             <option value="bottom-left">Bottom Left</option>
@@ -268,7 +268,7 @@ export const WidgetSettingsPage: React.FC = () => {
                               onChange={(e) =>
                                 updateConfig({ primary_color: e.target.value })
                               }
-                              placeholder="#0891b2"
+                              placeholder="#713600"
                               className="flex-1"
                             />
                           </div>
@@ -315,7 +315,7 @@ export const WidgetSettingsPage: React.FC = () => {
                             }
                             placeholder="Hi! How can we help you today?"
                             rows={3}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent resize-none"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
                           />
                         </div>
 
@@ -365,7 +365,7 @@ export const WidgetSettingsPage: React.FC = () => {
                               onChange={(e) => updateConfig({ auto_open: e.target.checked })}
                               className="sr-only peer"
                             />
-                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-cyan-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-cyan-600"></div>
+                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
                           </label>
                         </div>
 
@@ -402,7 +402,7 @@ export const WidgetSettingsPage: React.FC = () => {
                               onChange={(e) => updateConfig({ is_active: e.target.checked })}
                               className="sr-only peer"
                             />
-                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-cyan-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-cyan-600"></div>
+                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
                           </label>
                         </div>
                       </div>

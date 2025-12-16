@@ -24,7 +24,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
   if (isSystem) {
     return (
       <div className="flex justify-center my-4">
-        <div className="bg-blush-50 border border-blush-200 px-4 py-2 rounded-full max-w-md">
+        <div className="bg-accent-50 border border-accent-200 px-4 py-2 rounded-full max-w-md">
           <p className="text-xs text-gray-700 text-center">{message.content}</p>
         </div>
       </div>
@@ -59,7 +59,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
   if (isAssistant) {
     return (
       <div className="flex items-start gap-3 mb-4">
-        <div className="w-8 h-8 bg-gradient-to-br from-cyan-500 to-sky-400 rounded-full flex items-center justify-center flex-shrink-0">
+        <div className="w-8 h-8 bg-gradient-to-br from-primary-500 to-secondary-400 rounded-full flex items-center justify-center flex-shrink-0">
           <span className="text-white text-xs font-bold">AI</span>
         </div>
         <div className="flex-1 max-w-lg">
@@ -69,7 +69,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
               {formatTime(message.created_at)}
             </span>
           </div>
-          <div className="bg-sky-50 rounded-lg rounded-tl-none p-3 border border-sky-200">
+          <div className="bg-secondary-50 rounded-lg rounded-tl-none p-3 border border-secondary-200">
             <p className="text-sm text-gray-800 whitespace-pre-wrap">
               {message.content}
             </p>
@@ -122,7 +122,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
             {isAgent ? 'You' : agentName || 'Agent'}
           </span>
         </div>
-        <div className="bg-gradient-to-r from-cyan-500 to-sky-400 rounded-lg rounded-tr-none p-3 shadow-sm">
+        <div className="bg-gradient-to-r from-primary-500 to-secondary-400 rounded-lg rounded-tr-none p-3 shadow-sm">
           <p className="text-sm text-white whitespace-pre-wrap">{message.content}</p>
         </div>
       </div>

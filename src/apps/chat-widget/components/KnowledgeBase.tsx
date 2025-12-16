@@ -121,7 +121,7 @@ export const KnowledgeBaseView: React.FC<KnowledgeBaseViewProps> = ({
   return (
     <div className="w-96 h-[600px] bg-white rounded-lg shadow-2xl flex flex-col overflow-hidden animate-slide-up">
       {/* Header */}
-      <div className="px-4 py-3 bg-gradient-to-r from-cyan-500 to-sky-400 text-white">
+      <div className="px-4 py-3 bg-gradient-to-r from-primary-500 to-secondary-400 text-white">
         <div className="flex items-center justify-between mb-2">
           <h3 className="font-semibold text-lg">Help Center</h3>
           <button
@@ -145,7 +145,7 @@ export const KnowledgeBaseView: React.FC<KnowledgeBaseViewProps> = ({
             placeholder="Search for help..."
             value={searchQuery}
             onChange={(e) => handleSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 text-sm"
+            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
           />
         </div>
       </div>
@@ -158,7 +158,7 @@ export const KnowledgeBaseView: React.FC<KnowledgeBaseViewProps> = ({
               onClick={() => setSelectedCategory(null)}
               className={`px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
                 selectedCategory === null
-                  ? 'bg-cyan-500 text-white'
+                  ? 'bg-primary-500 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
@@ -170,7 +170,7 @@ export const KnowledgeBaseView: React.FC<KnowledgeBaseViewProps> = ({
                 onClick={() => setSelectedCategory(category.id)}
                 className={`px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
                   selectedCategory === category.id
-                    ? 'bg-cyan-500 text-white'
+                    ? 'bg-primary-500 text-white'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
@@ -187,7 +187,7 @@ export const KnowledgeBaseView: React.FC<KnowledgeBaseViewProps> = ({
           onClick={() => setActiveTab('faqs')}
           className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
             activeTab === 'faqs'
-              ? 'text-cyan-600 border-b-2 border-cyan-600'
+              ? 'text-primary-600 border-b-2 border-primary-600'
               : 'text-gray-600 hover:text-gray-900'
           }`}
         >
@@ -200,7 +200,7 @@ export const KnowledgeBaseView: React.FC<KnowledgeBaseViewProps> = ({
           onClick={() => setActiveTab('articles')}
           className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
             activeTab === 'articles'
-              ? 'text-cyan-600 border-b-2 border-cyan-600'
+              ? 'text-primary-600 border-b-2 border-primary-600'
               : 'text-gray-600 hover:text-gray-900'
           }`}
         >
@@ -215,14 +215,14 @@ export const KnowledgeBaseView: React.FC<KnowledgeBaseViewProps> = ({
       <div className="flex-1 overflow-y-auto">
         {isLoading ? (
           <div className="flex items-center justify-center h-full">
-            <div className="w-8 h-8 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin" />
+            <div className="w-8 h-8 border-4 border-primary-500 border-t-transparent rounded-full animate-spin" />
           </div>
         ) : selectedArticle ? (
           /* Full Article View */
           <div className="p-4">
             <button
               onClick={() => setSelectedArticle(null)}
-              className="flex items-center gap-1 text-cyan-600 hover:text-cyan-700 text-sm mb-4"
+              className="flex items-center gap-1 text-primary-600 hover:text-primary-700 text-sm mb-4"
             >
               <ChevronRight className="w-4 h-4 rotate-180" />
               Back to articles
@@ -231,7 +231,7 @@ export const KnowledgeBaseView: React.FC<KnowledgeBaseViewProps> = ({
               {selectedArticle.title}
             </h3>
             {selectedArticle.category_name && (
-              <span className="inline-block px-2 py-1 bg-cyan-100 text-cyan-700 text-xs rounded-full mb-4">
+              <span className="inline-block px-2 py-1 bg-primary-100 text-primary-700 text-xs rounded-full mb-4">
                 {selectedArticle.category_name}
               </span>
             )}
@@ -255,7 +255,7 @@ export const KnowledgeBaseView: React.FC<KnowledgeBaseViewProps> = ({
                     onClick={() => toggleFAQ(faq.id)}
                     className="w-full text-left flex items-start justify-between gap-2 group"
                   >
-                    <span className="font-medium text-gray-900 text-sm group-hover:text-cyan-600 transition-colors">
+                    <span className="font-medium text-gray-900 text-sm group-hover:text-primary-600 transition-colors">
                       {faq.question}
                     </span>
                     <ChevronRight
@@ -272,7 +272,7 @@ export const KnowledgeBaseView: React.FC<KnowledgeBaseViewProps> = ({
                       <div className="mt-3 flex items-center gap-4">
                         <button
                           onClick={() => markHelpful(faq.id)}
-                          className="flex items-center gap-1 text-xs text-gray-500 hover:text-cyan-600 transition-colors"
+                          className="flex items-center gap-1 text-xs text-gray-500 hover:text-primary-600 transition-colors"
                         >
                           <ThumbsUp className="w-3.5 h-3.5" />
                           Helpful {faq.helpful_count ? `(${faq.helpful_count})` : ''}
@@ -299,7 +299,7 @@ export const KnowledgeBaseView: React.FC<KnowledgeBaseViewProps> = ({
                   onClick={() => viewArticle(article.id)}
                   className="w-full p-4 text-left hover:bg-gray-50 transition-colors group"
                 >
-                  <h4 className="font-medium text-gray-900 text-sm mb-1 group-hover:text-cyan-600 transition-colors">
+                  <h4 className="font-medium text-gray-900 text-sm mb-1 group-hover:text-primary-600 transition-colors">
                     {article.title}
                   </h4>
                   <p className="text-xs text-gray-600 line-clamp-2 mb-2">
@@ -330,7 +330,7 @@ export const KnowledgeBaseView: React.FC<KnowledgeBaseViewProps> = ({
         </p>
         <button
           onClick={onStartChat}
-          className="w-full px-4 py-3 bg-gradient-to-r from-cyan-500 to-sky-400 text-white rounded-lg font-medium hover:from-cyan-600 hover:to-sky-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 transition-all duration-200 flex items-center justify-center gap-2"
+          className="w-full px-4 py-3 bg-gradient-to-r from-primary-500 to-secondary-400 text-white rounded-lg font-medium hover:from-primary-600 hover:to-secondary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-all duration-200 flex items-center justify-center gap-2"
         >
           <MessageCircle className="w-5 h-5" />
           Chat with Support

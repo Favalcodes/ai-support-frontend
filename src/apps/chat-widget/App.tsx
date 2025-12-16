@@ -44,9 +44,9 @@ export const ChatWidgetApp: React.FC = () => {
               <code>{`<!-- Add this script to your website -->
 <script>
   (function() {
-    window.SupportHubConfig = {
+    window.getLyncConfig = {
       companyId: 'YOUR_COMPANY_ID',
-      primaryColor: '#00D9DF',
+      primaryColor: '#713600',
       position: 'bottom-right'
     };
     var script = document.createElement('script');
@@ -82,7 +82,7 @@ export const ChatWidgetApp: React.FC = () => {
                 <tr className="border-b border-gray-200">
                   <td className="py-2">primaryColor</td>
                   <td className="py-2">string</td>
-                  <td className="py-2">#00D9DF</td>
+                  <td className="py-2">#713600</td>
                 </tr>
                 <tr className="border-b border-gray-200">
                   <td className="py-2">position</td>
@@ -92,7 +92,7 @@ export const ChatWidgetApp: React.FC = () => {
                 <tr>
                   <td className="py-2">companyName</td>
                   <td className="py-2">string</td>
-                  <td className="py-2">SupportHub</td>
+                  <td className="py-2">getLync</td>
                 </tr>
               </tbody>
             </table>

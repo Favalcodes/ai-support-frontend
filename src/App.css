@@ -17,6 +17,9 @@
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
+.bg-car-animate {
+  background: url('https://www.animatedimages.org/data/media/67/animated-car-image-0049.gif'), rgba(0, 0, 0, 0.3);
+}
 
 @keyframes logo-spin {
   from {

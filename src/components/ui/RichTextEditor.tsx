@@ -218,7 +218,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
       },
       quote: 'border-l-4 border-gray-300 pl-4 italic my-4 text-gray-700',
       code: 'bg-gray-800 text-gray-100 p-4 rounded my-4 block font-mono text-sm overflow-x-auto',
-      link: 'text-cyan-600 underline hover:text-cyan-700',
+      link: 'text-primary-600 underline hover:text-primary-700',
       text: {
         bold: 'font-bold',
         italic: 'italic',

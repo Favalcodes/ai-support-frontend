@@ -14,6 +14,7 @@ import { useAuth } from '../../../hooks';
 import { staffService, type Staff } from '../../../services/staff.service';
 import { departmentService, type Department } from '../../../services/department.service';
 import { Button, Input, Card, CardBody, Badge, Spinner, MultiSelectDropdown } from '../../../components/ui';
+import { UserRole } from '@/types/user.types';
 
 export const StaffPage: React.FC = () => {
   const { user } = useAuth();
@@ -30,7 +31,7 @@ export const StaffPage: React.FC = () => {
   // Form state for adding/editing staff
   const [formData, setFormData] = useState({
     email: '',
-    role: 'COMPANY_STAFF',
+    role: UserRole.COMPANY_STAFF,
     department_ids: [] as string[],
     is_all_rounder: false,
   });
@@ -78,7 +79,7 @@ export const StaffPage: React.FC = () => {
       });
 
       setShowAddModal(false);
-      setFormData({ email: '', role: 'COMPANY_STAFF', department_ids: [], is_all_rounder: false });
+      setFormData({ email: '', role: UserRole.COMPANY_STAFF, department_ids: [], is_all_rounder: false });
       await loadStaff();
     } catch (err: any) {
       console.error('Failed to add staff:', err);
@@ -103,7 +104,7 @@ export const StaffPage: React.FC = () => {
 
       setShowEditModal(false);
       setSelectedStaff(null);
-      setFormData({ email: '', role: 'COMPANY_STAFF', department_ids: [], is_all_rounder: false });
+      setFormData({ email: '', role: UserRole.COMPANY_STAFF, department_ids: [], is_all_rounder: false });
       await loadStaff();
     } catch (err: any) {
       console.error('Failed to update staff:', err);
@@ -130,12 +131,22 @@ export const StaffPage: React.FC = () => {
     setSelectedStaff(staffMember);
     setFormData({
       email: staffMember.email,
-      role: staffMember.role,
+      role: staffMember.role as UserRole,
       department_ids: staffMember.departments?.map(d => d.id) || [],
       is_all_rounder: staffMember.is_all_rounder || false,
     });
     setShowEditModal(true);
   };
+
+  const closeEditModal = () => {
+    setFormData({
+      email: '',
+      role: UserRole.COMPANY_STAFF,
+      department_ids: [],
+      is_all_rounder: false,
+    })
+    setShowEditModal(false);
+  }
 
   const filteredStaff = staff.filter((member) => {
     const searchLower = searchQuery.toLowerCase();
@@ -148,11 +159,11 @@ export const StaffPage: React.FC = () => {
 
   const getRoleBadge = (role: string) => {
     switch (role) {
-      case 'COMPANY_SUPER_ADMIN':
+      case UserRole.COMPANY_SUPER_ADMIN:
         return <Badge variant="danger">Super Admin</Badge>;
-      case 'COMPANY_ADMIN':
+      case UserRole.COMPANY_ADMIN:
         return <Badge variant="warning">Admin</Badge>;
-      case 'COMPANY_STAFF':
+      case UserRole.COMPANY_STAFF:
         return <Badge variant="info">Staff</Badge>;
       default:
         return <Badge variant="default">{role}</Badge>;
@@ -241,8 +252,8 @@ export const StaffPage: React.FC = () => {
                 <CardBody>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 bg-gradient-to-br from-cyan-100 to-blue-200 rounded-full flex items-center justify-center">
-                        <span className="text-cyan-700 font-bold text-lg">
+                      <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center">
+                        <span className="text-primary-700 font-bold text-lg">
                           {member.first_name?.charAt(0) || member.email?.charAt(0).toUpperCase()}
                         </span>
                       </div>
@@ -326,59 +337,63 @@ export const StaffPage: React.FC = () => {
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
                   <select
                     value={formData.role}
-                    onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+                    onChange={(e) => setFormData({ ...formData, role: e.target.value as UserRole })}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   >
-                    <option value="COMPANY_STAFF">Staff</option>
-                    <option value="COMPANY_ADMIN">Admin</option>
-                    <option value="COMPANY_SUPER_ADMIN">Super Admin</option>
+                    <option value={UserRole.COMPANY_STAFF}>Staff</option>
+                    <option value={UserRole.COMPANY_ADMIN}>Admin</option>
+                    <option value={UserRole.COMPANY_SUPER_ADMIN}>Super Admin</option>
                   </select>
                 </div>
 
-                {/* All-Rounder Toggle */}
-                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                  <div>
-                    <label className="font-medium text-gray-900">All-Rounder</label>
-                    <p className="text-sm text-gray-600 mt-1">
-                      Can handle conversations from any department
-                    </p>
-                  </div>
-                  <label className="relative inline-flex items-center cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={formData.is_all_rounder}
-                      onChange={(e) => setFormData({ ...formData, is_all_rounder: e.target.checked, department_ids: e.target.checked ? [] : formData.department_ids })}
-                      className="sr-only peer"
-                    />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-cyan-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-cyan-600"></div>
-                  </label>
-                </div>
+                {/* All-Rounder Toggle - Only for COMPANY_STAFF */}
+                {(formData.role !== UserRole.COMPANY_ADMIN && formData.role !== UserRole.COMPANY_SUPER_ADMIN) && (
+                  <>
+                    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                      <div>
+                        <label className="font-medium text-gray-900">All-Rounder</label>
+                        <p className="text-sm text-gray-600 mt-1">
+                          Can handle conversations from any department
+                        </p>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={formData.is_all_rounder}
+                          onChange={(e) => setFormData({ ...formData, is_all_rounder: e.target.checked, department_ids: e.target.checked ? [] : formData.department_ids })}
+                          className="sr-only peer"
+                        />
+                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
+                      </label>
+                    </div>
 
-                {/* Department Selection */}
-                {!formData.is_all_rounder && (
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Departments
-                    </label>
-                    <MultiSelectDropdown
-                      options={departments.map(dept => ({
-                        id: dept.id,
-                        label: dept.name,
-                        icon: dept.icon,
-                        color: dept.color,
-                      }))}
-                      selectedIds={formData.department_ids}
-                      onChange={(selectedIds) => setFormData({ ...formData, department_ids: selectedIds })}
-                      placeholder="Select departments..."
-                      searchPlaceholder="Search departments..."
-                      emptyMessage="No departments available. Create departments first."
-                    />
-                  </div>
+                    {/* Department Selection */}
+                    {!formData.is_all_rounder && (
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Departments
+                        </label>
+                        <MultiSelectDropdown
+                          options={departments.map(dept => ({
+                            id: dept.id,
+                            label: dept.name,
+                            icon: dept.icon,
+                            color: dept.color,
+                          }))}
+                          selectedIds={formData.department_ids}
+                          onChange={(selectedIds) => setFormData({ ...formData, department_ids: selectedIds })}
+                          placeholder="Select departments..."
+                          searchPlaceholder="Search departments..."
+                          emptyMessage="No departments available. Create departments first."
+                        />
+                      </div>
+                    )}
+                  </>
                 )}
 
                 <div className="p-3 bg-blue-50 rounded-lg">
@@ -419,7 +434,7 @@ export const StaffPage: React.FC = () => {
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-bold text-gray-900">Edit Staff Member</h2>
                 <button
-                  onClick={() => setShowEditModal(false)}
+                  onClick={() => closeEditModal()}
                   className="text-gray-400 hover:text-gray-600"
                 >
                   <X className="w-5 h-5" />
@@ -438,61 +453,65 @@ export const StaffPage: React.FC = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
                   <select
                     value={formData.role}
-                    onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+                    onChange={(e) => setFormData({ ...formData, role: e.target.value as UserRole })}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   >
-                    <option value="COMPANY_STAFF">Staff</option>
-                    <option value="COMPANY_ADMIN">Admin</option>
-                    <option value="COMPANY_SUPER_ADMIN">Super Admin</option>
+                    <option value={UserRole.COMPANY_STAFF}>Staff</option>
+                    <option value={UserRole.COMPANY_ADMIN}>Admin</option>
+                    <option value={UserRole.COMPANY_SUPER_ADMIN}>Super Admin</option>
                   </select>
                 </div>
 
                 {/* All-Rounder Toggle */}
-                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                  <div>
-                    <label className="font-medium text-gray-900">All-Rounder</label>
-                    <p className="text-sm text-gray-600 mt-1">
-                      Can handle conversations from any department
-                    </p>
-                  </div>
-                  <label className="relative inline-flex items-center cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={formData.is_all_rounder}
-                      onChange={(e) => setFormData({ ...formData, is_all_rounder: e.target.checked, department_ids: e.target.checked ? [] : formData.department_ids })}
-                      className="sr-only peer"
-                    />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-cyan-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-cyan-600"></div>
-                  </label>
-                </div>
+                {(formData.role !== UserRole.COMPANY_ADMIN && formData.role !== UserRole.COMPANY_SUPER_ADMIN) && (
+                  <>
+                    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                      <div>
+                        <label className="font-medium text-gray-900">All-Rounder</label>
+                        <p className="text-sm text-gray-600 mt-1">
+                          Can handle conversations from any department
+                        </p>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={formData.is_all_rounder}
+                          onChange={(e) => setFormData({ ...formData, is_all_rounder: e.target.checked, department_ids: e.target.checked ? [] : formData.department_ids })}
+                          className="sr-only peer"
+                        />
+                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
+                      </label>
+                    </div>
 
-                {/* Department Selection */}
-                {!formData.is_all_rounder && (
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Departments
-                    </label>
-                    <MultiSelectDropdown
-                      options={departments.map(dept => ({
-                        id: dept.id,
-                        label: dept.name,
-                        icon: dept.icon,
-                        color: dept.color,
-                      }))}
-                      selectedIds={formData.department_ids}
-                      onChange={(selectedIds) => setFormData({ ...formData, department_ids: selectedIds })}
-                      placeholder="Select departments..."
-                      searchPlaceholder="Search departments..."
-                      emptyMessage="No departments available. Create departments first."
-                    />
-                  </div>
+                    {/* Department Selection */}
+                    {!formData.is_all_rounder && (
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Departments
+                        </label>
+                        <MultiSelectDropdown
+                          options={departments.map(dept => ({
+                            id: dept.id,
+                            label: dept.name,
+                            icon: dept.icon,
+                            color: dept.color,
+                          }))}
+                          selectedIds={formData.department_ids}
+                          onChange={(selectedIds) => setFormData({ ...formData, department_ids: selectedIds })}
+                          placeholder="Select departments..."
+                          searchPlaceholder="Search departments..."
+                          emptyMessage="No departments available. Create departments first."
+                        />
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
 
               <div className="flex gap-3 mt-6">
                 <Button
                   variant="secondary"
-                  onClick={() => setShowEditModal(false)}
+                  onClick={() => closeEditModal()}
                   className="flex-1"
                   disabled={isSubmitting}
                 >

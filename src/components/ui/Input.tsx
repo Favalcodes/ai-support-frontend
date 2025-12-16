@@ -37,7 +37,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
               disabled:bg-gray-100 disabled:cursor-not-allowed
               ${error 
                 ? 'border-red-500 focus:ring-red-500 focus:border-red-500' 
-                : 'border-gray-300 focus:ring-cyan-500 focus:border-cyan-500'
+                : 'border-gray-300 focus:ring-primary-500 focus:border-primary-500'
               }
               ${className}
             `}

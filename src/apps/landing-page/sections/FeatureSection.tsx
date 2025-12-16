@@ -56,9 +56,9 @@ export const FeaturesSection: React.FC = () => {
 
   const getColorClasses = (color: string) => {
     const colors: Record<string, { bg: string; text: string }> = {
-      cyan: { bg: 'bg-cyan-100', text: 'text-cyan-600' },
-      mauve: { bg: 'bg-mauve-100', text: 'text-mauve-600' },
-      sky: { bg: 'bg-sky-100', text: 'text-sky-600' },
+      cyan: { bg: 'bg-primary-100', text: 'text-primary-600' },
+      mauve: { bg: 'bg-primary-100', text: 'text-primary-600' },
+      sky: { bg: 'bg-primary-100', text: 'text-primary-600' },
     };
     return colors[color] || colors.cyan;
   };

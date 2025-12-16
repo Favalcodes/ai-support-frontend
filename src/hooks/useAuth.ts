@@ -11,8 +11,11 @@ export const useAuth = () => {
       try {
         setLoading(true);
         const response = await authService.login({ email, password });
-        login(response.data.user, response.data.token);
-        return { success: true };
+        login(response.data.user, response.data.token, response.data.permissions);
+        return {
+          success: true,
+          mustChangePassword: response.data.mustChangePassword || false,
+        };
       } catch (error: any) {
         return {
           success: false,
@@ -35,7 +38,11 @@ export const useAuth = () => {
     }) => {
       try {
         setLoading(true);
-        await authService.register(data);
+        const response = await authService.register(data);
+        // Automatically log in after successful registration
+        if (response.data) {
+          login(response.data.user, response.data.token, response.data.permissions);
+        }
         return { success: true };
       } catch (error: any) {
         return {

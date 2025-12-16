@@ -32,16 +32,25 @@ export const useChat = (companyId: string) => {
   const hasInitializedRef = useRef(false);
 
   /**
-   * Initialize socket connection and event listeners
+   * Initialize socket connection early (even without conversation)
    */
   useEffect(() => {
-    if (!conversation?.id || !user?.id || hasInitializedRef.current) return;
-
     const socket = socketService.connect();
-    
+
     // Update connection status
     socket.on('connect', () => setIsConnected(true));
     socket.on('disconnect', () => setIsConnected(false));
+
+    return () => {
+      socketService.removeAllListeners();
+    };
+  }, []);
+
+  /**
+   * Join conversation room when conversation and user are available
+   */
+  useEffect(() => {
+    if (!conversation?.id || !user?.id || hasInitializedRef.current) return;
 
     // Join conversation room
     socketService.joinConversation(conversation.id, user.id);

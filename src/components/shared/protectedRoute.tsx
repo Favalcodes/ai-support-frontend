@@ -51,6 +51,12 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
+  // Check if user has a company - if not, redirect to company setup
+  // Skip this check if user is on the company-setup page
+  if (user && user.role === UserRole.COMPANY_SUPER_ADMIN && !user.company_id && location.pathname !== '/company-setup') {
+    return <Navigate to="/company-setup" replace />;
+  }
+
   // Check role if specified
   if (requireRole && user) {
     const hasAccess = hasRequiredRole(user.role as UserRole, requireRole);
@@ -86,7 +92,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
             </p>
             <button
               onClick={() => window.history.back()}
-              className="px-4 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600"
+              className="px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600"
             >
               Go Back
             </button>

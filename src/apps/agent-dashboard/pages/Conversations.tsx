@@ -66,9 +66,9 @@
 //         ) : (
 //           <div className="flex-1 flex items-center justify-center bg-gray-50">
 //             <div className="text-center">
-//               <div className="w-16 h-16 bg-cyan-100 rounded-full flex items-center justify-center mx-auto mb-4">
+//               <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
 //                 <svg
-//                   className="w-8 h-8 text-cyan-600"
+//                   className="w-8 h-8 text-primary-600"
 //                   fill="none"
 //                   stroke="currentColor"
 //                   viewBox="0 0 24 24"
@@ -99,8 +99,8 @@
 // };
 
 
-import React, { useEffect, useState } from 'react';
-import { ConversationList } from '../components/ConversationList';
+import React, { useEffect, useState, useCallback } from 'react';
+import { ConversationList, Filters } from '../components/ConversationList';
 import { MessageView } from '../components/MessageView';
 import { CustomerInfoPanel } from '../components/CustomerInfoPanel';
 import { ConversationHeader } from '../components/ConversationHeader';
@@ -109,10 +109,13 @@ import { useAuth, useConversation, useMessages, useSocket } from '../../../hooks
 import { useTypingStore } from '../../../stores/typingStore';
 import { Conversation } from '../../../types/conversation.types';
 import { socketService } from '../../../services/socket';
+import { usePermissions } from '../../../hooks/usePermissions';
+import { Permission } from '../../../types/permission.types';
 
 export const ConversationsPage: React.FC = () => {
   const { user } = useAuth();
-  const { conversations, activeConversation, loadAgentConversations, selectConversation } =
+  const { permissions } = usePermissions();
+  const { conversations, activeConversation, loadAgentConversations, loadCompanyConversations, selectConversation } =
     useConversation();
   const { messages, sendMessage, isLoading: messagesLoading, isSending } = useMessages(
     activeConversation?.id || null
@@ -125,15 +128,39 @@ export const ConversationsPage: React.FC = () => {
   const { getTypingUsers } = useTypingStore();
   const [isLoadingConversations, setIsLoadingConversations] = useState(true);
   const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(null);
+  const [currentFilters, setCurrentFilters] = useState<Filters>({
+    status: 'ALL',
+    dateRange: 'all',
+    assignedOnly: false,
+    escalatedOnly: false,
+  });
 
-  // Load conversations when component mounts
+  // Load conversations when component mounts or filters change
   useEffect(() => {
     if (user) {
-      loadAgentConversations(user.id).finally(() => {
-        setIsLoadingConversations(false);
-      });
+      // Admins with VIEW_ALL_CONVERSATIONS permission see all company conversations
+      // Regular staff only see their assigned conversations
+      const hasViewAllPermission = permissions.includes(Permission.VIEW_ALL_CONVERSATIONS);
+
+      const status = currentFilters.status === 'ALL' ? undefined : currentFilters.status;
+
+      setIsLoadingConversations(true);
+      if (hasViewAllPermission) {
+        loadCompanyConversations({ status }).finally(() => {
+          setIsLoadingConversations(false);
+        });
+      } else {
+        loadAgentConversations(user.id, status).finally(() => {
+          setIsLoadingConversations(false);
+        });
+      }
     }
-  }, [user]);
+  }, [user?.id, permissions, currentFilters.status, loadAgentConversations, loadCompanyConversations]);
+
+  // Handle filter changes from ConversationList component
+  const handleFilterChange = useCallback((filters: Filters) => {
+    setCurrentFilters(filters);
+  }, []);
 
   const handleSelectConversation = (conversation: Conversation) => {
     selectConversation(conversation);
@@ -189,6 +216,7 @@ export const ConversationsPage: React.FC = () => {
           activeConversationId={activeConversation?.id || null}
           onSelectConversation={handleSelectConversation}
           isLoading={isLoadingConversations}
+          onFilterChange={handleFilterChange}
         />
       </div>
 
@@ -213,9 +241,9 @@ export const ConversationsPage: React.FC = () => {
         ) : (
           <div className="flex-1 flex items-center justify-center bg-gray-50">
             <div className="text-center">
-              <div className="w-16 h-16 bg-cyan-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg
-                  className="w-8 h-8 text-cyan-600"
+                  className="w-8 h-8 text-primary-600"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"

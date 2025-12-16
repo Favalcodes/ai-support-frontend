@@ -10,8 +10,8 @@
 
 // export const ChatWidgetContainer: React.FC<ChatWidgetContainerProps> = ({
 //   position = 'bottom-right',
-//   primaryColor = '#00D9DF',
-//   companyName = 'SupportHub',
+//   primaryColor = '#713600',
+//   companyName = 'getLync',
 // }) => {
 //   const [isOpen, setIsOpen] = useState(false);
 //   const [unreadCount, setUnreadCount] = useState(0);
@@ -50,34 +50,25 @@
 // };
 
 
-import React, { useState } from 'react';
+import React from 'react';
 import { ChatButton } from './ChatButton';
-import { ChatWindowWithHistory } from './ChatWindowWithHistory';
-import { PreChatForm } from './PreChatForm';
-import { KnowledgeBaseView } from './KnowledgeBase';
-import { DepartmentSelection } from './DepartmentSelection';
-import { useChat } from '@/hooks/useChat';
+import { IntercomStyleWidget } from './IntercomStyleWidget';
 import { useChatStore } from '@/stores/chatStore';
 import { ChatWidgetState } from '@/types/widget-states';
-import type { Category } from '@/types/knowledge.types';
 
 interface ChatWidgetContainerProps {
   companyId: string;
-  categories?: Category[];
   position?: 'bottom-right' | 'bottom-left';
+  companyName?: string;
+  user?: any; // User from company platform (for auto-sync)
 }
 
 export const ChatWidgetContainer: React.FC<ChatWidgetContainerProps> = ({
   companyId,
-  categories,
   position = 'bottom-right',
+  companyName = 'Support',
+  user,
 }) => {
-  const {
-    conversation,
-    user,
-    startConversation,
-  } = useChat(companyId);
-
   const {
     widgetState,
     unreadCount,
@@ -85,19 +76,10 @@ export const ChatWidgetContainer: React.FC<ChatWidgetContainerProps> = ({
     resetUnreadCount,
   } = useChatStore();
 
-  // Track selected department
-  const [selectedDepartmentId, setSelectedDepartmentId] = useState<string | undefined>();
-
-  // Handle opening widget - goes to department selection first
+  // Handle opening widget
   const handleOpenWidget = () => {
-    setWidgetState(ChatWidgetState.DEPARTMENT_SELECT);
+    setWidgetState(ChatWidgetState.CHAT_ACTIVE);
     resetUnreadCount();
-  };
-
-  // Handle department selection
-  const handleSelectDepartment = (departmentId: string) => {
-    setSelectedDepartmentId(departmentId);
-    setWidgetState(ChatWidgetState.PRE_CHAT_FORM);
   };
 
   // Handle closing widget (ends conversation)
@@ -112,41 +94,8 @@ export const ChatWidgetContainer: React.FC<ChatWidgetContainerProps> = ({
 
   // Handle reopening minimized widget
   const handleReopenWidget = () => {
-    // If there's an active conversation, reopen to chat active
-    if (conversation && user) {
-      setWidgetState(ChatWidgetState.CHAT_ACTIVE);
-    } else {
-      // Otherwise go to department selection
-      setWidgetState(ChatWidgetState.DEPARTMENT_SELECT);
-    }
+    setWidgetState(ChatWidgetState.CHAT_ACTIVE);
     resetUnreadCount();
-  };
-
-  // Handle "Chat with Support" button from FAQ/Articles view
-  const handleStartChatFlow = () => {
-    setWidgetState(ChatWidgetState.PRE_CHAT_FORM);
-  };
-
-  // Handle pre-chat form submission
-  const handleStartChat = async (userData: {
-    email: string;
-    first_name: string;
-    last_name: string;
-    category_id?: string;
-  }) => {
-    try {
-      setWidgetState(ChatWidgetState.LOADING);
-      // Include selected department as category_id
-      await startConversation({
-        ...userData,
-        category_id: selectedDepartmentId || userData.category_id,
-      });
-      setWidgetState(ChatWidgetState.CHAT_ACTIVE);
-    } catch (error) {
-      console.error('Failed to start conversation:', error);
-      alert('Failed to start chat. Please try again.');
-      setWidgetState(ChatWidgetState.PRE_CHAT_FORM);
-    }
   };
 
   // Position class
@@ -172,73 +121,15 @@ export const ChatWidgetContainer: React.FC<ChatWidgetContainerProps> = ({
         />
       )}
 
-      {/* State: DEPARTMENT_SELECT - Show department selection */}
-      {widgetState === ChatWidgetState.DEPARTMENT_SELECT && (
-        <DepartmentSelection
-          companyId={companyId}
-          onSelectDepartment={handleSelectDepartment}
-          onClose={handleCloseWidget}
-        />
-      )}
-
-      {/* State: FAQ_ARTICLES - Show knowledge base */}
-      {widgetState === ChatWidgetState.FAQ_ARTICLES && (
-        <KnowledgeBaseView
-          companyId={companyId}
-          onStartChat={handleStartChatFlow}
-          onClose={handleCloseWidget}
-        />
-      )}
-
-      {/* State: PRE_CHAT_FORM - Show user info form */}
-      {widgetState === ChatWidgetState.PRE_CHAT_FORM && (
-        <div className="w-96 h-[600px] bg-white rounded-lg shadow-2xl overflow-hidden animate-slide-up">
-          <div className="h-full flex flex-col">
-            {/* Header */}
-            <div className="px-4 py-3 bg-cyan-500 text-white flex items-center justify-between">
-              <div>
-                <h3 className="font-semibold">Start a Conversation</h3>
-                <p className="text-xs opacity-90">We're here to help!</p>
-              </div>
-              <button
-                onClick={() => setWidgetState(ChatWidgetState.DEPARTMENT_SELECT)}
-                className="text-white hover:bg-white/20 rounded-full p-1 transition-colors"
-              >
-                ← Back
-              </button>
-            </div>
-
-            {/* Form */}
-            <PreChatForm
-              onSubmit={handleStartChat}
-              isLoading={false}
-              categories={categories}
-            />
-          </div>
-        </div>
-      )}
-
-      {/* State: LOADING - Show loading spinner */}
-      {widgetState === ChatWidgetState.LOADING && (
-        <div className="w-96 h-[600px] bg-white rounded-lg shadow-2xl flex items-center justify-center animate-slide-up">
-          <div className="text-center">
-            <div className="w-12 h-12 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-            <p className="text-gray-600 font-medium">Starting your chat...</p>
-            <p className="text-gray-500 text-sm mt-2">Please wait a moment</p>
-          </div>
-        </div>
-      )}
-
-      {/* State: CHAT_ACTIVE - Show chat window with history */}
-      {widgetState === ChatWidgetState.CHAT_ACTIVE && conversation && user && (
+      {/* State: CHAT_ACTIVE - Show Intercom-style widget */}
+      {widgetState === ChatWidgetState.CHAT_ACTIVE && (
         <div className="mb-4">
-          <ChatWindowWithHistory
+          <IntercomStyleWidget
             onClose={handleCloseWidget}
             onMinimize={handleMinimizeWidget}
             companyId={companyId}
-            userId={user.id}
-            currentConversationId={conversation.id}
-            departmentId={selectedDepartmentId}
+            companyName={companyName}
+            user={user}
           />
         </div>
       )}

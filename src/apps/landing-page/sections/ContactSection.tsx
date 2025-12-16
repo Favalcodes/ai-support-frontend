@@ -40,8 +40,8 @@ export const ContactSection: React.FC = () => {
     {
       icon: Mail,
       label: 'Email',
-      value: 'support@supporthub.ai',
-      href: 'mailto:support@supporthub.ai',
+      value: 'support@getlync.co',
+      href: 'mailto:support@getlync.co',
     },
     {
       icon: Phone,
@@ -78,8 +78,8 @@ export const ContactSection: React.FC = () => {
             </h3>
 
             {isSubmitted && (
-              <div className="mb-6 p-4 bg-cyan-50 border border-cyan-200 rounded-lg">
-                <p className="text-cyan-800 font-medium">
+              <div className="mb-6 p-4 bg-primary-50 border border-primary-200 rounded-lg">
+                <p className="text-primary-800 font-medium">
                   ✓ Thank you! We'll get back to you soon.
                 </p>
               </div>
@@ -147,8 +147,8 @@ export const ContactSection: React.FC = () => {
                   const Icon = info.icon;
                   return (
                     <div key={index} className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-cyan-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <Icon className="w-6 h-6 text-cyan-600" />
+                      <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <Icon className="w-6 h-6 text-primary-600" />
                       </div>
                       <div>
                         <p className="text-sm font-medium text-gray-500 mb-1">
@@ -157,7 +157,7 @@ export const ContactSection: React.FC = () => {
                         {info.href ? (
                           <a
                             href={info.href}
-                            className="text-gray-900 hover:text-cyan-600 transition-colors"
+                            className="text-gray-900 hover:text-primary-600 transition-colors"
                           >
                             {info.value}
                           </a>
@@ -172,7 +172,7 @@ export const ContactSection: React.FC = () => {
             </div>
 
             {/* Office Hours */}
-            <div className="bg-cyan-500 rounded-2xl shadow-lg p-8 text-white">
+            <div className="bg-primary-500 rounded-2xl shadow-lg p-8 text-white">
               <h3 className="text-2xl font-bold mb-4">Office Hours</h3>
               <div className="space-y-2">
                 <div className="flex justify-between">

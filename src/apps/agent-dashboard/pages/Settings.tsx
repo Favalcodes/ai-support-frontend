@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { User, Lock, Bell, Building, Save } from 'lucide-react';
+import toast from 'react-hot-toast';
 import { useAuth } from '../../../hooks';
 import { Button, Input, Card } from '../../../components/ui';
 import { userService } from '../../../services/user.service';
@@ -91,7 +92,7 @@ export const SettingsPage: React.FC = () => {
 
   const handleProfileSave = async () => {
     if (!profileForm.first_name.trim() || !profileForm.last_name.trim()) {
-      alert('Please fill in all required fields');
+      toast.error('Please fill in all required fields');
       return;
     }
 
@@ -102,10 +103,10 @@ export const SettingsPage: React.FC = () => {
       // Refresh user data
       await refreshUser();
 
-      alert('Profile updated successfully!');
+      toast.success('Profile updated successfully!');
     } catch (error) {
       console.error('Failed to update profile:', error);
-      alert('Failed to update profile. Please try again.');
+      toast.error('Failed to update profile. Please try again.');
     } finally {
       setIsSaving(false);
     }
@@ -113,12 +114,12 @@ export const SettingsPage: React.FC = () => {
 
   const handleCompanySave = async () => {
     if (!companyForm.name.trim()) {
-      alert('Company name is required');
+      toast.error('Company name is required');
       return;
     }
 
     if (!company?.id) {
-      alert('Company ID not found');
+      toast.error('Company ID not found');
       return;
     }
 
@@ -126,11 +127,11 @@ export const SettingsPage: React.FC = () => {
     try {
       const updatedCompany = await companyService.updateCompany(company.id, companyForm);
       setCompany(updatedCompany);
-      alert('Company details updated successfully!');
+      toast.success('Company details updated successfully!');
     } catch (error: any) {
       console.error('Failed to update company:', error);
       const errorMessage = error?.response?.data?.message || 'Failed to update company details. Please try again.';
-      alert(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setIsSaving(false);
     }
@@ -138,17 +139,17 @@ export const SettingsPage: React.FC = () => {
 
   const handlePasswordChange = async () => {
     if (!passwordForm.currentPassword || !passwordForm.newPassword || !passwordForm.confirmPassword) {
-      alert('Please fill in all password fields');
+      toast.error('Please fill in all password fields');
       return;
     }
 
     if (passwordForm.newPassword !== passwordForm.confirmPassword) {
-      alert('New passwords do not match!');
+      toast.error('New passwords do not match!');
       return;
     }
 
     if (passwordForm.newPassword.length < 8) {
-      alert('Password must be at least 8 characters long!');
+      toast.error('Password must be at least 8 characters long!');
       return;
     }
 
@@ -159,12 +160,12 @@ export const SettingsPage: React.FC = () => {
         newPassword: passwordForm.newPassword,
       });
 
-      alert('Password changed successfully!');
+      toast.success('Password changed successfully!');
       setPasswordForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
     } catch (error: any) {
       console.error('Failed to change password:', error);
       const errorMessage = error?.response?.data?.message || 'Failed to change password. Please try again.';
-      alert(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setIsSaving(false);
     }
@@ -175,10 +176,10 @@ export const SettingsPage: React.FC = () => {
     try {
       // Save to localStorage (backend notification endpoint can be added later)
       localStorage.setItem('notification_preferences', JSON.stringify(notifications));
-      alert('Notification preferences updated successfully!');
+      toast.success('Notification preferences updated successfully!');
     } catch (error) {
       console.error('Failed to update notifications:', error);
-      alert('Failed to update notification preferences. Please try again.');
+      toast.error('Failed to update notification preferences. Please try again.');
     } finally {
       setIsSaving(false);
     }
@@ -209,7 +210,7 @@ export const SettingsPage: React.FC = () => {
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center gap-2 px-4 py-3 font-medium transition-colors border-b-2 ${
                   activeTab === tab.id
-                    ? 'border-cyan-500 text-cyan-600'
+                    ? 'border-primary-500 text-primary-600'
                     : 'border-transparent text-gray-600 hover:text-gray-900'
                 }`}
               >
@@ -364,7 +365,7 @@ export const SettingsPage: React.FC = () => {
                       type="checkbox"
                       checked={notifications.emailOnNewMessage}
                       onChange={(e) => setNotifications({ ...notifications, emailOnNewMessage: e.target.checked })}
-                      className="w-4 h-4 text-cyan-600 rounded border-gray-300 focus:ring-cyan-500"
+                      className="w-4 h-4 text-primary-600 rounded border-gray-300 focus:ring-primary-500"
                     />
                     <div>
                       <div className="text-sm font-medium text-gray-900">New Messages</div>
@@ -376,7 +377,7 @@ export const SettingsPage: React.FC = () => {
                       type="checkbox"
                       checked={notifications.emailOnEscalation}
                       onChange={(e) => setNotifications({ ...notifications, emailOnEscalation: e.target.checked })}
-                      className="w-4 h-4 text-cyan-600 rounded border-gray-300 focus:ring-cyan-500"
+                      className="w-4 h-4 text-primary-600 rounded border-gray-300 focus:ring-primary-500"
                     />
                     <div>
                       <div className="text-sm font-medium text-gray-900">Escalations</div>
@@ -388,7 +389,7 @@ export const SettingsPage: React.FC = () => {
                       type="checkbox"
                       checked={notifications.emailOnResolution}
                       onChange={(e) => setNotifications({ ...notifications, emailOnResolution: e.target.checked })}
-                      className="w-4 h-4 text-cyan-600 rounded border-gray-300 focus:ring-cyan-500"
+                      className="w-4 h-4 text-primary-600 rounded border-gray-300 focus:ring-primary-500"
                     />
                     <div>
                       <div className="text-sm font-medium text-gray-900">Resolutions</div>
@@ -406,7 +407,7 @@ export const SettingsPage: React.FC = () => {
                       type="checkbox"
                       checked={notifications.appNotifications}
                       onChange={(e) => setNotifications({ ...notifications, appNotifications: e.target.checked })}
-                      className="w-4 h-4 text-cyan-600 rounded border-gray-300 focus:ring-cyan-500"
+                      className="w-4 h-4 text-primary-600 rounded border-gray-300 focus:ring-primary-500"
                     />
                     <div>
                       <div className="text-sm font-medium text-gray-900">Push Notifications</div>
@@ -418,7 +419,7 @@ export const SettingsPage: React.FC = () => {
                       type="checkbox"
                       checked={notifications.soundEnabled}
                       onChange={(e) => setNotifications({ ...notifications, soundEnabled: e.target.checked })}
-                      className="w-4 h-4 text-cyan-600 rounded border-gray-300 focus:ring-cyan-500"
+                      className="w-4 h-4 text-primary-600 rounded border-gray-300 focus:ring-primary-500"
                     />
                     <div>
                       <div className="text-sm font-medium text-gray-900">Sound Alerts</div>

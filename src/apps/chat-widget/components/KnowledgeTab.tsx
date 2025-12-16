@@ -114,7 +114,7 @@ export const KnowledgeTab: React.FC<KnowledgeTabProps> = ({
       <div className="flex-1 overflow-y-auto p-4 min-h-0">
         {isLoading ? (
           <div className="flex flex-col items-center justify-center h-full">
-            <Loader2 className="w-8 h-8 text-cyan-500 animate-spin mb-3" />
+            <Loader2 className="w-8 h-8 text-primary-500 animate-spin mb-3" />
             <p className="text-sm text-gray-600">Loading articles...</p>
           </div>
         ) : articles.length === 0 ? (
@@ -127,7 +127,7 @@ export const KnowledgeTab: React.FC<KnowledgeTabProps> = ({
             {onStartChat && (
               <button
                 onClick={onStartChat}
-                className="mt-4 px-4 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 transition-colors"
+                className="mt-4 px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors"
               >
                 Chat with Support
               </button>
@@ -139,21 +139,21 @@ export const KnowledgeTab: React.FC<KnowledgeTabProps> = ({
               <button
                 key={article.id}
                 onClick={() => handleArticleClick(article.id)}
-                className="w-full bg-white rounded-lg border border-gray-200 p-4 text-left hover:shadow-md hover:border-cyan-300 transition-all group"
+                className="w-full bg-white rounded-lg border border-gray-200 p-4 text-left hover:shadow-md hover:border-primary-300 transition-all group"
               >
                 {/* Category Badge */}
                 {article.category && (
-                  <span className="inline-block px-2 py-0.5 text-xs font-medium text-cyan-700 bg-cyan-100 rounded mb-2">
+                  <span className="inline-block px-2 py-0.5 text-xs font-medium text-primary-700 bg-primary-100 rounded mb-2">
                     {article.category}
                   </span>
                 )}
 
                 {/* Title */}
                 <div className="flex items-start justify-between gap-2 mb-2">
-                  <h4 className="text-sm font-semibold text-gray-900 group-hover:text-cyan-600 transition-colors">
+                  <h4 className="text-sm font-semibold text-gray-900 group-hover:text-primary-600 transition-colors">
                     {article.title}
                   </h4>
-                  <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-cyan-600 flex-shrink-0 transition-colors" />
+                  <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-primary-600 flex-shrink-0 transition-colors" />
                 </div>
 
                 {/* Excerpt */}
@@ -183,11 +183,11 @@ export const KnowledgeTab: React.FC<KnowledgeTabProps> = ({
       {/* Footer - Need more help? */}
       {!isLoading && articles.length > 0 && onStartChat && (
         <div className="p-4 bg-white border-t border-gray-200 flex-shrink-0">
-          <div className="bg-cyan-50 rounded-lg p-3 text-center">
+          <div className="bg-primary-50 rounded-lg p-3 text-center">
             <p className="text-sm text-gray-700 mb-2">Can't find what you're looking for?</p>
             <button
               onClick={onStartChat}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 transition-colors text-sm font-medium"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors text-sm font-medium"
             >
               <MessageSquare className="w-4 h-4" />
               Chat with Support

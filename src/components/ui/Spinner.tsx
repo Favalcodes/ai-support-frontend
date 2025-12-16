@@ -16,7 +16,7 @@ export const Spinner: React.FC<SpinnerProps> = ({ size = 'md', className = '' })
   return (
     <Loader2
       size={sizes[size]}
-      className={`animate-spin text-cyan-500 ${className}`}
+      className={`animate-spin text-primary-500 ${className}`}
     />
   );
 };

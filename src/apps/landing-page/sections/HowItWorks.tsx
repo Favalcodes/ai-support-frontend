@@ -44,19 +44,19 @@ export const HowItWorksSection: React.FC = () => {
               <div key={index} className="relative">
                 {/* Connector Line (desktop only) */}
                 {index < steps.length - 1 && (
-                  <div className="hidden md:block absolute top-16 left-1/2 w-full h-0.5 bg-cyan-500"></div>
+                  <div className="hidden md:block absolute top-16 left-1/2 w-full h-0.5 bg-primary-500"></div>
                 )}
 
                 {/* Step Card */}
                 <div className="relative z-10 text-center">
                   {/* Number Badge */}
-                  <div className="w-16 h-16 bg-cyan-500 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4 shadow-glow-cyan">
+                  <div className="w-16 h-16 bg-primary-500 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4 shadow-glow-cyan">
                     {step.number}
                   </div>
 
                   {/* Icon */}
-                  <div className="w-16 h-16 bg-white border-4 border-cyan-100 rounded-full flex items-center justify-center mx-auto mb-4 -mt-8">
-                    <Icon className="w-8 h-8 text-cyan-600" />
+                  <div className="w-16 h-16 bg-white border-4 border-primary-100 rounded-full flex items-center justify-center mx-auto mb-4 -mt-8">
+                    <Icon className="w-8 h-8 text-primary-600" />
                   </div>
 
                   {/* Content */}

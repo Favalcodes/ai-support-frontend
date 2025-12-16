@@ -11,6 +11,17 @@ export const conversationService = {
         return response.data.data;
     },
 
+    // Get all company conversations (for admins)
+    async getCompanyConversations(params?: {
+        page?: number;
+        limit?: number;
+        status?: string;
+        assignedStaffId?: string;
+    }): Promise<{ data: Conversation[]; total: number; page: number; limit: number; totalPages: number }> {
+        const response = await api.get(`/staff/conversations/paginated`, { params });
+        return response.data.data;
+    },
+
     // Get unassigned conversations
     async getUnassignedConversations(companyId: string): Promise<Conversation[]> {
         const response = await api.get(`/staff/conversations/unassigned/${companyId}`);
@@ -70,7 +81,7 @@ export const conversationService = {
         limit = 10
     ): Promise<Conversation[]> {
         const response = await api.get(`/conversation`, {
-            params: { userId, companyId, limit },
+            params: { user_id: userId, company_id: companyId, limit },
         });
         return response.data.data;
     },
@@ -104,6 +115,12 @@ export const conversationService = {
         return response.data.data;
     },
 
+    // Get company stats (for admins)
+    async getCompanyStats(): Promise<any> {
+        const response = await api.get(`/staff/stats/company`);
+        return response.data.data;
+    },
+
     // Get agent stats
     async getAgentStats(staffId: string): Promise<any> {
         const response = await api.get(`/staff/agents/${staffId}/stats`);
@@ -121,5 +138,13 @@ export const conversationService = {
     async getConversationNotes(conversationId: string): Promise<string> {
         const response = await api.get(`/conversation/${conversationId}`);
         return response.data.data.notes || '';
+    },
+
+    // Rate a conversation
+    async rateConversation(conversationId: string, rating: number, rating_comment?: string): Promise<void> {
+        await api.post(`/conversation/${conversationId}/rate`, {
+            rating,
+            rating_comment,
+        });
     },
 };

@@ -17,7 +17,7 @@ export const ChatButton: React.FC<ChatButtonProps> = ({
       onClick={onClick}
       className={`
         relative w-16 h-16 rounded-full shadow-2xl
-        bg-cyan-500
+        bg-primary-500
         hover:scale-110 active:scale-95
         transition-all duration-300 ease-out
         flex items-center justify-center
@@ -45,7 +45,7 @@ export const ChatButton: React.FC<ChatButtonProps> = ({
 
       {/* Pulse Ring */}
       {!isOpen && (
-        <span className="absolute inset-0 rounded-full bg-cyan-500 animate-ping opacity-20"></span>
+        <span className="absolute inset-0 rounded-full bg-primary-500 animate-ping opacity-20"></span>
       )}
 
       <style>{`

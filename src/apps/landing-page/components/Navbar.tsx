@@ -3,6 +3,7 @@ import { Menu, X, User, LogOut } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '../../../components/ui';
 import { useAuthStore } from '../../../stores/authStore';
+import Logo from '../../../assets/logo.png'
 
 export const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -52,15 +53,16 @@ export const Navbar: React.FC = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-cyan-500 rounded-xl flex items-center justify-center">
-              <span className="text-white font-bold text-lg">AI</span>
+            <div className="w-10 h-10 bg-transparent rounded-xl flex items-center justify-center">
+              {/* <span className="text-white font-bold text-lg">AI</span> */}
+              <img src={Logo} alt="white logo" className='w-full h-full object-cover' />
             </div>
             <span
               className={`text-xl font-bold transition-colors ${
                 isScrolled ? 'text-gray-900' : 'text-white'
               }`}
             >
-              SupportHub
+              getLync
             </span>
           </div>
 
@@ -141,7 +143,7 @@ export const Navbar: React.FC = () => {
                 >
                   Sign In
                 </Link>
-                <Link to="/demo">
+                <Link to="/register">
                   <Button variant="primary" size="sm">
                     Get Started
                   </Button>
@@ -220,7 +222,7 @@ export const Navbar: React.FC = () => {
                   >
                     Sign In
                   </Link>
-                  <Link to="/demo" onClick={() => setIsMobileMenuOpen(false)}>
+                  <Link to="/register" onClick={() => setIsMobileMenuOpen(false)}>
                     <Button variant="primary" className="w-full">
                       Get Started
                     </Button>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Mail, Calendar, Building, Save, CheckCircle } from 'lucide-react';
+import toast from 'react-hot-toast';
 import { Conversation } from '../../../types/conversation.types';
 import { Avatar, Badge, Button, Textarea } from '../../../components/ui';
 import { formatDate } from '../../../utils/formatters';
@@ -43,14 +44,15 @@ export const CustomerInfoPanel: React.FC<CustomerInfoPanelProps> = ({
       setIsSavingNotes(true);
       await conversationService.saveConversationNotes(conversation.id, notes);
       setSaveSuccess(true);
-      
+      toast.success('Notes saved successfully');
+
       // Hide success message after 2 seconds
       setTimeout(() => {
         setSaveSuccess(false);
       }, 2000);
     } catch (error) {
       console.error('Failed to save notes:', error);
-      alert('Failed to save notes. Please try again.');
+      toast.error('Failed to save notes. Please try again.');
     } finally {
       setIsSavingNotes(false);
     }
@@ -81,11 +83,11 @@ export const CustomerInfoPanel: React.FC<CustomerInfoPanelProps> = ({
 
         {/* Quick Stats */}
         <div className="grid grid-cols-2 gap-3 mb-6">
-          <div className="bg-gradient-to-br from-blush-50 to-sky-50 rounded-lg p-3 text-center">
+          <div className="bg-gradient-to-br from-accent-50 to-secondary-50 rounded-lg p-3 text-center">
             <p className="text-2xl font-bold text-gray-900">-</p>
             <p className="text-xs text-gray-600">Total Chats</p>
           </div>
-          <div className="bg-gradient-to-br from-blush-50 to-sky-50 rounded-lg p-3 text-center">
+          <div className="bg-gradient-to-br from-accent-50 to-secondary-50 rounded-lg p-3 text-center">
             <p className="text-2xl font-bold text-gray-900">-</p>
             <p className="text-xs text-gray-600">Avg Rating</p>
           </div>

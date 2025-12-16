@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Search, Filter, X } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Search, Filter, X, Star } from 'lucide-react';
 import { Conversation, ConversationStatus } from '../../../types/conversation.types';
 import { Avatar, Badge } from '../../../components/ui';
 import { formatRelativeTime } from '../../../utils/formatters';
@@ -9,9 +9,10 @@ interface ConversationListProps {
   activeConversationId: string | null;
   onSelectConversation: (conversation: Conversation) => void;
   isLoading?: boolean;
+  onFilterChange?: (filters: Filters) => void;
 }
 
-interface Filters {
+export interface Filters {
   status: ConversationStatus | 'ALL';
   dateRange: 'all' | 'today' | 'week' | 'month';
   assignedOnly: boolean;
@@ -23,6 +24,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
   activeConversationId,
   onSelectConversation,
   isLoading = false,
+  onFilterChange,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
@@ -32,6 +34,13 @@ export const ConversationList: React.FC<ConversationListProps> = ({
     assignedOnly: false,
     escalatedOnly: false,
   });
+
+  // Notify parent component when filters change (for backend fetching)
+  useEffect(() => {
+    if (onFilterChange) {
+      onFilterChange(filters);
+    }
+  }, [filters, onFilterChange]);
 
   const isWithinDateRange = (date: string, range: string): boolean => {
     const conversationDate = new Date(date);
@@ -102,8 +111,6 @@ export const ConversationList: React.FC<ConversationListProps> = ({
     switch (status) {
       case 'OPEN':
         return <Badge variant="success" size="sm">Active</Badge>;
-      case 'RESOLVED':
-        return <Badge variant="default" size="sm">Resolved</Badge>;
       case 'CLOSED':
         return <Badge variant="default" size="sm">Closed</Badge>;
       default:
@@ -131,7 +138,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
     return (
       <div className="flex items-center justify-center h-full">
         <div className="text-center">
-          <div className="animate-spin w-8 h-8 border-4 border-cyan-500 border-t-transparent rounded-full mx-auto mb-2"></div>
+          <div className="animate-spin w-8 h-8 border-4 border-primary-500 border-t-transparent rounded-full mx-auto mb-2"></div>
           <p className="text-sm text-gray-500">Loading conversations...</p>
         </div>
       </div>
@@ -148,7 +155,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
             onClick={() => setShowFilters(!showFilters)}
             className={`p-2 rounded-lg transition-colors ${
               showFilters || hasActiveFilters
-                ? 'bg-cyan-100 text-cyan-600'
+                ? 'bg-primary-100 text-primary-600'
                 : 'hover:bg-gray-100 text-gray-600'
             }`}
             title="Toggle filters"
@@ -170,7 +177,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
             placeholder="Search by name or email..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 text-sm"
+            className="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm"
           />
         </div>
       </div>
@@ -189,11 +196,10 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                 onChange={(e) =>
                   setFilters({ ...filters, status: e.target.value as ConversationStatus | 'ALL' })
                 }
-                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
               >
                 <option value="ALL">All Status</option>
                 <option value="OPEN">Open</option>
-                <option value="RESOLVED">Resolved</option>
                 <option value="CLOSED">Closed</option>
               </select>
             </div>
@@ -208,7 +214,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                 onChange={(e) =>
                   setFilters({ ...filters, dateRange: e.target.value as Filters['dateRange'] })
                 }
-                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
               >
                 <option value="all">All Time</option>
                 <option value="today">Today</option>
@@ -224,7 +230,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                   type="checkbox"
                   checked={filters.assignedOnly}
                   onChange={(e) => setFilters({ ...filters, assignedOnly: e.target.checked })}
-                  className="w-4 h-4 text-cyan-600 border-gray-300 rounded focus:ring-cyan-500"
+                  className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
                 />
                 <span className="ml-2">Assigned to me only</span>
               </label>
@@ -234,7 +240,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                   type="checkbox"
                   checked={filters.escalatedOnly}
                   onChange={(e) => setFilters({ ...filters, escalatedOnly: e.target.checked })}
-                  className="w-4 h-4 text-cyan-600 border-gray-300 rounded focus:ring-cyan-500"
+                  className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
                 />
                 <span className="ml-2">Escalated only</span>
               </label>
@@ -244,7 +250,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
             {hasActiveFilters && (
               <button
                 onClick={resetFilters}
-                className="w-full px-3 py-2 text-sm text-cyan-600 hover:text-cyan-700 hover:bg-cyan-50 rounded-lg transition-colors flex items-center justify-center gap-2"
+                className="w-full px-3 py-2 text-sm text-primary-600 hover:text-primary-700 hover:bg-primary-50 rounded-lg transition-colors flex items-center justify-center gap-2"
               >
                 <X className="w-4 h-4" />
                 Reset Filters
@@ -275,7 +281,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                   hover:bg-gray-50
                   ${
                     activeConversationId === conversation.id
-                      ? 'bg-cyan-50 border-l-4 border-l-cyan-500'
+                      ? 'bg-primary-50 border-l-4 border-l-primary-500'
                       : ''
                   }
                 `}
@@ -311,6 +317,12 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                       {getStatusBadge(conversation.status)}
                       {conversation.needs_human_agent && (
                         <Badge variant="warning" size="sm">Escalated</Badge>
+                      )}
+                      {conversation.status === 'CLOSED' && conversation.rating && (
+                        <div className="flex items-center gap-1 px-2 py-0.5 bg-yellow-50 border border-yellow-200 rounded text-xs">
+                          <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                          <span className="font-medium text-yellow-700">{conversation.rating}</span>
+                        </div>
                       )}
                     </div>
                   </div>

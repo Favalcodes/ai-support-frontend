@@ -5,6 +5,7 @@ export interface KnowledgeCategory {
   name: string;
   description?: string;
   company_id: string;
+  articles: KnowledgeArticle[];
   created_at: string;
   updated_at: string;
 }

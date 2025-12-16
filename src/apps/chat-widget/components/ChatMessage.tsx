@@ -25,7 +25,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
   if (message.role === 'system') {
     return (
       <div className="flex justify-center my-2">
-        <div className="bg-blush-50 border border-blush-200 px-4 py-2 rounded-full max-w-xs">
+        <div className="bg-accent-50 border border-accent-200 px-4 py-2 rounded-full max-w-xs">
           <p className="text-xs text-gray-700 text-center">{message.content}</p>
         </div>
       </div>
@@ -37,7 +37,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
     return (
       <div className="flex justify-end">
         <div className="max-w-[75%]">
-          <div className="bg-cyan-500 text-white rounded-lg rounded-tr-none p-3 shadow-sm">
+          <div className="bg-primary-500 text-white rounded-lg rounded-tr-none p-3 shadow-sm">
             <p className="text-sm whitespace-pre-wrap">{message.content}</p>
           </div>
           <p className="text-xs text-gray-500 mt-1 text-right">
@@ -54,7 +54,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
       <Avatar
         name="AI"
         size="sm"
-        className="bg-cyan-500 flex-shrink-0"
+        className="bg-primary-500 flex-shrink-0"
       />
       <div className="max-w-[75%]">
         <div className="bg-white rounded-lg rounded-tl-none p-3 shadow-sm border border-gray-200">
