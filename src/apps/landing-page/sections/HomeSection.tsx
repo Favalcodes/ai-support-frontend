@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { ArrowRight, Check } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
+import { ArrowRight, Check, Play } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { avatars, art } from '../../../assets/brand';
 
 const trustPoints = ['No credit card required', '14-day free trial', 'Cancel anytime'];
@@ -13,15 +13,6 @@ const handoffFaces = [
 ];
 
 export const HeroSection: React.FC = () => {
-  const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Carry the address into signup so the visitor does not retype it
-    navigate(`/register${email ? `?email=${encodeURIComponent(email)}` : ''}`);
-  };
-
   return (
     <section className="relative isolate min-h-[42rem] lg:min-h-[46rem] flex items-center overflow-hidden">
       {/* Generated brand plate: the relay loop resolving into a chat bubble.
@@ -50,30 +41,22 @@ export const HeroSection: React.FC = () => {
             the context already in place.
           </p>
 
-          {/* Inline capture, in the shape of the reference hero */}
-          <form
-            onSubmit={handleSubmit}
-            className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-2 sm:p-2 sm:bg-white/10 sm:border sm:border-white/20 sm:rounded-2xl max-w-xl mb-8 sm:mb-9"
-          >
-            <label htmlFor="hero-email" className="sr-only">
-              Work email
-            </label>
-            <input
-              id="hero-email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your work email"
-              className="flex-1 min-w-0 px-5 py-3.5 rounded-xl bg-white/10 sm:bg-transparent border border-white/20 sm:border-0 text-white placeholder:text-secondary-300 focus:outline-none focus:ring-2 focus:ring-secondary-400 sm:focus:ring-0"
-            />
-            <button
-              type="submit"
-              className="group inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-primary-500 text-white font-semibold hover:bg-primary-400 transition-colors shrink-0"
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-8 sm:mb-9">
+            <Link
+              to="/register"
+              className="group inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl bg-primary-500 text-white font-semibold hover:bg-primary-400 transition-colors"
             >
               Start free trial
               <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-            </button>
-          </form>
+            </Link>
+            <Link
+              to="/demo"
+              className="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl bg-white/10 border border-white/25 text-white font-semibold hover:bg-white/15 transition-colors"
+            >
+              <Play className="w-4 h-4 fill-current" />
+              View demo
+            </Link>
+          </div>
 
           <div className="flex flex-col lg:flex-row lg:items-center gap-5 lg:gap-10">
             <div className="flex items-center gap-3 shrink-0">

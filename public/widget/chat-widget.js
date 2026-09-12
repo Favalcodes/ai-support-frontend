@@ -309,6 +309,39 @@
         stroke-linejoin: round;
       }
 
+      /* Attribution bar.
+         Quiet by design and outside the scrolling content, so it stays pinned to
+         the base of the widget on every tab. Hide it for white-label customers
+         by removing this block and the anchor above. */
+      .cw-powered-by {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        padding: 10px 12px;
+        flex-shrink: 0;
+        background: #ffffff;
+        border-top: 1px solid #E9ECFF;
+        color: #9A9EB6;
+        font-size: 11px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: color 0.15s ease;
+      }
+
+      .cw-powered-by:hover {
+        color: #0E1752;
+      }
+
+      .cw-powered-by b {
+        color: #0E1752;
+        font-weight: 700;
+      }
+
+      .cw-powered-by b.cw-powered-accent {
+        color: #4563FF;
+      }
+
       /* Content area */
       .cw-content {
         flex: 1;
@@ -1090,6 +1123,14 @@
         <div class="cw-content" id="cw-content">
           <!-- Content will be dynamically loaded here -->
         </div>
+
+        <!-- Attribution, pinned to the base across every tab -->
+        <a class="cw-powered-by" href="https://rlayai.co" target="_blank" rel="noreferrer noopener">
+          <svg viewBox="0 0 28 14" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+            <path d="M7 3.2a3.8 3.8 0 1 0 0 7.6c3.4 0 4.6-7.6 8-7.6a3.8 3.8 0 1 1 0 7.6c-1.2 0-2.1-.9-2.8-2"></path>
+          </svg>
+          <span>Powered by <b>rlay</b><b class="cw-powered-accent">Ai</b></span>
+        </a>
       </div>
     </div>
   `;

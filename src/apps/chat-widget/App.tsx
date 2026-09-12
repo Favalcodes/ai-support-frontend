@@ -1,110 +1,135 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { ArrowLeft, ArrowRight, MousePointerClick } from 'lucide-react';
 import { ChatWidgetContainer } from './components/ChatWidgetContainer';
+import { logo } from '../../assets/brand';
+
+/**
+ * Public demo page for the embeddable widget.
+ *
+ * The install snippet shown here is the same one the dashboard generates. It
+ * previously documented `window.getLyncConfig` and a cdn.supporthub.ai URL,
+ * neither of which exists, alongside the old chocolate default colour.
+ */
+
+const DEMO_COMPANY_ID = 'd37e75b2-e62f-4c76-a339-e8b125d85706';
+
+const installSnippet = `<!-- rlayAi Widget -->
+<script>
+  window.chatWidgetConfig = {
+    companyId: 'YOUR_COMPANY_ID',
+    apiUrl: 'https://api.rlayai.co/api/v1'
+  };
+</script>
+<script src="https://app.rlayai.co/widget/chat-widget.js" async></script>
+<!-- End rlayAi Widget -->`;
+
+const options: { name: string; type: string; default: string; note: string }[] = [
+  { name: 'companyId', type: 'string', default: 'required', note: 'Found in Widget Settings' },
+  { name: 'apiUrl', type: 'string', default: "the script's origin", note: 'Your API root' },
+  { name: 'user', type: 'object', default: 'none', note: 'Skips the pre-chat form for signed-in users' },
+  { name: 'position', type: "'bottom-right' | 'bottom-left'", default: 'bottom-right', note: 'Which corner it docks to' },
+];
 
 export const ChatWidgetApp: React.FC = () => {
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-      {/* Demo Page Content */}
-      <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-4">
-          Chat Widget Demo
-        </h1>
-        <p className="text-gray-600 mb-4">
-          This is a demo page showing how the chat widget appears on your website.
-          The widget is positioned in the bottom-right corner.
+    <div className="min-h-screen bg-dark-500">
+      {/* Slim header */}
+      <header className="border-b border-ink-800">
+        <div className="max-w-5xl mx-auto px-5 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+          <Link to="/" aria-label="rlayAi home">
+            <img src={logo.fullOnDark} alt="rlayAi" className="h-10 w-auto" />
+          </Link>
+          <div className="flex items-center gap-3">
+            <Link
+              to="/"
+              className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-secondary-300 hover:text-white transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back to site
+            </Link>
+            <Link
+              to="/register"
+              className="group inline-flex items-center gap-1.5 px-5 py-2.5 rounded-lg bg-primary-500 text-white text-sm font-semibold hover:bg-primary-400 transition-colors"
+            >
+              Start free trial
+              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+            </Link>
+          </div>
+        </div>
+      </header>
+
+      <main className="max-w-5xl mx-auto px-5 sm:px-6 lg:px-8 py-14 sm:py-20">
+        <p className="text-sm font-semibold uppercase tracking-widest text-secondary-400 mb-4">
+          Live demo
         </p>
-        <p className="text-gray-600 mb-4">
-          Click the floating button to open the chat widget and start a conversation.
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tighter text-white mb-5">
+          This page has the widget on it
+        </h1>
+        <p className="text-base sm:text-lg text-secondary-200 leading-relaxed max-w-2xl mb-8">
+          Exactly what your customers would see. It is docked in the bottom-right
+          corner of this page — open it, ask something, and watch it answer from the
+          knowledge base before offering a human.
         </p>
 
-        {/* Demo Features */}
-        <div className="mt-8 space-y-4">
-          <h2 className="text-2xl font-semibold text-gray-900">Features:</h2>
-          <ul className="list-disc list-inside space-y-2 text-gray-600">
-            <li>Floating chat button with bounce animation</li>
-            <li>Unread message counter badge</li>
-            <li>Expandable chat window</li>
-            <li>AI-powered responses (demo)</li>
-            <li>Typing indicators</li>
-            <li>Message timestamps</li>
-            <li>File attachment button</li>
-            <li>Fully responsive design</li>
-            <li>Customizable colors and position</li>
-            <li>Easy to embed with a single script tag</li>
-          </ul>
+        <div className="inline-flex items-center gap-2.5 px-4 py-3 rounded-xl bg-primary-800 border border-primary-600 text-secondary-200 text-sm mb-14">
+          <MousePointerClick className="w-4 h-4 text-secondary-400 shrink-0" />
+          Open the chat button in the bottom-right corner to try it
         </div>
 
-        {/* Integration Code */}
-        <div className="mt-8">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-            How to Integrate:
+        {/* Install */}
+        <section className="mb-12">
+          <h2 className="text-xl sm:text-2xl font-bold text-white mb-3">
+            Adding it to your own site
           </h2>
-          <div className="bg-gray-900 rounded-lg p-4 overflow-x-auto">
-            <pre className="text-green-400 text-sm">
-              <code>{`<!-- Add this script to your website -->
-<script>
-  (function() {
-    window.getLyncConfig = {
-      companyId: 'YOUR_COMPANY_ID',
-      primaryColor: '#713600',
-      position: 'bottom-right'
-    };
-    var script = document.createElement('script');
-    script.src = 'https://cdn.supporthub.ai/widget.js';
-    script.async = true;
-    document.head.appendChild(script);
-  })();
-</script>`}</code>
+          <p className="text-secondary-200 leading-relaxed mb-5 max-w-2xl">
+            Two script tags, anywhere before <code className="text-secondary-300">&lt;/body&gt;</code>.
+            Your dashboard generates this with your company ID already filled in.
+          </p>
+          <div className="rounded-2xl bg-dark-700 border border-ink-800 p-5 overflow-x-auto">
+            <pre className="text-xs sm:text-sm leading-relaxed text-secondary-300 font-mono">
+              <code>{installSnippet}</code>
             </pre>
           </div>
-        </div>
+        </section>
 
-        {/* Customization */}
-        <div className="mt-8">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-            Customization Options:
+        {/* Options */}
+        <section>
+          <h2 className="text-xl sm:text-2xl font-bold text-white mb-5">
+            Configuration
           </h2>
-          <div className="bg-gray-50 rounded-lg p-4">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-gray-200">
-                  <th className="text-left py-2 font-semibold">Option</th>
-                  <th className="text-left py-2 font-semibold">Type</th>
-                  <th className="text-left py-2 font-semibold">Default</th>
-                </tr>
-              </thead>
-              <tbody className="text-gray-600">
-                <tr className="border-b border-gray-200">
-                  <td className="py-2">companyId</td>
-                  <td className="py-2">string</td>
-                  <td className="py-2">required</td>
-                </tr>
-                <tr className="border-b border-gray-200">
-                  <td className="py-2">primaryColor</td>
-                  <td className="py-2">string</td>
-                  <td className="py-2">#713600</td>
-                </tr>
-                <tr className="border-b border-gray-200">
-                  <td className="py-2">position</td>
-                  <td className="py-2">'bottom-right' | 'bottom-left'</td>
-                  <td className="py-2">bottom-right</td>
-                </tr>
-                <tr>
-                  <td className="py-2">companyName</td>
-                  <td className="py-2">string</td>
-                  <td className="py-2">rlayAi</td>
-                </tr>
-              </tbody>
-            </table>
+          <div className="rounded-2xl border border-ink-800 overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm min-w-[34rem]">
+                <thead className="bg-dark-700">
+                  <tr className="text-left text-white">
+                    <th className="py-3 px-4 font-semibold">Option</th>
+                    <th className="py-3 px-4 font-semibold">Type</th>
+                    <th className="py-3 px-4 font-semibold">Default</th>
+                    <th className="py-3 px-4 font-semibold">Notes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {options.map((opt, i) => (
+                    <tr
+                      key={opt.name}
+                      className={i < options.length - 1 ? 'border-b border-ink-800' : ''}
+                    >
+                      <td className="py-3 px-4 font-mono text-secondary-300">{opt.name}</td>
+                      <td className="py-3 px-4 text-secondary-400">{opt.type}</td>
+                      <td className="py-3 px-4 text-secondary-400">{opt.default}</td>
+                      <td className="py-3 px-4 text-secondary-400">{opt.note}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
-      </div>
+        </section>
+      </main>
 
-      {/* Chat Widget */}
-      <ChatWidgetContainer
-        companyId="d37e75b2-e62f-4c76-a339-e8b125d85706"
-        position="bottom-right"
-      />
+      {/* The widget itself, which is the point of the page */}
+      <ChatWidgetContainer companyId={DEMO_COMPANY_ID} position="bottom-right" />
     </div>
   );
 };

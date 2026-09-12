@@ -10,6 +10,7 @@ import { knowledgeBaseService } from '@/services/knowledgeBase.service';
 import { departmentService, type Department } from '@/services/department.service';
 import { conversationService, type Conversation } from '@/services/conversation.service';
 import type { FAQ, Article } from '@/types/knowledge.types';
+import { PoweredBy } from './PoweredBy';
 
 interface IntercomStyleWidgetProps {
   onClose: () => void;
@@ -214,6 +215,9 @@ export const IntercomStyleWidget: React.FC<IntercomStyleWidgetProps> = ({
           <ArticlesTab companyId={companyId} />
         )}
       </div>
+
+      {/* Attribution, pinned to the base across every tab */}
+      <PoweredBy />
     </div>
   );
 };
