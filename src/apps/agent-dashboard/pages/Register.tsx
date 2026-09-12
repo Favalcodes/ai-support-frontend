@@ -157,7 +157,7 @@ export const RegisterPage: React.FC = () => {
              <img src={Logo} alt="logo" className='w-full h-full object-cover' />
           </div>
           <h1 className="text-3xl font-bold text-white mb-2">Create Your Account</h1>
-          <p className="text-secondary-200">Start your journey with getLync</p>
+          <p className="text-secondary-200">Start your journey with rlayAi</p>
         </div>
 
         {/* Registration Card */}
@@ -294,7 +294,7 @@ export const RegisterPage: React.FC = () => {
 
         {/* Footer */}
         <p className="text-center text-secondary-200 text-sm mt-8">
-          © 2025 getLync. All rights reserved.
+          © 2025 rlayAi. All rights reserved.
         </p>
       </div>
     </div>

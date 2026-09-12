@@ -84,7 +84,7 @@ export const HeroSection: React.FC = () => {
 
           {/* Right Content - Chat Preview */}
           <div className="relative">
-            <img src={Golden} alt='Golden retriever and getLync' />
+            <img src={Golden} alt='Golden retriever and rlayAi' />
             {/* Floating Stats Cards */}
             {/* <div className="absolute -top-10 -left-10 bg-white rounded-xl shadow-2xl p-4 z-20 animate-float">
               <div className="flex items-center gap-3">

@@ -33,7 +33,7 @@ export const Footer: React.FC = () => {
                 {/* <span className="text-white font-bold text-sm">AI</span> */}
                 <img src={Logo} alt="logo" className='w-full h-full object-cover' />
               </div>
-              <span className="text-lg font-bold">getLync</span>
+              <span className="text-lg font-bold">rlayAi</span>
             </div>
             <p className="text-gray-400 text-sm">
               AI-powered customer support platform for modern businesses
@@ -85,7 +85,7 @@ export const Footer: React.FC = () => {
 
         {/* Bottom Bar */}
         <div className="border-t border-gray-800 pt-8 text-center text-sm text-gray-400">
-          <p>&copy; 2025 getLync. All rights reserved.</p>
+          <p>&copy; 2025 rlayAi. All rights reserved.</p>
         </div>
       </div>
     </footer>

@@ -92,7 +92,7 @@ export const ChatWidgetApp: React.FC = () => {
                 <tr>
                   <td className="py-2">companyName</td>
                   <td className="py-2">string</td>
-                  <td className="py-2">getLync</td>
+                  <td className="py-2">rlayAi</td>
                 </tr>
               </tbody>
             </table>

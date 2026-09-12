@@ -62,7 +62,7 @@ export const Navbar: React.FC = () => {
                 isScrolled ? 'text-gray-900' : 'text-white'
               }`}
             >
-              getLync
+              rlayAi
             </span>
           </div>
 

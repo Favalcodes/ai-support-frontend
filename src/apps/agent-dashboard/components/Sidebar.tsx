@@ -88,7 +88,7 @@ export const Sidebar: React.FC = () => {
           <div className="flex items-center justify-center w-8 h-8 bg-transparent rounded-lg cursor-pointer">
             <img src={Logo} alt="logo" className='w-full h-full object-cover' />
           </div>
-          <span className="text-white font-bold text-lg">getLync</span>
+          <span className="text-white font-bold text-lg">rlayAi</span>
         </div>
       </div>
 

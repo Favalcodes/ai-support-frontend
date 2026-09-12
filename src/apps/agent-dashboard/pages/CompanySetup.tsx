@@ -288,7 +288,7 @@ export const CompanySetupPage: React.FC = () => {
 
         {/* Footer */}
         <p className="text-center text-secondary-200 text-sm mt-8">
-          © 2025 getLync. All rights reserved.
+          © 2025 rlayAi. All rights reserved.
         </p>
       </div>
     </div>

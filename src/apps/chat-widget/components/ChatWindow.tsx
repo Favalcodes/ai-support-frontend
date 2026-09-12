@@ -138,7 +138,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ onClose, onMinimize, com
       {/* Powered By */}
       <div className="px-4 py-2 bg-gray-50 border-t border-gray-200">
         <p className="text-center text-xs text-gray-500">
-          Powered by <span className="font-semibold text-primary-600">getLync AI</span>
+          Powered by <span className="font-semibold text-primary-600">rlayAi</span>
         </p>
       </div>
 

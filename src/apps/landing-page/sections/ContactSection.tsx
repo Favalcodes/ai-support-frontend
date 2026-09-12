@@ -40,8 +40,8 @@ export const ContactSection: React.FC = () => {
     {
       icon: Mail,
       label: 'Email',
-      value: 'support@getlync.co',
-      href: 'mailto:support@getlync.co',
+      value: 'support@rlayai.co',
+      href: 'mailto:support@rlayai.co',
     },
     {
       icon: Phone,
