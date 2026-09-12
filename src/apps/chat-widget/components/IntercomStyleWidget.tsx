@@ -235,7 +235,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
   onBack,
 }) => {
   return (
-    <div className="bg-gradient-to-r from-primary-500 to-secondary-500 px-5 py-4 flex items-center justify-between">
+    <div className="bg-primary-500 px-5 py-4 flex items-center justify-between">
       <div className="flex items-center gap-3">
         {showBack && onBack && (
           <button
@@ -347,7 +347,7 @@ const HomeTab: React.FC<HomeTabProps> = ({ onSendMessage, companyId, lastConvers
     <div className="flex flex-col h-full overflow-y-auto">
       {/* Welcome Section */}
       <div className="p-6 text-center">
-        <div className="w-16 h-16 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+        <div className="w-16 h-16 bg-primary-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
           <span className="text-white text-2xl">👋</span>
         </div>
         <h3 className="text-2xl font-bold text-gray-900 mb-2">Hi there!</h3>

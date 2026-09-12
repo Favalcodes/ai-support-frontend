@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, User, LogOut } from 'lucide-react';
+import { Menu, X, User, LogOut, ArrowRight } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Button } from '../../../components/ui';
 import { useAuthStore } from '../../../stores/authStore';
-import Logo from '../../../assets/logo.png'
+import { logo } from '../../../assets/brand';
 
+/**
+ * The bar sits transparent over the dark hero and turns into a solid white
+ * surface once you scroll past it, so the wordmark has to swap between its
+ * light and dark cuts rather than being tinted with CSS.
+ */
 export const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -13,15 +17,11 @@ export const Navbar: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-
-    window.addEventListener('scroll', handleScroll);
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close user menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
@@ -29,53 +29,58 @@ export const Navbar: React.FC = () => {
         setShowUserMenu(false);
       }
     };
-
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [showUserMenu]);
 
+  // Lock the page behind the mobile sheet
+  useEffect(() => {
+    document.body.style.overflow = isMobileMenuOpen ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMobileMenuOpen]);
+
   const navLinks = [
     { label: 'Features', href: '#features' },
-    { label: 'How it Works', href: '#how-it-works' },
+    { label: 'How it works', href: '#how-it-works' },
     { label: 'Pricing', href: '#pricing' },
     { label: 'Contact', href: '#contact' },
   ];
+
+  const onDark = !isScrolled;
 
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? 'bg-white/90 backdrop-blur-lg shadow-sm'
+          ? 'bg-white/85 backdrop-blur-xl border-b border-dark-100 shadow-soft'
           : 'bg-transparent'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <div className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-transparent rounded-xl flex items-center justify-center">
-              {/* <span className="text-white font-bold text-lg">AI</span> */}
-              <img src={Logo} alt="white logo" className='w-full h-full object-cover' />
-            </div>
-            <span
-              className={`text-xl font-bold transition-colors ${
-                isScrolled ? 'text-gray-900' : 'text-white'
-              }`}
-            >
-              rlayAi
-            </span>
-          </div>
+      <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-20">
+          {/* Wordmark */}
+          <Link to="/" className="flex items-center shrink-0" aria-label="rlayAi home">
+            <img
+              src={onDark ? logo.fullOnDark : logo.full}
+              alt="rlayAi"
+              className="h-8 w-auto"
+              width={1200}
+              height={360}
+            />
+          </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
+          {/* Desktop nav */}
+          <div className="hidden md:flex items-center gap-1">
             {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
-                className={`font-medium transition-colors ${
-                  isScrolled
-                    ? 'text-gray-600 hover:text-gray-900'
-                    : 'text-white/90 hover:text-white'
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  onDark
+                    ? 'text-white/75 hover:text-white hover:bg-white/10'
+                    : 'text-dark-400 hover:text-dark-500 hover:bg-primary-50'
                 }`}
               >
                 {link.label}
@@ -83,120 +88,118 @@ export const Navbar: React.FC = () => {
             ))}
           </div>
 
-          {/* Desktop CTAs */}
-          <div className="hidden md:flex items-center gap-4">
+          {/* Account actions */}
+          <div className="hidden md:flex items-center gap-3">
             {isAuthenticated && user ? (
-              // Logged in - show user menu
               <div className="relative user-menu-container">
                 <button
                   onClick={() => setShowUserMenu(!showUserMenu)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
-                    isScrolled
-                      ? 'text-gray-700 hover:bg-gray-100'
-                      : 'text-white hover:bg-white/10'
+                  className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    onDark
+                      ? 'text-white hover:bg-white/10'
+                      : 'text-dark-500 hover:bg-primary-50'
                   }`}
                 >
-                  <User className="w-5 h-5" />
-                  <span className="font-medium">{user.first_name || user.email}</span>
+                  <span className="w-7 h-7 rounded-full bg-primary-500 flex items-center justify-center text-white text-xs font-bold">
+                    {(user.first_name?.[0] ?? user.email[0]).toUpperCase()}
+                  </span>
+                  <span className="max-w-[10rem] truncate">{user.first_name || user.email}</span>
                 </button>
 
-                {/* User dropdown menu */}
                 {showUserMenu && (
-                  <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                  <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lift border border-dark-100 overflow-hidden">
                     <Link
                       to="/dashboard"
-                      className="block px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors"
                       onClick={() => setShowUserMenu(false)}
+                      className="flex items-center gap-2 px-4 py-3 text-sm text-dark-500 hover:bg-primary-50 transition-colors"
                     >
-                      <div className="flex items-center gap-2">
-                        <User className="w-4 h-4" />
-                        <span>Dashboard</span>
-                      </div>
+                      <User className="w-4 h-4" />
+                      Dashboard
                     </Link>
-                    <hr className="my-2 border-gray-200" />
                     <button
                       onClick={() => {
                         logout();
                         setShowUserMenu(false);
                         navigate('/');
                       }}
-                      className="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 transition-colors"
+                      className="w-full flex items-center gap-2 px-4 py-3 text-sm text-dark-400 hover:text-dark-500 hover:bg-primary-50 transition-colors"
                     >
-                      <div className="flex items-center gap-2">
-                        <LogOut className="w-4 h-4" />
-                        <span>Sign Out</span>
-                      </div>
+                      <LogOut className="w-4 h-4" />
+                      Sign out
                     </button>
                   </div>
                 )}
               </div>
             ) : (
-              // Not logged in - show sign in and get started
               <>
                 <Link
                   to="/login"
-                  className={`font-medium transition-colors ${
-                    isScrolled
-                      ? 'text-gray-600 hover:text-gray-900'
-                      : 'text-white/90 hover:text-white'
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    onDark
+                      ? 'text-white/80 hover:text-white hover:bg-white/10'
+                      : 'text-dark-400 hover:text-dark-500 hover:bg-primary-50'
                   }`}
                 >
-                  Sign In
+                  Sign in
                 </Link>
-                <Link to="/register">
-                  <Button variant="primary" size="sm">
-                    Get Started
-                  </Button>
+                <Link
+                  to="/register"
+                  className={`group inline-flex items-center gap-1.5 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+                    onDark
+                      ? 'bg-white text-dark-500 hover:bg-secondary-100'
+                      : 'bg-primary-500 text-white hover:bg-primary-600'
+                  }`}
+                >
+                  Start free
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
                 </Link>
               </>
             )}
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile trigger */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={isMobileMenuOpen}
             className={`md:hidden p-2 rounded-lg transition-colors ${
-              isScrolled
-                ? 'text-gray-600 hover:bg-gray-100'
-                : 'text-white hover:bg-white/10'
+              onDark ? 'text-white hover:bg-white/10' : 'text-dark-500 hover:bg-primary-50'
             }`}
           >
-            {isMobileMenuOpen ? (
-              <X className="w-6 h-6" />
-            ) : (
-              <Menu className="w-6 h-6" />
-            )}
+            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile sheet */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-white border-t border-gray-200 shadow-lg">
-          <div className="px-6 py-4 space-y-3">
+        <div className="md:hidden bg-white border-t border-dark-100 shadow-lift">
+          <div className="px-6 py-5 space-y-1">
             {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
-                className="block py-2 text-gray-600 hover:text-gray-900 font-medium"
+                className="block py-3 text-dark-500 font-medium"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 {link.label}
               </a>
             ))}
-            <div className="pt-4 border-t border-gray-200 space-y-2">
+
+            <div className="pt-4 mt-2 border-t border-dark-100 space-y-3">
               {isAuthenticated && user ? (
-                // Logged in - show user info and actions
                 <>
-                  <div className="px-3 py-2 bg-gray-50 rounded-lg">
-                    <div className="flex items-center gap-2 text-gray-700">
-                      <User className="w-5 h-5" />
-                      <span className="font-medium">{user.first_name || user.email}</span>
-                    </div>
+                  <div className="flex items-center gap-3 px-3 py-3 bg-primary-50 rounded-xl">
+                    <span className="w-9 h-9 rounded-full bg-primary-500 flex items-center justify-center text-white text-sm font-bold">
+                      {(user.first_name?.[0] ?? user.email[0]).toUpperCase()}
+                    </span>
+                    <span className="font-medium text-dark-500 truncate">
+                      {user.first_name || user.email}
+                    </span>
                   </div>
                   <Link
                     to="/dashboard"
-                    className="block py-2 text-gray-600 hover:text-gray-900 font-medium"
+                    className="block py-2 text-dark-400 font-medium"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     Dashboard
@@ -207,25 +210,27 @@ export const Navbar: React.FC = () => {
                       setIsMobileMenuOpen(false);
                       navigate('/');
                     }}
-                    className="w-full text-left py-2 text-red-600 hover:text-red-700 font-medium"
+                    className="w-full text-left py-2 text-dark-400 font-medium"
                   >
-                    Sign Out
+                    Sign out
                   </button>
                 </>
               ) : (
-                // Not logged in
                 <>
                   <Link
                     to="/login"
-                    className="block py-2 text-gray-600 hover:text-gray-900 font-medium"
+                    className="block py-2 text-dark-400 font-medium"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
-                    Sign In
+                    Sign in
                   </Link>
-                  <Link to="/register" onClick={() => setIsMobileMenuOpen(false)}>
-                    <Button variant="primary" className="w-full">
-                      Get Started
-                    </Button>
+                  <Link
+                    to="/register"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="flex items-center justify-center gap-2 w-full px-5 py-3 rounded-xl bg-primary-500 text-white font-semibold"
+                  >
+                    Start free
+                    <ArrowRight className="w-4 h-4" />
                   </Link>
                 </>
               )}

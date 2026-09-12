@@ -35,7 +35,7 @@ export const Avatar: React.FC<AvatarProps> = ({
     const colors = [
       'bg-primary-500',
       'bg-secondary-500',
-      'bg-accent-500',
+      'bg-primary-50',
       'bg-blue-500',
       'bg-purple-500',
       'bg-green-500',

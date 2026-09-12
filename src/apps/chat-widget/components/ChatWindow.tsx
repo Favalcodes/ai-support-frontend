@@ -71,7 +71,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ onClose, onMinimize }) =
   return (
     <div className="w-96 h-[600px] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-slide-up">
       {/* Header */}
-      <div className="bg-gradient-to-r from-primary-500 to-secondary-400 p-4 flex items-center justify-between">
+      <div className="bg-primary-500 p-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
             <span className="text-white font-bold">AI</span>
@@ -121,7 +121,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ onClose, onMinimize }) =
         {/* Typing Indicator */}
         {isTyping && (
           <div className="flex items-start gap-2">
-            <Avatar name="AI" size="sm" className="bg-gradient-to-br from-primary-500 to-secondary-400" />
+            <Avatar name="AI" size="sm" className="bg-primary-500" />
             <div className="bg-white rounded-lg rounded-tl-none p-3 shadow-sm">
               <div className="flex gap-1">
                 <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
@@ -166,7 +166,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ onClose, onMinimize }) =
           <button
             onClick={handleSend}
             disabled={!inputValue.trim()}
-            className="p-2 bg-gradient-to-r from-primary-500 to-secondary-400 text-white rounded-lg hover:from-primary-600 hover:to-secondary-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+            className="p-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             aria-label="Send message"
           >
             <Send className="w-5 h-5" />

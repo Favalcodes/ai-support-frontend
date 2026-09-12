@@ -177,7 +177,7 @@ export const FirstLoginSetupPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-dark-900 via-primary-800 to-dark-800 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-dark-500 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">

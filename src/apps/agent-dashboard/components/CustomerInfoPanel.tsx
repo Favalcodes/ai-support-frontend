@@ -83,11 +83,11 @@ export const CustomerInfoPanel: React.FC<CustomerInfoPanelProps> = ({
 
         {/* Quick Stats */}
         <div className="grid grid-cols-2 gap-3 mb-6">
-          <div className="bg-gradient-to-br from-accent-50 to-secondary-50 rounded-lg p-3 text-center">
+          <div className="bg-primary-50 rounded-lg p-3 text-center">
             <p className="text-2xl font-bold text-gray-900">-</p>
             <p className="text-xs text-gray-600">Total Chats</p>
           </div>
-          <div className="bg-gradient-to-br from-accent-50 to-secondary-50 rounded-lg p-3 text-center">
+          <div className="bg-primary-50 rounded-lg p-3 text-center">
             <p className="text-2xl font-bold text-gray-900">-</p>
             <p className="text-xs text-gray-600">Avg Rating</p>
           </div>

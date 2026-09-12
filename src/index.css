@@ -7,7 +7,3 @@
     @apply font-sans antialiased;
   }
 }
-.bg-car-animate {
-  background: linear-gradient(rgba(0, 0, 0, 0.88), rgba(0, 0, 0, 0.88)), url('https://www.animatedimages.org/data/media/67/animated-car-image-0049.gif') no-repeat center;
-  background-size: contain;
-}

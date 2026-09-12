@@ -1,6 +1,28 @@
 import React, { useState } from 'react';
-import { Mail, MapPin, Phone } from 'lucide-react';
-import { Button, Input, Textarea } from '../../../components/ui';
+import { Mail, MapPin, Phone, Send } from 'lucide-react';
+
+const SUPPORT_EMAIL = 'support@rlayai.co';
+
+const contactInfo = [
+  {
+    icon: Mail,
+    label: 'Email',
+    value: SUPPORT_EMAIL,
+    href: `mailto:${SUPPORT_EMAIL}`,
+  },
+  {
+    icon: Phone,
+    label: 'Phone',
+    value: '+234 800 000 0000',
+    href: 'tel:+2348000000000',
+  },
+  {
+    icon: MapPin,
+    label: 'Office',
+    value: 'Lagos, Nigeria',
+    href: null,
+  },
+];
 
 export const ContactSection: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -9,189 +31,171 @@ export const ContactSection: React.FC = () => {
     company: '',
     message: '',
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  /**
+   * Opens the visitor's mail client with the message composed.
+   *
+   * There is no contact endpoint and no email service behind this form. It
+   * previously ran a setTimeout and then showed "message sent", which meant
+   * every enquiry was silently discarded while telling the sender otherwise.
+   */
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
 
-    // Simulate form submission
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setIsSubmitted(true);
-      setFormData({ name: '', email: '', company: '', message: '' });
+    const subject = `rlayAi enquiry from ${formData.name}`;
+    const body = [
+      `Name: ${formData.name}`,
+      `Email: ${formData.email}`,
+      formData.company ? `Company: ${formData.company}` : null,
+      '',
+      formData.message,
+    ]
+      .filter((line) => line !== null)
+      .join('\n');
 
-      // Reset success message after 5 seconds
-      setTimeout(() => setIsSubmitted(false), 5000);
-    }, 1500);
+    window.location.href = `mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent(
+      subject
+    )}&body=${encodeURIComponent(body)}`;
   };
 
-  const contactInfo = [
-    {
-      icon: Mail,
-      label: 'Email',
-      value: 'support@rlayai.co',
-      href: 'mailto:support@rlayai.co',
-    },
-    {
-      icon: Phone,
-      label: 'Phone',
-      value: '+1 (555) 123-4567',
-      href: 'tel:+15551234567',
-    },
-    {
-      icon: MapPin,
-      label: 'Office',
-      value: 'San Francisco, CA',
-      href: null,
-    },
-  ];
+  const fieldClass =
+    'w-full px-4 py-3 rounded-xl bg-white border border-primary-100 text-dark-500 placeholder:text-dark-300 focus:outline-none focus:border-primary-400 focus:ring-2 focus:ring-primary-100 transition-all';
 
   return (
-    <section id="contact" className="py-20 px-6 lg:px-8 bg-gray-50">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
-            Get in touch
-          </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
-          </p>
-        </div>
+    <section id="contact" className="relative bg-white py-16 sm:py-24 lg:py-32">
+      <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
+        <div className="grid lg:grid-cols-[1fr_1.15fr] gap-10 sm:gap-12 lg:gap-16 items-start">
+          {/* Pitch */}
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-widest text-ink-500 mb-4">
+              Contact
+            </p>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tighter text-dark-500 mb-5">
+              Talk to a person
+            </h2>
+            <p className="text-base sm:text-lg text-dark-400 leading-relaxed mb-8 sm:mb-10">
+              Questions about routing, data handling or what it takes to migrate? Send a
+              note and we will get back to you.
+            </p>
 
-        <div className="grid lg:grid-cols-2 gap-12">
-          {/* Contact Form */}
-          <div className="bg-white rounded-2xl shadow-lg p-8">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">
-              Send us a message
-            </h3>
+            <ul className="space-y-4">
+              {contactInfo.map((info) => {
+                const Icon = info.icon;
+                const content = (
+                  <>
+                    <span className="flex items-center justify-center w-11 h-11 rounded-xl bg-primary-50 border border-primary-100 shrink-0">
+                      <Icon className="w-5 h-5 text-primary-600" />
+                    </span>
+                    <span>
+                      <span className="block text-xs font-semibold uppercase tracking-wide text-dark-300">
+                        {info.label}
+                      </span>
+                      <span className="block text-dark-500 font-medium">{info.value}</span>
+                    </span>
+                  </>
+                );
 
-            {isSubmitted && (
-              <div className="mb-6 p-4 bg-primary-50 border border-primary-200 rounded-lg">
-                <p className="text-primary-800 font-medium">
-                  ✓ Thank you! We'll get back to you soon.
-                </p>
-              </div>
-            )}
-
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <Input
-                label="Name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="John Doe"
-                required
-              />
-
-              <Input
-                label="Email"
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="john@company.com"
-                required
-              />
-
-              <Input
-                label="Company"
-                name="company"
-                value={formData.company}
-                onChange={handleChange}
-                placeholder="Acme Inc."
-              />
-
-              <Textarea
-                label="Message"
-                name="message"
-                value={formData.message}
-                onChange={handleChange}
-                placeholder="Tell us how we can help..."
-                rows={5}
-                required
-              />
-
-              <Button
-                type="submit"
-                variant="primary"
-                className="w-full"
-                loading={isSubmitting}
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? 'Sending...' : 'Send Message'}
-              </Button>
-            </form>
+                return (
+                  <li key={info.label}>
+                    {info.href ? (
+                      <a
+                        href={info.href}
+                        className="flex items-center gap-4 group hover:opacity-80 transition-opacity"
+                      >
+                        {content}
+                      </a>
+                    ) : (
+                      <div className="flex items-center gap-4">{content}</div>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
           </div>
 
-          {/* Contact Info */}
-          <div>
-            <div className="bg-white rounded-2xl shadow-lg p-8 mb-6">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">
-                Contact Information
-              </h3>
-
-              <div className="space-y-6">
-                {contactInfo.map((info, index) => {
-                  const Icon = info.icon;
-                  return (
-                    <div key={index} className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <Icon className="w-6 h-6 text-primary-600" />
-                      </div>
-                      <div>
-                        <p className="text-sm font-medium text-gray-500 mb-1">
-                          {info.label}
-                        </p>
-                        {info.href ? (
-                          <a
-                            href={info.href}
-                            className="text-gray-900 hover:text-primary-600 transition-colors"
-                          >
-                            {info.value}
-                          </a>
-                        ) : (
-                          <p className="text-gray-900">{info.value}</p>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Office Hours */}
-            <div className="bg-primary-500 rounded-2xl shadow-lg p-8 text-white">
-              <h3 className="text-2xl font-bold mb-4">Office Hours</h3>
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span>Monday - Friday</span>
-                  <span className="font-semibold">9:00 AM - 6:00 PM</span>
+          {/* Form */}
+          <div className="rounded-2xl sm:rounded-3xl bg-primary-50 border border-primary-100 p-5 sm:p-7 lg:p-9">
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div className="grid sm:grid-cols-2 gap-5">
+                <div>
+                  <label htmlFor="name" className="block text-sm font-semibold text-dark-500 mb-2">
+                    Name
+                  </label>
+                  <input
+                    id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    placeholder="Jane Doe"
+                    required
+                    className={fieldClass}
+                  />
                 </div>
-                <div className="flex justify-between">
-                  <span>Saturday</span>
-                  <span className="font-semibold">10:00 AM - 4:00 PM</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Sunday</span>
-                  <span className="font-semibold">Closed</span>
+                <div>
+                  <label htmlFor="email" className="block text-sm font-semibold text-dark-500 mb-2">
+                    Email
+                  </label>
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="jane@company.com"
+                    required
+                    className={fieldClass}
+                  />
                 </div>
               </div>
-              <p className="mt-4 text-sm text-white/80">
-                All times in Pacific Standard Time (PST)
+
+              <div>
+                <label htmlFor="company" className="block text-sm font-semibold text-dark-500 mb-2">
+                  Company <span className="font-normal text-dark-300">(optional)</span>
+                </label>
+                <input
+                  id="company"
+                  name="company"
+                  value={formData.company}
+                  onChange={handleChange}
+                  placeholder="Acme Inc."
+                  className={fieldClass}
+                />
+              </div>
+
+              <div>
+                <label htmlFor="message" className="block text-sm font-semibold text-dark-500 mb-2">
+                  Message
+                </label>
+                <textarea
+                  id="message"
+                  name="message"
+                  rows={5}
+                  value={formData.message}
+                  onChange={handleChange}
+                  placeholder="Tell us what you are trying to solve..."
+                  required
+                  className={`${fieldClass} resize-y`}
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="group flex items-center justify-center gap-2 w-full px-6 py-3.5 rounded-xl bg-primary-500 text-white font-semibold hover:bg-primary-600 transition-all"
+              >
+                <Send className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+                Send message
+              </button>
+
+              <p className="text-xs text-dark-300 text-center">
+                Opens in your mail app, addressed to {SUPPORT_EMAIL}.
               </p>
-            </div>
+            </form>
           </div>
         </div>
       </div>

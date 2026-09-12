@@ -25,7 +25,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
   if (message.role === 'system') {
     return (
       <div className="flex justify-center my-2">
-        <div className="bg-accent-50 border border-accent-200 px-4 py-2 rounded-full max-w-xs">
+        <div className="bg-primary-50 border border-primary-200 px-4 py-2 rounded-full max-w-xs">
           <p className="text-xs text-gray-700 text-center">{message.content}</p>
         </div>
       </div>

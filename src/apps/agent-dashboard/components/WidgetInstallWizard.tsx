@@ -83,7 +83,7 @@ export const WidgetInstallWizard: React.FC<WidgetInstallWizardProps> = ({ onClos
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
         {/* Header */}
-        <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-primary-50 to-blue-50">
+        <div className="p-6 border-b border-gray-200 bg-primary-50">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-2xl font-bold text-gray-900">Widget Installation Wizard</h2>
@@ -376,7 +376,7 @@ export const WidgetInstallWizard: React.FC<WidgetInstallWizardProps> = ({ onClos
                   </div>
                 </div>
 
-                <div className="bg-gradient-to-br from-primary-50 to-blue-50 border-2 border-primary-200 rounded-lg p-6">
+                <div className="bg-primary-50 border-2 border-primary-200 rounded-lg p-6">
                   <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
                     <Code className="w-5 h-5 text-primary-600" />
                     How to Install

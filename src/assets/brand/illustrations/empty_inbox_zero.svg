@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 240" fill="none">
+  <defs>
+    <linearGradient id="boxGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#A1B0FF" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#4563FF" stop-opacity="0.1" />
+    </linearGradient>
+  </defs>
+  <!-- Background glow circle -->
+  <circle cx="150" cy="110" r="80" fill="url(#boxGrad)" />
+  <!-- Inbox Tray Base -->
+  <path d="M60,130 L90,170 L210,170 L240,130 L210,90 L90,90 Z" fill="#FFFFFF" stroke="#4563FF" stroke-width="3" />
+  <path d="M60,130 L110,130 C115,145 130,150 150,150 C170,150 185,145 190,130 L240,130" stroke="#4563FF" stroke-width="3" fill="none" />
+  <!-- Checkmark Badge floating above -->
+  <circle cx="150" cy="80" r="32" fill="#4563FF" />
+  <path d="M138,80 L146,88 L164,70" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+  <!-- Sparkles -->
+  <path d="M90,60 L94,50 L98,60 L108,64 L98,68 L94,78 L90,68 L80,64 Z" fill="#A1B0FF" />
+  <path d="M220,50 L223,42 L226,50 L234,53 L226,56 L223,64 L220,56 L212,53 Z" fill="#A1B0FF" />
+  <!-- Text -->
+  <text x="150" y="205" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#0E1752">You're All Caught Up!</text>
+  <text x="150" y="225" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#3345A4">No pending tickets in your queue.</text>
+</svg>

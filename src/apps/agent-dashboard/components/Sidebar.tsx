@@ -100,7 +100,7 @@ export const Sidebar: React.FC = () => {
             to={item.to}
             className={({ isActive }) =>
               `flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${isActive
-                ? 'bg-accent-500 text-primary-900 font-semibold'
+                ? 'bg-primary-50 text-primary-900 font-semibold'
                 : 'text-white hover:bg-dark-800'
               }`
             }
@@ -121,7 +121,7 @@ export const Sidebar: React.FC = () => {
               to="/dashboard/settings"
               className={({ isActive }) =>
                 `flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${isActive
-                  ? 'bg-accent-500 text-primary-900 font-semibold'
+                  ? 'bg-primary-50 text-primary-900 font-semibold'
                   : 'text-white hover:bg-dark-800'
                 }`
               }
@@ -139,18 +139,18 @@ export const Sidebar: React.FC = () => {
           <Avatar
             name={user ? `${user.first_name} ${user.last_name}` : 'User'}
             size="md"
-            className='bg-accent-300 text-primary'
+            className='bg-primary-100 text-primary'
           />
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-white truncate">
               {user?.first_name} {user?.last_name}
             </p>
-            <p className="text-xs text-accent-400 truncate">{user?.email}</p>
+            <p className="text-xs text-dark-300 truncate">{user?.email}</p>
           </div>
         </div>
         <button
           onClick={logout}
-          className="w-full flex items-center justify-center px-3 py-2 text-sm font-medium text-accent-300 hover:bg-dark-800 hover:text-white rounded-lg transition-colors"
+          className="w-full flex items-center justify-center px-3 py-2 text-sm font-medium text-dark-300 hover:bg-dark-800 hover:text-white rounded-lg transition-colors"
         >
           <LogOut className="w-4 h-4 mr-2" />
           Sign Out

@@ -1,209 +1,127 @@
-import React from 'react';
-import { ArrowRight, CheckCircle } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { Button } from '../../../components/ui';
-import Golden from '../../../assets/golden-bg.png'
+import React, { useState } from 'react';
+import { ArrowRight, Check } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { avatars } from '../../../assets/brand';
+
+const trustPoints = ['No credit card required', '14-day free trial', 'Cancel anytime'];
+
+const handoffFaces = [
+  { src: avatars.bot, label: 'rlayAi assistant' },
+  { src: avatars.sarah, label: 'Sarah, Support Specialist' },
+  { src: avatars.david, label: 'David, Technical Support' },
+  { src: avatars.elena, label: 'Elena, Customer Success' },
+];
 
 export const HeroSection: React.FC = () => {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Carry the address into signup so the visitor does not retype it
+    navigate(`/register${email ? `?email=${encodeURIComponent(email)}` : ''}`);
+  };
+
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Gradient Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-dark-900 via-primary-800 to-dark-800"></div>
-      
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary-500/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary-400/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-      </div>
+    <section className="relative isolate min-h-[42rem] lg:min-h-[46rem] flex items-center overflow-hidden">
+      {/*
+        HERO BACKDROP SLOT.
 
-      {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-20">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          
-          {/* Left Content */}
-          <div className="text-white">
-            {/* Badge */}
-            <div className="inline-flex items-center px-4 py-2 bg-primary-500/20 backdrop-blur-sm border border-primary-400/30 rounded-full text-sm font-medium mb-6">
-              <span className="w-2 h-2 bg-primary-400 rounded-full mr-2 animate-pulse"></span>
-              AI-Powered Customer Support
-            </div>
+        None of the supplied photographs suit a full-bleed hero: they are literal,
+        busy office shots with no open area for the headline to sit in. Rather
+        than put one behind the type anyway, this stays a flat Midnight ground
+        until the generated plate exists.
 
-            {/* Heading */}
-            <h1 className="text-5xl lg:text-7xl font-bold mb-6 leading-tight">
-              Support that
-              <span className="block text-primary-400">
-                never sleeps
-              </span>
-            </h1>
+        To drop the image in: save it to src/assets/brand/lifestyle/hero_backdrop.jpg,
+        export it from the brand index, then uncomment the two elements below.
+        The generation prompt is in docs/IMAGE_PROMPTS.md.
 
-            {/* Description */}
-            <p className="text-xl text-secondary-200 mb-8 leading-relaxed">
-              Deliver instant, accurate support 24/7 with our intelligent AI assistant. 
-              Seamlessly escalate to human agents when needed.
-            </p>
+        <img
+          src={lifestyle.heroBackdrop}
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 -z-20 w-full h-full object-cover object-center"
+        />
+        <div className="absolute inset-0 -z-10 bg-dark-500/80" aria-hidden="true" />
+      */}
+      <div className="absolute inset-0 -z-10 bg-dark-500" aria-hidden="true" />
 
-            {/* CTAs */}
-            <div className="flex flex-col sm:flex-row gap-4 mb-8">
-              <Link to="/register">
-                <Button
-                  variant="primary"
-                  size="lg"
-                  rightIcon={<ArrowRight className="w-5 h-5" />}
-                  className="shadow-glow-cyan"
-                >
-                  Start Free Trial
-                </Button>
-              </Link>
-              <Link to="/demo">
-                <Button
-                  variant="secondary"
-                  size="lg"
-                  className="border-white/30 hover:bg-white/10"
-                >
-                  Watch Demo
-                </Button>
-              </Link>
-            </div>
-
-            {/* Features List */}
-            <div className="flex flex-col sm:flex-row gap-6 text-sm text-secondary-200">
-              <div className="flex items-center gap-2">
-                <CheckCircle className="w-5 h-5 text-primary-400" />
-                <span>No credit card required</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle className="w-5 h-5 text-primary-400" />
-                <span>14-day free trial</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle className="w-5 h-5 text-primary-400" />
-                <span>Cancel anytime</span>
-              </div>
-            </div>
+      <div className="relative w-full max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 pt-32 pb-16 sm:pt-36 sm:pb-20 lg:pt-40 lg:pb-28">
+        <div className="max-w-3xl">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-primary-800 border border-primary-600 rounded-full text-xs font-semibold text-secondary-300 mb-6 sm:mb-7">
+            <span className="w-2 h-2 rounded-full bg-secondary-400" />
+            Answers from your knowledge base, not guesses
           </div>
 
-          {/* Right Content - Chat Preview */}
-          <div className="relative">
-            <img src={Golden} alt='Golden retriever and rlayAi' />
-            {/* Floating Stats Cards */}
-            {/* <div className="absolute -top-10 -left-10 bg-white rounded-xl shadow-2xl p-4 z-20 animate-float">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                  </svg>
-                </div>
-                <div>
-                  <p className="text-2xl font-bold text-gray-900">2.5s</p>
-                  <p className="text-xs text-gray-500">Avg Response</p>
-                </div>
-              </div>
-            </div>
+          <h1 className="text-[2.5rem] sm:text-6xl lg:text-7xl leading-[1.05] font-extrabold tracking-tighter text-white mb-5 sm:mb-6">
+            Support that answers
+            <span className="block text-secondary-500 mt-1">and knows when to stop</span>
+          </h1>
 
-            <div className="absolute -bottom-10 -right-10 bg-white rounded-xl shadow-2xl p-4 z-20 animate-float" style={{ animationDelay: '0.5s' }}>
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                  </svg>
-                </div>
-                <div>
-                  <p className="text-2xl font-bold text-gray-900">94%</p>
-                  <p className="text-xs text-gray-500">Resolved</p>
-                </div>
-              </div>
-            </div> */}
+          <p className="text-base sm:text-lg lg:text-xl text-secondary-200 leading-relaxed mb-8 sm:mb-10 max-w-2xl">
+            rlayAi replies instantly from your own articles and FAQs. The moment a
+            question needs a person, it hands the whole conversation to your team with
+            the context already in place.
+          </p>
 
-            {/* Chat Window Mockup */}
-            {/* <div className="relative bg-white rounded-2xl shadow-2xl overflow-hidden border-4 border-primary-500/20">
- 
-              <div className="bg-primary-500 p-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-                    <span className="text-white font-bold">AI</span>
-                  </div>
-                  <div>
-                    <h3 className="text-white font-semibold">Support Assistant</h3>
-                    <p className="text-white/80 text-xs">Online • Responds instantly</p>
-                  </div>
-                </div>
-              </div>
+          {/* Inline capture, in the shape of the reference hero */}
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-2 sm:p-2 sm:bg-white/10 sm:border sm:border-white/20 sm:rounded-2xl max-w-xl mb-8 sm:mb-9"
+          >
+            <label htmlFor="hero-email" className="sr-only">
+              Work email
+            </label>
+            <input
+              id="hero-email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your work email"
+              className="flex-1 min-w-0 px-5 py-3.5 rounded-xl bg-white/10 sm:bg-transparent border border-white/20 sm:border-0 text-white placeholder:text-secondary-300 focus:outline-none focus:ring-2 focus:ring-secondary-400 sm:focus:ring-0"
+            />
+            <button
+              type="submit"
+              className="group inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-primary-500 text-white font-semibold hover:bg-primary-400 transition-colors shrink-0"
+            >
+              Start free trial
+              <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+            </button>
+          </form>
 
-  
-              <div className="p-4 space-y-3 bg-gray-50 h-80">
-              
-                <div className="flex gap-2">
-                  <div className="w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-white text-xs font-bold">AI</span>
-                  </div>
-                  <div className="bg-white rounded-lg rounded-tl-none p-3 shadow-sm max-w-xs">
-                    <p className="text-sm text-gray-800">Hi! How can I help you today?</p>
-                  </div>
-                </div>
-
-     
-                <div className="flex justify-end">
-                  <div className="bg-primary-500 rounded-lg rounded-tr-none p-3 shadow-sm max-w-xs">
-                    <p className="text-sm text-white">I need help with billing</p>
-                  </div>
-                </div>
-
-             
-                <div className="flex gap-2">
-                  <div className="w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-white text-xs font-bold">AI</span>
-                  </div>
-                  <div className="bg-white rounded-lg rounded-tl-none p-3 shadow-sm max-w-xs">
-                    <p className="text-sm text-gray-800">I'd be happy to help with billing! Let me find the relevant information...</p>
-                  </div>
-                </div>
-
-             
-                <div className="flex gap-2">
-                  <div className="w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-white text-xs font-bold">AI</span>
-                  </div>
-                  <div className="bg-white rounded-lg rounded-tl-none p-3 shadow-sm">
-                    <div className="flex gap-1">
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.15s' }}></div>
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.3s' }}></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-            
-              <div className="border-t p-3 bg-white">
-                <div className="flex items-center gap-2 bg-gray-100 rounded-lg px-3 py-2">
-                  <input
-                    type="text"
-                    placeholder="Type your message..."
-                    className="flex-1 bg-transparent outline-none text-sm"
-                    disabled
+          <div className="flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-10">
+            <div className="flex items-center gap-3">
+              <div className="flex -space-x-2.5">
+                {handoffFaces.map((face) => (
+                  <img
+                    key={face.label}
+                    src={face.src}
+                    alt={face.label}
+                    title={face.label}
+                    className="w-9 h-9 rounded-full ring-2 ring-dark-500 object-cover"
+                    loading="lazy"
                   />
-                  <button className="text-primary-600">
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"/>
-                    </svg>
-                  </button>
-                </div>
+                ))}
               </div>
-            </div> */}
-          </div>
+              <p className="text-sm text-secondary-200 leading-tight whitespace-nowrap">
+                <span className="block font-semibold text-white">
+                  AI first, humans on standby
+                </span>
+                Escalates with full context
+              </p>
+            </div>
 
+            <ul className="flex flex-wrap gap-x-6 gap-y-2">
+              {trustPoints.map((point) => (
+                <li key={point} className="flex items-center gap-2 text-sm text-secondary-300">
+                  <Check className="w-4 h-4 text-secondary-400 shrink-0" />
+                  {point}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
-
-      <style>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-20px); }
-        }
-        .animate-float {
-          animation: float 3s ease-in-out infinite;
-        }
-      `}</style>
     </section>
   );
 };

@@ -60,7 +60,7 @@ export class ErrorBoundary extends Component<Props, State> {
       }
 
       return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-dark-900 via-primary-900 to-dark-800 p-4">
+        <div className="min-h-screen flex items-center justify-center bg-dark-500 p-4">
           <div className="max-w-md w-full bg-white/10 backdrop-blur-lg rounded-xl p-8 text-center">
             <div className="text-6xl mb-4">⚠️</div>
             <h1 className="text-2xl font-bold text-white mb-2">Oops! Something went wrong</h1>

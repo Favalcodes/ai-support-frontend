@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Mail, Lock, User, Phone } from 'lucide-react';
 import { Button, Input } from '../../../components/ui';
 import { authService } from '../../../services/auth.service';
@@ -10,12 +10,14 @@ import Logo from '../../../assets/logo.png'
 
 export const RegisterPage: React.FC = () => {
   const storeLogin = useAuthStore((state) => state.login);
+  // The landing hero captures an address before sending people here
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
-    email: '',
+    email: searchParams.get('email') ?? '',
     password: '',
     confirmPassword: '',
     phone_number: '',
@@ -142,7 +144,7 @@ export const RegisterPage: React.FC = () => {
   const passwordStrength = getPasswordStrength();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-dark-900 via-primary-800 to-dark-800 flex items-center justify-center p-4 py-8">
+    <div className="min-h-screen bg-dark-500 flex items-center justify-center p-4 py-8">
       <div className="w-full max-w-2xl">
         {/* Logo */}
         <div className="text-center mb-8">
