@@ -4,7 +4,7 @@ import { Lock, User, Phone, Check, Eye, EyeClosed } from 'lucide-react';
 import { Button, Input } from '../../../components/ui';
 import { useAuth } from '../../../hooks';
 import { authService } from '../../../services/auth.service';
-import Logo from '../../../assets/logo.png';
+import { logo } from '../../../assets/brand';
 import { getPasswordErrors } from '../../../utils/validators';
 
 export const FirstLoginSetupPage: React.FC = () => {
@@ -181,9 +181,12 @@ export const FirstLoginSetupPage: React.FC = () => {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-white border border-secondary-700 p-4 rounded-2xl mb-4 cursor-pointer" onClick={() => navigate('/')}>
-            <img src={Logo} alt="logo" className="w-full h-full object-cover" />
-          </div>
+          <img
+            src={logo.fullOnDark}
+            alt="rlayAi"
+            className="h-11 w-auto mx-auto mb-6 cursor-pointer"
+            onClick={() => navigate('/')}
+          />
           <h1 className="text-3xl font-bold text-white mb-2">Welcome!</h1>
           <p className="text-secondary-200">
             {step === 'password'
@@ -365,7 +368,7 @@ export const FirstLoginSetupPage: React.FC = () => {
 
         {/* Footer */}
         <p className="text-center text-secondary-200 text-sm mt-8">
-          © 2025 AI Support Platform. All rights reserved.
+          © {new Date().getFullYear()} rlayAi. All rights reserved.
         </p>
       </div>
     </div>

@@ -6,7 +6,7 @@ import { authService } from '../../../services/auth.service';
 import { useAuthStore } from '../../../stores/authStore';
 import { isValidEmail, getPasswordErrors as validatePassword } from '../../../utils/validators';
 import { UserRole } from '@/types/user.types';
-import Logo from '../../../assets/logo.png'
+import { logo } from '../../../assets/brand';
 
 export const RegisterPage: React.FC = () => {
   const storeLogin = useAuthStore((state) => state.login);
@@ -148,10 +148,12 @@ export const RegisterPage: React.FC = () => {
       <div className="w-full max-w-2xl">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-white border border-secondary-700 p-4 rounded-2xl mb-4 cursor-pointer" onClick={() => navigate('/')}>
-            {/* <span className="text-white font-bold text-2xl">L</span> */}
-             <img src={Logo} alt="logo" className='w-full h-full object-cover' />
-          </div>
+          <img
+            src={logo.fullOnDark}
+            alt="rlayAi"
+            className="h-11 w-auto mx-auto mb-6 cursor-pointer"
+            onClick={() => navigate('/')}
+          />
           <h1 className="text-3xl font-bold text-white mb-2">Create Your Account</h1>
           <p className="text-secondary-200">Start your journey with rlayAi</p>
         </div>

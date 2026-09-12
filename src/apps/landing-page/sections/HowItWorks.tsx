@@ -111,7 +111,7 @@ export const HowItWorksSection: React.FC = () => {
               How it works
             </p>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tighter text-dark-500 mb-5">
-              Live in an afternoon
+              Live at ANYTIME
             </h2>
             <p className="text-base sm:text-lg text-dark-400 leading-relaxed mb-8">
               Three steps, none of which need an engineer for longer than a coffee.

@@ -65,7 +65,7 @@ export const Navbar: React.FC = () => {
             <img
               src={onDark ? logo.fullOnDark : logo.full}
               alt="rlayAi"
-              className="h-8 w-auto"
+              className="h-10 sm:h-11 w-auto"
               width={1200}
               height={360}
             />

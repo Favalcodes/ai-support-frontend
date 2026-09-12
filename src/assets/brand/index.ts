@@ -27,8 +27,13 @@ import deptGeneral from './illustrations/dept_general.svg';
 import emptyInbox from './illustrations/empty_inbox_zero.svg';
 import emptyKnowledgeBase from './illustrations/empty_knowledge_base.svg';
 
-import supportRepWorkspace from './lifestyle/support_rep_workspace.jpg';
-import teamCollaboration from './lifestyle/team_collaboration.jpg';
+// Generated brand plates: the relay loop resolving into a chat bubble, the
+// braided many-into-one form, the two streams merging at the handoff, and the
+// flat loop mark.
+import heroBackdrop from './lifestyle/hero_backdrop.jpg';
+import converging from './lifestyle/converging.jpg';
+import handoff from './lifestyle/handoff.jpg';
+import loopMark from './lifestyle/loop_mark.jpg';
 
 
 export const logo = {
@@ -56,7 +61,9 @@ export const illustrations = {
   emptyKnowledgeBase,
 };
 
-export const lifestyle = {
-  supportRepWorkspace,
-  teamCollaboration,
+export const art = {
+  heroBackdrop,
+  converging,
+  handoff,
+  loopMark,
 };

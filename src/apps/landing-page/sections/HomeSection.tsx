@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ArrowRight, Check } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { avatars } from '../../../assets/brand';
+import { avatars, art } from '../../../assets/brand';
 
 const trustPoints = ['No credit card required', '14-day free trial', 'Cancel anytime'];
 
@@ -24,34 +24,20 @@ export const HeroSection: React.FC = () => {
 
   return (
     <section className="relative isolate min-h-[42rem] lg:min-h-[46rem] flex items-center overflow-hidden">
-      {/*
-        HERO BACKDROP SLOT.
-
-        None of the supplied photographs suit a full-bleed hero: they are literal,
-        busy office shots with no open area for the headline to sit in. Rather
-        than put one behind the type anyway, this stays a flat Midnight ground
-        until the generated plate exists.
-
-        To drop the image in: save it to src/assets/brand/lifestyle/hero_backdrop.jpg,
-        export it from the brand index, then uncomment the two elements below.
-        The generation prompt is in docs/IMAGE_PROMPTS.md.
-
-        <img
-          src={lifestyle.heroBackdrop}
-          alt=""
-          aria-hidden="true"
-          className="absolute inset-0 -z-20 w-full h-full object-cover object-center"
-        />
-        <div className="absolute inset-0 -z-10 bg-dark-500/80" aria-hidden="true" />
-      */}
-      <div className="absolute inset-0 -z-10 bg-dark-500" aria-hidden="true" />
+      {/* Generated brand plate: the relay loop resolving into a chat bubble.
+          The subject sits in the right third, so the headline on the left stays
+          clear of it. A flat Midnight wash at 55%, the measured minimum that keeps white type above AA (5.13:1)
+          without flattening the artwork. */}
+      <img
+        src={art.heroBackdrop}
+        alt=""
+        aria-hidden="true"
+        className="absolute inset-0 -z-20 w-full h-full object-cover object-center"
+      />
+      <div className="absolute inset-0 -z-10 bg-dark-500/55" aria-hidden="true" />
 
       <div className="relative w-full max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 pt-32 pb-16 sm:pt-36 sm:pb-20 lg:pt-40 lg:pb-28">
         <div className="max-w-3xl">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-primary-800 border border-primary-600 rounded-full text-xs font-semibold text-secondary-300 mb-6 sm:mb-7">
-            <span className="w-2 h-2 rounded-full bg-secondary-400" />
-            Answers from your knowledge base, not guesses
-          </div>
 
           <h1 className="text-[2.5rem] sm:text-6xl lg:text-7xl leading-[1.05] font-extrabold tracking-tighter text-white mb-5 sm:mb-6">
             Support that answers
@@ -89,9 +75,9 @@ export const HeroSection: React.FC = () => {
             </button>
           </form>
 
-          <div className="flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-10">
-            <div className="flex items-center gap-3">
-              <div className="flex -space-x-2.5">
+          <div className="flex flex-col lg:flex-row lg:items-center gap-5 lg:gap-10">
+            <div className="flex items-center gap-3 shrink-0">
+              <div className="flex -space-x-2.5 shrink-0">
                 {handoffFaces.map((face) => (
                   <img
                     key={face.label}
@@ -103,7 +89,7 @@ export const HeroSection: React.FC = () => {
                   />
                 ))}
               </div>
-              <p className="text-sm text-secondary-200 leading-tight whitespace-nowrap">
+              <p className="text-sm text-secondary-200 leading-tight">
                 <span className="block font-semibold text-white">
                   AI first, humans on standby
                 </span>

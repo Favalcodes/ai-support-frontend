@@ -1,4 +1,4 @@
-export const APP_NAME = 'AI Support Platform';
+export const APP_NAME = 'rlayAi';
 
 export const ROUTES = {
   LOGIN: '/login',

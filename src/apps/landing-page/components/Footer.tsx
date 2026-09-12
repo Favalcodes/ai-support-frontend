@@ -84,7 +84,7 @@ export const Footer: React.FC = () => {
               <img
                 src={logo.fullOnDark}
                 alt="rlayAi"
-                className="h-8 w-auto"
+                className="h-12 w-auto"
                 width={1200}
                 height={360}
               />

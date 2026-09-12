@@ -17,7 +17,7 @@ import { useConversationStore } from '../../../stores';
 import { Avatar } from '../../../components/ui';
 import { usePermissions } from '../../../hooks/usePermissions';
 import { Permission } from '../../../types/permission.types';
-import Logo from '../../../assets/logo.png'
+import { logo } from '../../../assets/brand';
 
 export const Sidebar: React.FC = () => {
   const { user, logout } = useAuth();
@@ -84,12 +84,7 @@ export const Sidebar: React.FC = () => {
     <div className="w-64 bg-dark-600 flex flex-col">
       {/* Logo */}
       <div className="h-16 flex items-center px-6 border-b border-dark-800 cursor-pointer" onClick={() => navigate('/')}>
-        <div className="flex items-center gap-2">
-          <div className="flex items-center justify-center w-8 h-8 bg-transparent rounded-lg cursor-pointer">
-            <img src={Logo} alt="logo" className='w-full h-full object-cover' />
-          </div>
-          <span className="text-white font-bold text-lg">rlayAi</span>
-        </div>
+        <img src={logo.fullOnDark} alt="rlayAi" className="h-9 w-auto" />
       </div>
 
       {/* Navigation */}
