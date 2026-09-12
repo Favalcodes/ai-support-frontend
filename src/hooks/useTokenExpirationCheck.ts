@@ -1,57 +1,50 @@
-// import { useEffect, useRef } from 'react';
-// import { useAuthStore } from '../stores/authStore';
-// import { authService } from '../services/auth.service';
+import { useEffect, useRef } from 'react';
+import { useAuthStore } from '../stores/authStore';
+import { authService } from '../services/auth.service';
 
-// /**
-//  * Hook to periodically check if the token is still valid
-//  * Automatically logs out the user if the token has expired
-//  */
-// export const useTokenExpirationCheck = () => {
-//   const { isAuthenticated, logout } = useAuthStore();
-//   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+/**
+ * Periodically confirm the stored token is still valid and log the user out if it
+ * is not.
+ *
+ * This was commented out wholesale because the /auth/verify endpoint it depends on
+ * did not exist, which left expired sessions to fail later at a random API call.
+ */
+export const useTokenExpirationCheck = () => {
+  const { isAuthenticated, logout } = useAuthStore();
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-//   useEffect(() => {
-//     // Only run for authenticated users
-//     if (!isAuthenticated) {
-//       if (intervalRef.current) {
-//         clearInterval(intervalRef.current);
-//         intervalRef.current = null;
-//       }
-//       return;
-//     }
+  useEffect(() => {
+    if (!isAuthenticated) {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+      return;
+    }
 
-//     // Check token validity every 5 minutes
-//     const checkTokenValidity = async () => {
-//       try {
-//         const isValid = await authService.verifyToken();
+    const checkTokenValidity = async () => {
+      try {
+        const isValid = await authService.verifyToken();
 
-//         if (!isValid) {
-//           // Token is invalid/expired, logout user
-//           logout();
+        if (!isValid) {
+          logout();
+          sessionStorage.setItem('auth_error', 'Your session has expired. Please login again.');
+          window.location.href = '/login';
+        }
+      } catch (error) {
+        // A network blip should not sign the user out; only an explicit
+        // invalid-token answer from the server does that.
+        console.error('Token verification failed:', error);
+      }
+    };
 
-//           // Store message for login page
-//           sessionStorage.setItem('auth_error', 'Your session has expired. Please login again.');
+    checkTokenValidity();
+    intervalRef.current = setInterval(checkTokenValidity, 5 * 60 * 1000);
 
-//           // Redirect to login
-//           window.location.href = '/login';
-//         }
-//       } catch (error) {
-//         // If verification fails, assume token is invalid
-//         console.error('Token verification failed:', error);
-//       }
-//     };
-
-//     // Initial check
-//     checkTokenValidity();
-
-//     // Set up periodic check (every 5 minutes)
-//     intervalRef.current = setInterval(checkTokenValidity, 5 * 60 * 1000);
-
-//     // Cleanup on unmount
-//     return () => {
-//       if (intervalRef.current) {
-//         clearInterval(intervalRef.current);
-//       }
-//     };
-//   }, [isAuthenticated, logout]);
-// };
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [isAuthenticated, logout]);
+};

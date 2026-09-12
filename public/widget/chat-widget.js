@@ -747,21 +747,39 @@
     return;
   }
 
-  // Determine API base URL from current script location or use default
-  const currentScript = document.currentScript;
+  // Resolve the API base URL, most specific source first:
+  //   1. apiUrl in chatWidgetConfig (what the generated install snippet sets)
+  //   2. a data-api-url attribute on the script tag
+  //   3. the origin the widget script itself was served from
+  //   4. localhost, for development
+  //
+  // This previously ignored config entirely and always used the hardcoded
+  // localhost default, so every real installation pointed at the wrong host.
+  const currentScript =
+    document.currentScript ||
+    document.querySelector('script[src*="chat-widget.js"]');
   const scriptSrc = currentScript ? currentScript.src : '';
-  let apiBaseUrl = 'http://localhost:4001/api/v1'; // Default for development
 
-  // Try to extract from script location
-  // if (scriptSrc && !scriptSrc.startsWith('file://')) {
-  //   try {
-  //     const url = new URL(scriptSrc);
-  //     // Assume API is at same origin
-  //     apiBaseUrl = `${url.protocol}//${url.host}/api/v1`;
-  //   } catch (e) {
-  //     console.warn('Could not determine API URL from script source');
-  //   }
-  // }
+  let apiBaseUrl =
+    config.apiUrl ||
+    (currentScript && currentScript.getAttribute('data-api-url')) ||
+    '';
+
+  if (!apiBaseUrl && scriptSrc && !scriptSrc.startsWith('file://')) {
+    try {
+      const url = new URL(scriptSrc);
+      apiBaseUrl = `${url.protocol}//${url.host}/api/v1`;
+    } catch (e) {
+      console.warn('Chat Widget: could not determine API URL from script source');
+    }
+  }
+
+  if (!apiBaseUrl) {
+    apiBaseUrl = 'http://localhost:4001/api/v1';
+  }
+
+  // Normalise away a trailing slash so `${apiBaseUrl}/conversation` is well formed
+  apiBaseUrl = apiBaseUrl.replace(/\/+$/, '');
 
   console.log('Chat Widget: Using API URL:', apiBaseUrl);
 

@@ -26,6 +26,24 @@ export interface Conversation {
   rating?: number;
   rating_comment?: string;
   rated_at?: string;
+  /** Present when the API expands the owning company relation. */
+  company?: Company;
+  /** Free-text note recorded when an agent resolves the conversation. */
+  resolution_notes?: string;
+  notes?: string;
+  escalation_reason?: string;
+  assigned_at?: string;
+  /** Supplied by the paginated/list endpoints. */
+  message_count?: number;
+}
+
+export interface Company {
+  id: string;
+  name: string;
+  email?: string;
+  phone_number?: string;
+  city?: string;
+  country?: string;
 }
 
 export interface Category {

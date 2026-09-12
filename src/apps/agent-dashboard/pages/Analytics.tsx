@@ -4,7 +4,6 @@ import {
   MessageSquare,
   CheckCircle,
   Clock,
-  AlertCircle,
 } from 'lucide-react';
 import { useAuth } from '../../../hooks';
 import { usePermissions } from '../../../hooks/usePermissions';

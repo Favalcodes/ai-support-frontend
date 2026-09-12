@@ -27,6 +27,9 @@ class SocketService {
     }
 
     this.socket = io(this.baseURL, {
+      // Anonymous widget visitors connect without a token and are authorized per
+      // conversation instead; a signed-in user sends theirs so staff events work.
+      auth: { token: localStorage.getItem('auth_token') ?? undefined },
       transports: ['websocket', 'polling'],
       autoConnect: true,
       reconnection: true,

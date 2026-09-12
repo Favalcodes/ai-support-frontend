@@ -35,8 +35,8 @@ export const userService = {
     await api.delete('/user/delete');
   },
 
-  // Get user by ID (Note: This endpoint doesn't exist yet, kept for future implementation)
-  async getUser(userId: string): Promise<User> {
+  // Get user by ID (no such endpoint on the API; /user/profile only returns self)
+  async getUser(_userId: string): Promise<User> {
     console.warn('getUser: Backend endpoint not implemented yet');
     throw new Error('Get user by ID functionality not yet implemented');
   },

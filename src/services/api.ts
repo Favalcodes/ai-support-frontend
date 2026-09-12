@@ -47,8 +47,8 @@ api.interceptors.response.use(
             // Show a message to the user
             const errorMessage = (error.response.data as any)?.message || 'Your session has expired. Please login again.';
 
-            // Store the error message to show on login page
-            // sessionStorage.setItem('auth_error', errorMessage);
+            // Store the error message so the login page can explain the redirect
+            sessionStorage.setItem('auth_error', errorMessage);
 
             // Redirect to login page
             window.location.href = '/login';

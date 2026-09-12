@@ -10,7 +10,7 @@ class ApiService {
   private baseURL: string;
 
   constructor() {
-    this.baseURL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+    this.baseURL = import.meta.env.VITE_API_URL || 'http://localhost:4001/api/v1';
     this.api = axios.create({
       baseURL: this.baseURL,
       headers: {
@@ -64,9 +64,10 @@ class ApiService {
     userId: string
   ): Promise<Message> {
     try {
+      // The DTO field is user_id; `userId` failed whitelist validation with a 422.
       const response = await this.api.post(`/conversation/${conversationId}/messages`, {
         message,
-        userId,
+        user_id: userId,
       });
       return response.data.data;
     } catch (error) {

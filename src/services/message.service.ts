@@ -18,9 +18,11 @@ export const messageService = {
 
   // Send a message (general - for users)
   async sendMessage(conversationId: string, content: string, userId: string): Promise<Message> {
+    // SendMessageDto declares user_id, and validation runs with
+    // forbidNonWhitelisted, so posting `userId` was rejected with a 422.
     const response = await api.post(`/conversation/${conversationId}/messages`, {
       message: content,
-      userId,
+      user_id: userId,
     });
     return response.data.data;
   },

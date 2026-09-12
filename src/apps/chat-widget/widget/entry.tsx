@@ -1,5 +1,4 @@
 // src/widgets/entry.tsx
-import React from "react";
 import { createRoot, Root } from "react-dom/client";
 import "../styles/get-lync.widget.css";
 import { ChatWidgetContainer } from "../components/ChatWidgetContainer";

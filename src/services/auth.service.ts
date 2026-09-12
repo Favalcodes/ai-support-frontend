@@ -2,20 +2,22 @@ import api from './api';
 import { User } from '../types/user.types';
 import { Permission } from '../types/permission.types';
 
-interface LoginRequest {
+export interface LoginRequest {
     email: string;
     password: string;
 }
 
-interface LoginResponse {
+export interface LoginResponse {
     data: {
         user: User;
         token: string;
         permissions: Permission[];
+        /** True for staff still on their first-login temporary password. */
+        mustChangePassword?: boolean;
     };
 }
 
-interface RegisterRequest {
+export interface RegisterRequest {
     email: string;
     password: string;
     first_name: string;

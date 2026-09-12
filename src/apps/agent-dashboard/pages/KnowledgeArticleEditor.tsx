@@ -53,7 +53,7 @@ export const KnowledgeArticleEditor: React.FC = () => {
       setFormData({
         title: article.title,
         content: article.content,
-        category_id: article?.category?.id,
+        category_id: article?.category?.id ?? '',
       });
     } catch (error) {
       console.error('Failed to load article:', error);

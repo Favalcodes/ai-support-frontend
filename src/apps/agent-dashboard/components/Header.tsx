@@ -1,6 +1,5 @@
 import React from 'react';
 import { Bell, Search } from 'lucide-react';
-import { Badge } from '../../../components/ui';
 
 export const Header: React.FC = () => {
   return (

@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useAuthStore } from '../stores/authStore';
-import { authService } from '../services/auth.service';
+import { authService, type RegisterRequest } from '../services/auth.service';
 
 export const useAuth = () => {
   const { user, token, isAuthenticated, isLoading, login, logout, setLoading, setUser } =
@@ -29,13 +29,7 @@ export const useAuth = () => {
   );
 
   const handleRegister = useCallback(
-    async (data: {
-      email: string;
-      password: string;
-      first_name: string;
-      last_name: string;
-      company_id: string;
-    }) => {
+    async (data: RegisterRequest) => {
       try {
         setLoading(true);
         const response = await authService.register(data);

@@ -12,7 +12,6 @@ export const useConversation = () => {
     setConversations,
     addConversation,
     updateConversation,
-    removeConversation,
     setActiveConversation,
     setUnassignedCount,
     setLoading,
@@ -81,12 +80,11 @@ export const useConversation = () => {
   );
 
   const transferToAgent = useCallback(
-    async (conversationId: string, newAgentId: string, currentAgentId: string) => {
+    async (conversationId: string, newAgentId: string) => {
       try {
         const updated = await conversationService.transferConversation(
           conversationId,
-          newAgentId,
-          currentAgentId
+          newAgentId
         );
         updateConversation(conversationId, updated);
         return { success: true };
@@ -101,11 +99,10 @@ export const useConversation = () => {
   );
 
   const resolveConversation = useCallback(
-    async (conversationId: string, agentId: string, notes?: string) => {
+    async (conversationId: string, notes?: string) => {
       try {
         const updated = await conversationService.resolveConversation(
           conversationId,
-          agentId,
           notes
         );
         updateConversation(conversationId, updated);

@@ -12,7 +12,7 @@ import { useTokenExpirationCheck } from './hooks';
 
 function App() {
   // Check token expiration periodically
-  // useTokenExpirationCheck();
+  useTokenExpirationCheck();
 
   return (
     <ErrorBoundary>

@@ -627,7 +627,7 @@ interface PreChatFormViewProps {
 
 const PreChatFormView: React.FC<PreChatFormViewProps> = ({ onSubmit, onBack, companyId }) => {
   const [departments, setDepartments] = useState<Department[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [, setIsLoading] = useState(true);
 
   useEffect(() => {
     const loadDepartments = async () => {

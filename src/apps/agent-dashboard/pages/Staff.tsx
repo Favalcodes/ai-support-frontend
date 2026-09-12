@@ -13,7 +13,7 @@ import {
 import { useAuth } from '../../../hooks';
 import { staffService, type Staff } from '../../../services/staff.service';
 import { departmentService, type Department } from '../../../services/department.service';
-import { Button, Input, Card, CardBody, Badge, Spinner, MultiSelectDropdown } from '../../../components/ui';
+import { Button, Input, Card, CardBody, Badge, Spinner, MultiSelectDropdown, Modal } from '../../../components/ui';
 import { UserRole } from '@/types/user.types';
 
 export const StaffPage: React.FC = () => {
@@ -27,6 +27,8 @@ export const StaffPage: React.FC = () => {
   const [selectedStaff, setSelectedStaff] = useState<Staff | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // Shown once after onboarding; the server only keeps a bcrypt hash of it.
+  const [tempPassword, setTempPassword] = useState<{ email: string; password: string } | null>(null);
 
   // Form state for adding/editing staff
   const [formData, setFormData] = useState({
@@ -73,10 +75,15 @@ export const StaffPage: React.FC = () => {
       setIsSubmitting(true);
       setError(null);
 
-      await staffService.onboardStaff({
+      const created = await staffService.onboardStaff({
         ...formData,
         company_id: user.company_id,
       });
+
+      // Shown once: the server keeps only a hash and cannot reissue it.
+      if (created?.temp_password) {
+        setTempPassword({ email: formData.email, password: created.temp_password });
+      }
 
       setShowAddModal(false);
       setFormData({ email: '', role: UserRole.COMPANY_STAFF, department_ids: [], is_all_rounder: false });
@@ -530,6 +537,43 @@ export const StaffPage: React.FC = () => {
           </div>
         </div>
       )}
+      {/* One-time credential for a newly onboarded staff member */}
+      <Modal
+        isOpen={!!tempPassword}
+        onClose={() => setTempPassword(null)}
+        title="Temporary password"
+        size="md"
+      >
+        <div className="space-y-4">
+          <p className="text-sm text-gray-600">
+            Share this with <span className="font-medium">{tempPassword?.email}</span> so they
+            can sign in for the first time. They will be asked to set their own password.
+          </p>
+
+          <div className="flex items-center gap-2">
+            <code className="flex-1 px-3 py-2 rounded bg-gray-100 font-mono text-sm break-all">
+              {tempPassword?.password}
+            </code>
+            <Button
+              variant="secondary"
+              onClick={() => {
+                if (tempPassword) navigator.clipboard?.writeText(tempPassword.password);
+              }}
+            >
+              Copy
+            </Button>
+          </div>
+
+          <p className="text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded px-3 py-2">
+            This is the only time it is shown. It is stored hashed and cannot be retrieved
+            again &mdash; you would have to re-onboard the staff member.
+          </p>
+
+          <div className="flex justify-end">
+            <Button onClick={() => setTempPassword(null)}>Done</Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

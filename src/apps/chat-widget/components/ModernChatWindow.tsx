@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { X, Send, Paperclip, Smile, MoreVertical, ArrowLeft } from 'lucide-react';
+import React, { useState } from 'react';
+import { X, Send, MoreVertical, ArrowLeft } from 'lucide-react';
 import { ConnectedChatWindow } from './ConnectedChatWindow';
 
 interface ModernChatWindowProps {
@@ -83,7 +83,7 @@ interface WelcomeViewProps {
   companyName: string;
 }
 
-const WelcomeView: React.FC<WelcomeViewProps> = ({ onStartChat, companyName }) => {
+const WelcomeView: React.FC<WelcomeViewProps> = ({ onStartChat }) => {
   return (
     <div className="flex-1 flex flex-col">
       {/* Welcome Message */}

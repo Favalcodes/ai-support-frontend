@@ -38,7 +38,12 @@ export const staffService = {
   },
 
   // Onboard new staff member
-  async onboardStaff(data: CreateStaffDto): Promise<User> {
+  /**
+   * Returns the created user plus a one-time `temp_password`. The server stores only
+   * a hash of it, so this response is the single opportunity to show it to the admin
+   * who must pass it to the new staff member.
+   */
+  async onboardStaff(data: CreateStaffDto): Promise<User & { temp_password?: string }> {
     const response = await api.post('/auth/onboard-staff', data);
     return response.data.data;
   },

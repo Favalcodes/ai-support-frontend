@@ -10,7 +10,7 @@ export const useSocket = () => {
   useEffect(() => {
     if (isAuthenticated && user) {
       // Connect socket
-      const socket = socketService.connect(user.id);
+      const socket = socketService.connect();
 
       // Setup connection status listeners
       socket.on('connect', () => {

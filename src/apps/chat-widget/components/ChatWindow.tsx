@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, Paperclip, X, Minimize2 } from 'lucide-react';
-import { Avatar, Button, Textarea } from '../../../components/ui';
+import { Avatar, Textarea } from '../../../components/ui';
 import { ChatMessage } from './ChatMessage';
 
 interface Message {
@@ -16,7 +16,7 @@ interface ChatWindowProps {
   companyId?: string;
 }
 
-export const ChatWindow: React.FC<ChatWindowProps> = ({ onClose, onMinimize, companyId }) => {
+export const ChatWindow: React.FC<ChatWindowProps> = ({ onClose, onMinimize }) => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',

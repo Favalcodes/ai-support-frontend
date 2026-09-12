@@ -85,7 +85,7 @@ export const KnowledgeBaseView: React.FC<KnowledgeBaseViewProps> = ({
 
   // Mark FAQ as helpful
   const markHelpful = async (faqId: string) => {
-    await knowledgeBaseService.markFAQHelpful(faqId);
+    await knowledgeBaseService.markFAQHelpful(companyId, faqId);
     // Update local state
     setFaqs(faqs.map(faq => 
       faq.id === faqId 
@@ -96,7 +96,7 @@ export const KnowledgeBaseView: React.FC<KnowledgeBaseViewProps> = ({
 
   // View full article
   const viewArticle = async (articleId: string) => {
-    const article = await knowledgeBaseService.getArticle(articleId);
+    const article = await knowledgeBaseService.getArticle(companyId, articleId);
     if (article) {
       setSelectedArticle(article);
     }

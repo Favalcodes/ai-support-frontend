@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Mail, Lock, Loader2, Eye, EyeClosed, AlertCircle } from 'lucide-react';
+import { Mail, Lock, Eye, EyeClosed, AlertCircle } from 'lucide-react';
 import { Button, Input } from '../../../components/ui';
 import { useAuth } from '../../../hooks';
 import { isValidEmail } from '../../../utils/validators';
@@ -23,19 +23,18 @@ export const LoginPage: React.FC = () => {
     general: '',
   });
 
-  // Check for session expiration message
-  // useEffect(() => {
-  //   const authError = sessionStorage.getItem('auth_error');
-  //   if (authError) {
-  //     setSessionExpiredMessage(authError);
-  //     sessionStorage.removeItem('auth_error');
+  // Surface the reason the user was sent back here (expired token, 401 from the
+  // API). The banner below already existed but nothing ever populated it.
+  useEffect(() => {
+    const authError = sessionStorage.getItem('auth_error');
+    if (!authError) return;
 
-  //     // Auto-hide message after 10 seconds
-  //     setTimeout(() => {
-  //       setSessionExpiredMessage(null);
-  //     }, 10000);
-  //   }
-  // }, []);
+    setSessionExpiredMessage(authError);
+    sessionStorage.removeItem('auth_error');
+
+    const timer = setTimeout(() => setSessionExpiredMessage(null), 10000);
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

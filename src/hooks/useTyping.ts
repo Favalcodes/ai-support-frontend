@@ -10,6 +10,7 @@ export const useTyping = (conversationId: string | null, userName: string) => {
   const startTyping = useCallback(() => {
     if (!conversationId) return;
 
+    setIsTyping(true);
     socketService.startTyping(conversationId, userName);
 
     // Clear existing timeout
@@ -26,6 +27,7 @@ export const useTyping = (conversationId: string | null, userName: string) => {
   const stopTyping = useCallback(() => {
     if (!conversationId) return;
 
+    setIsTyping(false);
     socketService.stopTyping(conversationId);
 
     if (typingTimeoutRef.current) {

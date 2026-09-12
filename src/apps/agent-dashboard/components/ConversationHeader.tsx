@@ -23,10 +23,9 @@ export const ConversationHeader: React.FC<ConversationHeaderProps> = ({
     if (!conversation.assigned_staff_id) return;
     
     setIsResolving(true);
-    const result = await resolveConversation(
-      conversation.id,
-      conversation.assigned_staff_id
-    );
+    // The assigned staff member is taken from the caller's token server-side; the
+    // second argument here is the resolution note, not an agent id.
+    const result = await resolveConversation(conversation.id);
     setIsResolving(false);
     
     if (result.success) {

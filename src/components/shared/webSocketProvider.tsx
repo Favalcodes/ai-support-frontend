@@ -12,8 +12,8 @@ interface WebSocketProviderProps {
 
 export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({ children }) => {
   const { user, isAuthenticated } = useAuth();
-  const { socket, isConnected, on, off } = useSocket();
-  const { updateConversation, addConversation } = useConversationStore();
+  const { socket, on, off } = useSocket();
+  const { updateConversation } = useConversationStore();
   const { addMessage } = useMessageStore();
   const { addTypingUser, removeTypingUser } = useTypingStore();
 

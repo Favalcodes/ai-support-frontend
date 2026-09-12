@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { CheckCircle, Calendar, User, MessageSquare, Search, Filter } from 'lucide-react';
+import { CheckCircle, Calendar, User, MessageSquare, Search } from 'lucide-react';
 import { useAuth, useConversation } from '../../../hooks';
 import { usePermissions } from '../../../hooks/usePermissions';
 import { Permission } from '../../../types/permission.types';

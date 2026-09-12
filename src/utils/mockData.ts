@@ -64,6 +64,7 @@ export const mockConversations: Conversation[] = [
     active: true,
     needs_human_agent: false,
     created_at: new Date(Date.now() - 2 * 60 * 1000).toISOString(), // 2 minutes ago
+    updated_at: new Date(Date.now() - 2 * 60 * 1000).toISOString(),
     last_activity: new Date(Date.now() - 2 * 60 * 1000).toISOString(),
     user: mockUsers[0],
     category: {
@@ -82,6 +83,7 @@ export const mockConversations: Conversation[] = [
     active: true,
     needs_human_agent: false,
     created_at: new Date(Date.now() - 15 * 60 * 1000).toISOString(), // 15 minutes ago
+    updated_at: new Date(Date.now() - 15 * 60 * 1000).toISOString(),
     last_activity: new Date(Date.now() - 15 * 60 * 1000).toISOString(),
     user: mockUsers[1],
     category: {
@@ -100,6 +102,7 @@ export const mockConversations: Conversation[] = [
     active: true,
     needs_human_agent: false,
     created_at: new Date(Date.now() - 60 * 60 * 1000).toISOString(), // 1 hour ago
+    updated_at: new Date(Date.now() - 60 * 60 * 1000).toISOString(),
     last_activity: new Date(Date.now() - 60 * 60 * 1000).toISOString(),
     user: mockUsers[2],
     category: {

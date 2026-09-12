@@ -11,8 +11,6 @@ interface ConnectedChatWindowProps {
 
 export const ConnectedChatWindow: React.FC<ConnectedChatWindowProps> = ({
   companyId,
-  userId,
-  conversationId,
 }) => {
   const [inputValue, setInputValue] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);

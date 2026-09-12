@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Mail, Lock, User, Phone, Loader2 } from 'lucide-react';
+import { Mail, Lock, User, Phone } from 'lucide-react';
 import { Button, Input } from '../../../components/ui';
 import { authService } from '../../../services/auth.service';
+import { useAuthStore } from '../../../stores/authStore';
 import { isValidEmail } from '../../../utils/validators';
 import { UserRole } from '@/types/user.types';
 import Logo from '../../../assets/logo.png'
 
 export const RegisterPage: React.FC = () => {
+  const storeLogin = useAuthStore((state) => state.login);
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -115,9 +117,11 @@ export const RegisterPage: React.FC = () => {
         role: UserRole.COMPANY_SUPER_ADMIN, // Default role for new registrations
       });
 
-      // Store the token
+      // Persist through the auth store so the token lands under 'auth_token' (the key
+      // the axios interceptor reads) alongside the user and permissions. Writing a
+      // bare 'token' key left every request after registration unauthenticated.
       if (response.data.token) {
-        localStorage.setItem('token', response.data.token);
+        storeLogin(response.data.user, response.data.token, response.data.permissions);
       }
 
       // Navigate to company setup page

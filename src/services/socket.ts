@@ -6,12 +6,15 @@ class SocketService {
   private reconnectAttempts = 0;
   private maxReconnectAttempts = 5;
 
-  connect(userId?: string): Socket {
+  connect(): Socket {
     if (this.socket?.connected) {
       return this.socket;
     }
 
     this.socket = io(config.socketUrl, {
+      // The server authenticates the handshake; staff sockets must present their JWT
+      // or they are treated as anonymous and refused on privileged events.
+      auth: { token: localStorage.getItem('auth_token') ?? undefined },
       transports: ['websocket'],
       autoConnect: true,
       reconnection: true,
