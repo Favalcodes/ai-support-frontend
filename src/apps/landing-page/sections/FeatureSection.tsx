@@ -77,41 +77,54 @@ export const FeaturesSection: React.FC = () => {
           })}
         </div>
 
-        {/* Outcome panels.
-            These were stock office photographs. They were dropped: their warm,
-            beige-heavy colour sits outside the palette, and both carry visible
-            generation artifacts (the words "Orion Blue" printed on the chairs and
-            a mug). Flat brand panels until real product photography exists. */}
-        <div className="grid lg:grid-cols-2 gap-5 sm:gap-6 items-stretch">
-          <div className="rounded-2xl sm:rounded-3xl bg-dark-500 p-7 sm:p-9 flex flex-col justify-between min-h-[16rem]">
-            <p className="text-5xl sm:text-6xl font-extrabold tracking-tighter text-secondary-500 mb-6">
-              1st tier
-            </p>
-            <div>
-              <h3 className="text-xl sm:text-2xl font-bold text-white mb-2.5">
-                Your agents stop repeating themselves
-              </h3>
-              <p className="text-secondary-200 leading-relaxed">
-                The routine questions never reach the queue. What does reach it arrives
-                with the history already read.
-              </p>
-            </div>
-          </div>
+        {/* Outcome cards, in the shape of the reference site's stat row: three
+            dark panels, each led by one oversized figure.
 
-          <div className="rounded-2xl sm:rounded-3xl bg-ink-500 p-7 sm:p-9 flex flex-col justify-between min-h-[16rem]">
-            <p className="text-5xl sm:text-6xl font-extrabold tracking-tighter text-secondary-500 mb-6">
-              4 desks
-            </p>
-            <div>
-              <h3 className="text-xl sm:text-2xl font-bold text-white mb-2.5">
-                One queue, split by department
-              </h3>
-              <p className="text-secondary-200 leading-relaxed">
-                Billing, technical and success each see their own work, and all-rounders
-                see everything.
+            The two stock office photographs that used to sit here were dropped —
+            warm, beige-heavy colour outside the palette, and both carried visible
+            generation artifacts ("Orion Blue" printed on the chairs and a mug). */}
+        <div className="mb-10 sm:mb-12">
+          <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-dark-500 text-center">
+            Why teams move their first tier to rlayAi
+          </h3>
+        </div>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 items-stretch">
+          {[
+            {
+              figure: '1st tier',
+              bg: 'bg-dark-500',
+              title: 'Agents stop repeating themselves',
+              body: 'The routine questions never reach the queue. What does reach it arrives with the history already read.',
+            },
+            {
+              figure: '4 desks',
+              bg: 'bg-ink-500',
+              title: 'One queue, split by department',
+              body: 'Billing, technical and success each see their own work, and all-rounders see everything.',
+            },
+            {
+              figure: '2 tags',
+              bg: 'bg-primary-600',
+              title: 'Installed in an afternoon',
+              body: 'Two script tags into your site. No build step, no framework requirement, no npm install.',
+            },
+          ].map((card) => (
+            <div
+              key={card.figure}
+              className={`${card.bg} rounded-2xl sm:rounded-3xl p-7 sm:p-8 flex flex-col justify-between min-h-[15rem]`}
+            >
+              <p className="text-5xl sm:text-6xl font-extrabold tracking-tighter text-secondary-500 mb-6">
+                {card.figure}
               </p>
+              <div>
+                <h4 className="text-lg sm:text-xl font-bold text-white mb-2.5">{card.title}</h4>
+                <p className="text-sm sm:text-base text-secondary-200 leading-relaxed">
+                  {card.body}
+                </p>
+              </div>
             </div>
-          </div>
+          ))}
         </div>
       </div>
     </section>
