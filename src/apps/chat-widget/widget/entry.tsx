@@ -45,15 +45,33 @@ export function renderGetLyncWidget(target: string | HTMLElement, opts: LyncOpts
   );
 }
 
-// Convenience: auto-mount a default container created by the loader
+/**
+ * Auto-mount from the page's widget config.
+ *
+ * There were three incompatible embed contracts in the tree: the install snippet
+ * the backend generates sets `window.chatWidgetConfig`, this file read
+ * `window.getLyncConfig`, and the loader stub read `window.getLync._config`,
+ * which nothing ever set. `chatWidgetConfig` wins because it is the one the
+ * backend actually hands to customers; the older name is still accepted so any
+ * page already using it keeps working.
+ */
 export function initGetLyncAutoMount() {
-  const el = document.getElementById("get-lync-embed-root");
-  if (!el) return;
-  // read config placed on window by loader
-  const cfg = (window as any).getLyncConfig || {};
+  const cfg =
+    (window as any).chatWidgetConfig ||
+    (window as any).getLyncConfig ||
+    {};
+
   if (!cfg.companyId) {
-    console.error("getLync: companyId required in getLyncConfig");
+    console.error("Chat Widget: companyId is required in window.chatWidgetConfig");
     return;
+  }
+
+  // Create the mount point if the host page did not provide one.
+  let el = document.getElementById("get-lync-embed-root");
+  if (!el) {
+    el = document.createElement("div");
+    el.id = "get-lync-embed-root";
+    document.body.appendChild(el);
   }
   renderGetLyncWidget(el, {
     companyId: cfg.companyId,
@@ -71,6 +89,7 @@ declare global {
     renderGetLyncWidget?: typeof renderGetLyncWidget;
     getLync?: any;
     getLyncConfig?: any;
+    chatWidgetConfig?: any;
   }
 }
 
@@ -82,4 +101,14 @@ if (typeof window !== "undefined") {
     initAuto: () => initGetLyncAutoMount(),
     config: (c: Partial<LyncOpts>) => { window.getLyncConfig = { ...(window.getLyncConfig || {}), ...c } }
   };
+
+  // Mount straight away when the page already declared a config, so embedding is
+  // just two script tags with no manual init call.
+  if (window.chatWidgetConfig || window.getLyncConfig) {
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", () => initGetLyncAutoMount());
+    } else {
+      initGetLyncAutoMount();
+    }
+  }
 }

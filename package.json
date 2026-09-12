@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "format": "prettier --write \"src/**/*.{ts,tsx,css,md}\"",
-    "build:widget": "vite build --config vite.widget.config.ts"
+    "build:widget": "vite build --config vite.widget.config.ts",
+    "prebuild": "npm run build:widget"
   },
   "dependencies": {
     "@lexical/code": "^0.38.2",
