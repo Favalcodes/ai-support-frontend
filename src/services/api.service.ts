@@ -1,33 +1,16 @@
-import axios, { AxiosInstance } from 'axios';
+import { publicApi } from './api';
 import type {
   StartConversationRequest,
   StartConversationResponse,
   Message,
 } from '../types/chat.types';
 
+/**
+ * Conversation calls made by the embedded widget on behalf of an anonymous
+ * visitor. Uses the shared public client rather than its own axios instance.
+ */
 class ApiService {
-  private api: AxiosInstance;
-  private baseURL: string;
-
-  constructor() {
-    this.baseURL = import.meta.env.VITE_API_URL || 'http://localhost:4001/api/v1';
-    this.api = axios.create({
-      baseURL: this.baseURL,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      timeout: 10000,
-    });
-
-    // Response interceptor for error handling
-    this.api.interceptors.response.use(
-      (response) => response,
-      (error) => {
-        console.error('API Error:', error.response?.data || error.message);
-        throw error;
-      }
-    );
-  }
+  private readonly api = publicApi;
 
   /**
    * Start a new conversation or resume existing one
@@ -77,7 +60,7 @@ class ApiService {
   }
 
   getBaseURL(): string {
-    return this.baseURL;
+    return this.api.defaults.baseURL ?? '';
   }
 }
 

@@ -1,7 +1,32 @@
 import axios, { AxiosInstance, AxiosError } from 'axios';
 import { config } from '../config/env';
 
-// Create axios instance
+/**
+ * Public client for the embedded widget.
+ *
+ * Widget visitors are anonymous, so this instance deliberately carries no auth
+ * header and never redirects to /login on a 401 - doing that inside a customer's
+ * page would navigate their site away. It shares the base URL and timeout with
+ * the dashboard client below so the two cannot drift apart, which is what
+ * happened when the widget kept its own axios instance pointing at port 3000.
+ */
+export const publicApi: AxiosInstance = axios.create({
+  baseURL: config.apiUrl,
+  timeout: 30000,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+publicApi.interceptors.response.use(
+  (response) => response,
+  (error: AxiosError) => {
+    console.error('Widget API error:', (error.response?.data as any)?.message ?? error.message);
+    return Promise.reject(error);
+  }
+);
+
+// Authenticated client for the agent dashboard
 const api: AxiosInstance = axios.create({
   baseURL: config.apiUrl,
   timeout: 30000,

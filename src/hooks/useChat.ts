@@ -1,7 +1,7 @@
 import { useEffect, useRef, useCallback } from 'react';
 import { useChatStore } from '@/stores/chatStore';
 import { apiService } from '@/services/api.service';
-import { socketService } from '@/services/socket.service';
+import { socketService } from '@/services/socket';
 import type { StartConversationRequest } from '@/types/chat.types';
 
 export const useChat = (companyId: string) => {

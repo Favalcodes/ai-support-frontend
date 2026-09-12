@@ -1,5 +1,13 @@
 import { io, Socket } from 'socket.io-client';
 import { config } from '../config/env';
+import type {
+  Message,
+  TypingEvent,
+  AgentJoinedEvent,
+  EscalationEvent,
+} from '../types/chat.types';
+
+export type SocketEventCallback<T = any> = (data: T) => void;
 
 class SocketService {
   private socket: Socket | null = null;
@@ -116,6 +124,58 @@ class SocketService {
 
   getSocket(): Socket | null {
     return this.socket;
+  }
+
+  // ---------------------------------------------------------------------
+  // Typed listeners.
+  //
+  // Merged in from the widget's separate socket client. Two modules each
+  // opening their own connection meant a dashboard page using both hooks held
+  // two sockets to the same server, and only one of them was authenticated.
+  // ---------------------------------------------------------------------
+
+  onConversationHistory(callback: SocketEventCallback<{ messages: Message[] }>): void {
+    this.on('conversation_history', callback);
+  }
+
+  onNewMessage(callback: SocketEventCallback<{ message: Message }>): void {
+    this.on('new_message', callback);
+  }
+
+  onAiThinking(callback: SocketEventCallback<{ thinking: boolean }>): void {
+    this.on('ai_thinking', callback);
+  }
+
+  onEscalatedToHuman(callback: SocketEventCallback<EscalationEvent>): void {
+    this.on('escalated_to_human', callback);
+  }
+
+  onAgentJoined(callback: SocketEventCallback<AgentJoinedEvent>): void {
+    this.on('agent_joined', callback);
+  }
+
+  onUserTyping(callback: SocketEventCallback<TypingEvent>): void {
+    this.on('user_typing', callback);
+  }
+
+  onAgentTyping(callback: SocketEventCallback<TypingEvent>): void {
+    this.on('agent_typing', callback);
+  }
+
+  onConversationResolved(callback: SocketEventCallback): void {
+    this.on('conversation_resolved', callback);
+  }
+
+  onError(callback: SocketEventCallback<{ message: string }>): void {
+    this.on('error', callback);
+  }
+
+  removeAllListeners(event?: string): void {
+    if (event) {
+      this.socket?.removeAllListeners(event);
+    } else {
+      this.socket?.removeAllListeners();
+    }
   }
 }
 
