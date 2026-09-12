@@ -5,15 +5,29 @@ export const isValidEmail = (email: string): boolean => {
 };
 
 // Password validation (min 8 chars, 1 uppercase, 1 lowercase, 1 number)
-export const isValidPassword = (password: string): boolean => {
-  if (password.length < 8) return false;
-  
-  const hasUpperCase = /[A-Z]/.test(password);
-  const hasLowerCase = /[a-z]/.test(password);
-  const hasNumber = /\d/.test(password);
-  
-  return hasUpperCase && hasLowerCase && hasNumber;
+/**
+ * The single client-side password rule, kept in step with the backend's
+ * IsStrongPassword validator.
+ *
+ * There were three different rules in the frontend: this one (no special
+ * character), an inline copy in Register that did require one, and
+ * FirstLoginSetup which only checked the length. Anything the looser checks let
+ * through was rejected by the API with a 422 the user could not act on.
+ */
+const PASSWORD_SPECIAL = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/;
+
+export const getPasswordErrors = (password: string): string[] => {
+  const errors: string[] = [];
+  if (password.length < 8) errors.push('At least 8 characters');
+  if (!/[A-Z]/.test(password)) errors.push('One uppercase letter');
+  if (!/[a-z]/.test(password)) errors.push('One lowercase letter');
+  if (!/[0-9]/.test(password)) errors.push('One number');
+  if (!PASSWORD_SPECIAL.test(password)) errors.push('One special character');
+  return errors;
 };
+
+export const isValidPassword = (password: string): boolean =>
+  getPasswordErrors(password).length === 0;
 
 // Get password strength
 export const getPasswordStrength = (password: string): {

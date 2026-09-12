@@ -5,6 +5,7 @@ import { Button, Input } from '../../../components/ui';
 import { useAuth } from '../../../hooks';
 import { authService } from '../../../services/auth.service';
 import Logo from '../../../assets/logo.png';
+import { getPasswordErrors } from '../../../utils/validators';
 
 export const FirstLoginSetupPage: React.FC = () => {
   const navigate = useNavigate();
@@ -70,9 +71,14 @@ export const FirstLoginSetupPage: React.FC = () => {
     if (!passwordData.newPassword) {
       newErrors.newPassword = 'New password is required';
       isValid = false;
-    } else if (passwordData.newPassword.length < 8) {
-      newErrors.newPassword = 'Password must be at least 8 characters';
-      isValid = false;
+    } else {
+      // Was a bare length check, so a password the API would reject with a 422
+      // sailed through the form. Uses the same rule as the backend now.
+      const passwordErrors = getPasswordErrors(passwordData.newPassword);
+      if (passwordErrors.length > 0) {
+        newErrors.newPassword = `Password needs: ${passwordErrors.join(', ').toLowerCase()}`;
+        isValid = false;
+      }
     }
 
     if (!passwordData.confirmPassword) {

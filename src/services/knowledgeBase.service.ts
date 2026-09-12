@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from 'axios';
+import { publicApi } from './api';
 import type { FAQ, Article, Category } from '../types/knowledge.types';
 
 /**
@@ -9,20 +9,12 @@ import type { FAQ, Article, Category } from '../types/knowledge.types';
  * (/knowledge, /knowledge/faqs, /knowledge/categories), which returned 401 for
  * widget users, and read single articles through /knowledge/:id, which had no
  * company filter at all.
+ *
+ * Uses the shared public client rather than its own axios instance, so base URL
+ * and timeout stay in one place.
  */
 class KnowledgeBaseService {
-  private api: AxiosInstance;
-
-  constructor() {
-    const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:4001/api/v1';
-    this.api = axios.create({
-      baseURL,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      timeout: 10000,
-    });
-  }
+  private readonly api = publicApi;
 
   /**
    * Get all FAQs for a company (public endpoint for chat widget)

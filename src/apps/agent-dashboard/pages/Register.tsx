@@ -4,7 +4,7 @@ import { Mail, Lock, User, Phone } from 'lucide-react';
 import { Button, Input } from '../../../components/ui';
 import { authService } from '../../../services/auth.service';
 import { useAuthStore } from '../../../stores/authStore';
-import { isValidEmail } from '../../../utils/validators';
+import { isValidEmail, getPasswordErrors as validatePassword } from '../../../utils/validators';
 import { UserRole } from '@/types/user.types';
 import Logo from '../../../assets/logo.png'
 
@@ -38,16 +38,6 @@ export const RegisterPage: React.FC = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
     // Clear error when user types
     setErrors((prev) => ({ ...prev, [name]: '', general: '' }));
-  };
-
-  const validatePassword = (password: string): string[] => {
-    const errors: string[] = [];
-    if (password.length < 8) errors.push('At least 8 characters');
-    if (!/[A-Z]/.test(password)) errors.push('One uppercase letter');
-    if (!/[a-z]/.test(password)) errors.push('One lowercase letter');
-    if (!/[0-9]/.test(password)) errors.push('One number');
-    if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) errors.push('One special character');
-    return errors;
   };
 
   const validate = (): boolean => {
