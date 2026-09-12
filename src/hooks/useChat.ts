@@ -223,12 +223,37 @@ export const useChat = (companyId: string) => {
         };
         addMessage(userMessage);
 
-        // Send via socket for real-time
-        if (isConnected) {
+        /**
+         * Prefer the socket, because the reply arrives on the `new_message`
+         * listener above. Fall back to HTTP when it is not connected.
+         *
+         * Ask the socket directly rather than trusting the `isConnected` flag in
+         * the store: that flag is set by an event handler and is still false for
+         * the first moments after mount, so an early send took the HTTP branch.
+         */
+        const socketReady = socketService.isConnected();
+
+        if (socketReady) {
           socketService.sendMessage(conversation.id, user.id, content.trim());
         } else {
-          // Fallback to HTTP if socket is disconnected
-          await apiService.sendMessage(conversation.id, content.trim(), user.id);
+          setIsAiTyping(true);
+          try {
+            /**
+             * The HTTP reply has to be rendered here. Nothing is listening for
+             * it on this path, so previously the response was awaited and then
+             * dropped: the visitor saw their own message appear and never got an
+             * answer, which looked exactly like the AI ignoring them.
+             */
+            const { aiMessage } = await apiService.sendMessage(
+              conversation.id,
+              content.trim(),
+              user.id
+            );
+
+            if (aiMessage) addMessage(aiMessage);
+          } finally {
+            setIsAiTyping(false);
+          }
         }
       } catch (error) {
         console.error('Failed to send message:', error);
@@ -237,7 +262,7 @@ export const useChat = (companyId: string) => {
         setIsSendingMessage(false);
       }
     },
-    [conversation?.id, user?.id, isConnected, addMessage, setIsSendingMessage]
+    [conversation?.id, user?.id, addMessage, setIsAiTyping, setIsSendingMessage]
   );
 
   /**

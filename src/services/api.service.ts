@@ -5,6 +5,13 @@ import type {
   Message,
 } from '../types/chat.types';
 
+/** Envelope returned by POST /conversation/:id/messages. */
+export interface SendMessageResult {
+  userMessage: Message;
+  aiMessage: Message;
+  needsHumanAgent: boolean;
+}
+
 /**
  * Conversation calls made by the embedded widget on behalf of an anonymous
  * visitor. Uses the shared public client rather than its own axios instance.
@@ -45,14 +52,26 @@ class ApiService {
     conversationId: string,
     message: string,
     userId: string
-  ): Promise<Message> {
+  ): Promise<SendMessageResult> {
     try {
       // The DTO field is user_id; `userId` failed whitelist validation with a 422.
       const response = await this.api.post(`/conversation/${conversationId}/messages`, {
         message,
         user_id: userId,
       });
-      return response.data.data;
+
+      /**
+       * The endpoint answers with an envelope, not a single message:
+       * { conversationId, userMessage, aiMessage, needsHumanAgent, tokensUsed }.
+       * Returning `data.data` as if it were a Message meant callers had no way
+       * to reach the reply.
+       */
+      const payload = response.data.data;
+      return {
+        userMessage: payload.userMessage as Message,
+        aiMessage: payload.aiMessage as Message,
+        needsHumanAgent: Boolean(payload.needsHumanAgent),
+      };
     } catch (error) {
       console.error('Failed to send message:', error);
       throw new Error('Unable to send message. Please try again.');
