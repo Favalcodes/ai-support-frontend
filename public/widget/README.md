@@ -41,7 +41,7 @@ Customize the widget with these optional attributes:
 |-----------|------|---------|-------------|
 | `data-api-url` | string | `http://localhost:3000/api/v1` | Your API endpoint |
 | `data-position` | string | `bottom-right` | Widget position: `bottom-right`, `bottom-left`, `top-right`, `top-left` |
-| `data-primary-color` | string | `#0891b2` | Primary color (hex code) |
+| `data-primary-color` | string | `#4563FF` | Primary color (hex code) |
 | `data-title` | string | `Support Chat` | Widget header title |
 | `data-welcome-message` | string | `Hi! How can we help you today?` | Initial greeting |
 | `data-placeholder` | string | `Type your message...` | Input placeholder text |
@@ -99,7 +99,7 @@ Use any hex color code to match your brand:
 
 ```html
 <!-- Cyan (default) -->
-<script src="..." data-primary-color="#0891b2"></script>
+<script src="..." data-primary-color="#4563FF"></script>
 
 <!-- Purple -->
 <script src="..." data-primary-color="#7c3aed"></script>

@@ -20,10 +20,46 @@
   'use strict';
 
   // Get configuration from global scope
-  const config = window.chatWidgetConfig || {};
+  /**
+   * Configuration comes from either source, merged with window winning:
+   *
+   *   <script src="chat-widget.js" data-company-id="..."></script>
+   *   window.chatWidgetConfig = { companyId: '...' }
+   *
+   * The data-attribute form is a common embed pattern and is what the demo page
+   * shipped alongside this file already used, but only the window form was read,
+   * so that page logged "companyId is required" and never mounted.
+   */
+  const currentScriptEl =
+    document.currentScript ||
+    document.querySelector('script[src*="chat-widget.js"]');
+
+  function readDatasetConfig(el) {
+    if (!el || !el.dataset) return {};
+    const d = el.dataset;
+    const out = {};
+    if (d.companyId) out.companyId = d.companyId;
+    if (d.apiUrl) out.apiUrl = d.apiUrl;
+    if (d.position) out.position = d.position;
+    if (d.primaryColor) out.primaryColor = d.primaryColor;
+    if (d.title) out.title = d.title;
+    if (d.welcomeMessage) out.welcomeMessage = d.welcomeMessage;
+    if (d.placeholder) out.placeholder = d.placeholder;
+    if (d.autoOpen) out.autoOpen = d.autoOpen === 'true';
+    return out;
+  }
+
+  const config = Object.assign(
+    {},
+    readDatasetConfig(currentScriptEl),
+    window.chatWidgetConfig || {}
+  );
 
   if (!config.companyId) {
-    console.error('Chat Widget: companyId is required in chatWidgetConfig');
+    console.error(
+      'Chat Widget: companyId is required. Set window.chatWidgetConfig = { companyId: "..." } ' +
+      'or add data-company-id to the script tag.'
+    );
     return;
   }
 
@@ -35,9 +71,7 @@
   //
   // This previously ignored config entirely and always used the hardcoded
   // localhost default, so every real installation pointed at the wrong host.
-  const currentScript =
-    document.currentScript ||
-    document.querySelector('script[src*="chat-widget.js"]');
+  const currentScript = currentScriptEl;
   const scriptSrc = currentScript ? currentScript.src : '';
 
   let apiBaseUrl =
@@ -92,7 +126,7 @@
         width: 64px;
         height: 64px;
         border-radius: 50%;
-        background: var(--cw-primary-color, #713600);
+        background: var(--cw-primary-color, #4563FF);
         box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
         border: none;
         cursor: pointer;
@@ -152,7 +186,7 @@
         position: absolute;
         inset: 0;
         border-radius: 50%;
-        background: var(--cw-primary-color, #713600);
+        background: var(--cw-primary-color, #4563FF);
         animation: cw-ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
         opacity: 0.2;
         pointer-events: none;
@@ -176,7 +210,7 @@
 
       /* Header */
       .cw-header {
-        background: var(--cw-primary-color, #713600);
+        background: var(--cw-primary-color, #4563FF);
         padding: 16px 20px;
         display: flex;
         align-items: center;
@@ -294,8 +328,8 @@
       }
 
       .cw-tab-btn.active {
-        color: var(--cw-primary-color, #713600);
-        border-bottom-color: var(--cw-primary-color, #713600);
+        color: var(--cw-primary-color, #4563FF);
+        border-bottom-color: var(--cw-primary-color, #4563FF);
       }
 
       .cw-tab-btn svg {
@@ -366,7 +400,7 @@
       .cw-welcome-icon {
         width: 64px;
         height: 64px;
-        background: var(--cw-primary-color, #713600);
+        background: var(--cw-primary-color, #4563FF);
         border-radius: 16px;
         display: flex;
         align-items: center;
@@ -411,8 +445,8 @@
       }
 
       .cw-send-message-btn:hover {
-        border-color: var(--cw-primary-color, #713600);
-        color: var(--cw-primary-color, #713600);
+        border-color: var(--cw-primary-color, #4563FF);
+        color: var(--cw-primary-color, #4563FF);
       }
 
       .cw-send-message-btn .cw-icon-box {
@@ -442,7 +476,7 @@
       }
 
       .cw-send-message-btn:hover svg {
-        stroke: var(--cw-primary-color, #713600);
+        stroke: var(--cw-primary-color, #4563FF);
       }
 
       .cw-faqs-section {
@@ -507,7 +541,7 @@
         padding: 2px 8px;
         font-size: 12px;
         font-weight: 500;
-        color: #0891b2;
+        color: #4563FF;
         background: #cffafe;
         border-radius: 4px;
         width: fit-content;
@@ -547,7 +581,7 @@
       .cw-loading-spinner {
         width: 24px;
         height: 24px;
-        border: 2px solid var(--cw-primary-color, #713600);
+        border: 2px solid var(--cw-primary-color, #4563FF);
         border-top-color: transparent;
         border-radius: 50%;
         animation: cw-spin 1s linear infinite;
@@ -608,7 +642,7 @@
         display: inline-flex;
         align-items: center;
         gap: 8px;
-        background: var(--cw-primary-color, #713600);
+        background: var(--cw-primary-color, #4563FF);
         color: white;
         padding: 12px 24px;
         border: none;
@@ -696,7 +730,7 @@
 
       .cw-department-card:hover {
         background: #f3f4f6;
-        border-color: var(--cw-primary-color, #713600);
+        border-color: var(--cw-primary-color, #4563FF);
       }
 
       .cw-department-icon {
@@ -754,12 +788,12 @@
       .cw-form-input:focus,
       .cw-form-textarea:focus {
         outline: none;
-        border-color: var(--cw-primary-color, #713600);
+        border-color: var(--cw-primary-color, #4563FF);
       }
 
       .cw-submit-btn {
         width: 100%;
-        background: var(--cw-primary-color, #713600);
+        background: var(--cw-primary-color, #4563FF);
         color: white;
         padding: 12px;
         border: none;
@@ -811,7 +845,7 @@
         width: 32px;
         height: 32px;
         border-radius: 50%;
-        background: var(--cw-primary-color, #713600);
+        background: var(--cw-primary-color, #4563FF);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -835,7 +869,7 @@
       }
 
       .cw-message.user .cw-message-bubble {
-        background: var(--cw-primary-color, #713600);
+        background: var(--cw-primary-color, #4563FF);
         color: white;
         border-bottom-right-radius: 4px;
       }
@@ -897,13 +931,13 @@
 
       .cw-chat-input:focus {
         outline: none;
-        border-color: var(--cw-primary-color, #713600);
+        border-color: var(--cw-primary-color, #4563FF);
       }
 
       .cw-send-btn {
         width: 40px;
         height: 40px;
-        background: var(--cw-primary-color, #713600);
+        background: var(--cw-primary-color, #4563FF);
         border: none;
         border-radius: 8px;
         cursor: pointer;
@@ -1197,15 +1231,27 @@
       injectWidget();
       // }
     } catch (error) {
-      console.warn('Chat Widget: Could not load backend config, using defaults:', error.message);
-      // Still inject widget with defaults if config fails
-      // state.widgetConfig = {
-      //   position: 'bottom-right',
-      //   primary_color: '#713600',
-      //   title: 'Support',
-      // };
-      // console.log('Chat Widget: Using default configuration');
-      // injectWidget();
+      /**
+       * Degrade rather than disappear.
+       *
+       * This fallback existed but was commented out, so any hiccup reaching the
+       * API — a deploy, a blip, a CORS mistake — meant the widget rendered
+       * nothing at all on the customer's live site. It now mounts with defaults
+       * and picks up the real configuration on the next load.
+       */
+      console.warn('Chat Widget: could not load remote config, using defaults:', error.message);
+
+      state.widgetConfig = {
+        position: config.position || 'bottom-right',
+        primary_color: config.primaryColor || '#4563FF',
+        title: config.title || 'Support',
+        welcome_message: config.welcomeMessage || 'Hi! How can we help you today?',
+        placeholder_text: config.placeholder || 'Type your message...',
+        auto_open: false,
+        is_active: true,
+      };
+
+      injectWidget();
     }
   }
 
@@ -1470,7 +1516,7 @@ function renderMessagesList() {
   if (state.conversationsLoading) {
     elements.content.innerHTML = `
         <div style="display: flex; align-items: center; justify-content: center; height: 100%;">
-          <div style="width: 32px; height: 32px; border: 2px solid var(--cw-primary-color, #713600); border-top-color: transparent; border-radius: 50%; animation: cw-spin 1s linear infinite;"></div>
+          <div style="width: 32px; height: 32px; border: 2px solid var(--cw-primary-color, #4563FF); border-top-color: transparent; border-radius: 50%; animation: cw-spin 1s linear infinite;"></div>
         </div>
       `;
     return;
@@ -1541,7 +1587,7 @@ function renderMessagesList() {
           </div>
         </div>
         <div style="padding: 16px; border-top: 1px solid #e5e7eb;">
-          <button id="cw-start-new-btn" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--cw-primary-color, #713600); color: white; padding: 12px 16px; border: none; border-radius: 8px; font-weight: 500; cursor: pointer; transition: all 0.2s;">
+          <button id="cw-start-new-btn" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--cw-primary-color, #4563FF); color: white; padding: 12px 16px; border: none; border-radius: 8px; font-weight: 500; cursor: pointer; transition: all 0.2s;">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <line x1="12" y1="5" x2="12" y2="19"></line>
               <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -1907,7 +1953,7 @@ function renderArticlesTab() {
             </button>
             <div style="flex: 1;">
               <h3 style="font-weight: 600; color: #111827; margin: 0; font-size: 14px;">${escapeHtml(state.selectedArticle.title)}</h3>
-              ${state.selectedArticle.category_name ? `<p style="font-size: 12px; color: #0891b2; margin: 4px 0 0 0;">${escapeHtml(state.selectedArticle.category_name)}</p>` : ''}
+              ${state.selectedArticle.category_name ? `<p style="font-size: 12px; color: #4563FF; margin: 4px 0 0 0;">${escapeHtml(state.selectedArticle.category_name)}</p>` : ''}
             </div>
           </div>
           <div style="flex: 1; overflow-y: auto; padding: 24px;">
@@ -1976,7 +2022,7 @@ function renderArticlesTab() {
 // Render articles list
 function renderArticles() {
   if (state.articlesLoading) {
-    return '<div style="display: flex; align-items: center; justify-content: center; padding: 32px;"><div style="width: 24px; height: 24px; border: 2px solid var(--cw-primary-color, #713600); border-top-color: transparent; border-radius: 50%; animation: cw-spin 1s linear infinite;"></div></div>';
+    return '<div style="display: flex; align-items: center; justify-content: center; padding: 32px;"><div style="width: 24px; height: 24px; border: 2px solid var(--cw-primary-color, #4563FF); border-top-color: transparent; border-radius: 50%; animation: cw-spin 1s linear infinite;"></div></div>';
   }
   if (state.articles.length === 0) {
     return '<div style="text-align: center; padding: 32px;"><p style="color: #6b7280;">No articles available yet</p></div>';
@@ -1988,7 +2034,7 @@ function renderArticles() {
           <h4 style="font-weight: 500; color: #111827; font-size: 14px; margin: 0 0 8px 0;">${escapeHtml(article.title)}</h4>
           ${article.excerpt ? `<p style="font-size: 12px; color: #6b7280; margin: 0 0 8px 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${escapeHtml(stripHtml(article.excerpt))}</p>` : ''}
           <div style="display: flex; align-items: center; justify-content: space-between;">
-            ${article.category_name ? `<span style="font-size: 12px; color: #0891b2;">${escapeHtml(article.category_name)}</span>` : '<span></span>'}
+            ${article.category_name ? `<span style="font-size: 12px; color: #4563FF;">${escapeHtml(article.category_name)}</span>` : '<span></span>'}
             <span style="font-size: 12px; color: #6b7280;">${estimateReadTime(article.content)}</span>
           </div>
         </button>

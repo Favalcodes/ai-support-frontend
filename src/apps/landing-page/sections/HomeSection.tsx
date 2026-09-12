@@ -36,9 +36,7 @@ export const HeroSection: React.FC = () => {
           </h1>
 
           <p className="text-base sm:text-lg lg:text-xl text-secondary-200 leading-relaxed mb-8 sm:mb-10 max-w-2xl">
-            rlayAi replies instantly from your own articles and FAQs. The moment a
-            question needs a person, it hands the whole conversation to your team with
-            the context already in place.
+            Get replies instantly. Break the loop.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-8 sm:mb-9">
