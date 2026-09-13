@@ -2,6 +2,30 @@ import { create } from 'zustand';
 import type { User, Conversation, Message } from '@/types/chat.types';
 import { ChatWidgetState } from '../types/widget-states';
 
+/**
+ * Order messages by the time they were created.
+ *
+ * The transcript used to be whatever order events happened to arrive in: an
+ * optimistic message was appended to the end, and a history load replaced the
+ * array wholesale. Any late socket event or refetch could therefore render a
+ * new message above an older one.
+ *
+ * Ties keep their existing relative order, so a message and its reply stamped
+ * in the same second do not swap around on re-render.
+ */
+const byCreatedAt = (messages: Message[]): Message[] =>
+  messages
+    .map((message, index) => ({ message, index }))
+    .sort((a, b) => {
+      const left = new Date(a.message.created_at).getTime();
+      const right = new Date(b.message.created_at).getTime();
+      if (Number.isNaN(left) || Number.isNaN(right) || left === right) {
+        return a.index - b.index;
+      }
+      return left - right;
+    })
+    .map(({ message }) => message);
+
 interface ChatState {
   // User state
   user: User | null;
@@ -90,7 +114,7 @@ export const useChatStore = create<ChatState>((set) => ({
       }
 
       return {
-        messages: [...state.messages, message],
+        messages: byCreatedAt([...state.messages, message]),
         // Increment unread if widget is closed and message is not from user
         unreadCount:
           state.widgetState === ChatWidgetState.CLOSED && message.role !== 'USER'
@@ -99,11 +123,11 @@ export const useChatStore = create<ChatState>((set) => ({
       };
     }),
 
-  setMessages: (messages) => set({ messages }),
+  setMessages: (messages) => set({ messages: byCreatedAt(messages) }),
 
   updateMessages: (updater) =>
     set((state) => ({
-      messages: updater(state.messages),
+      messages: byCreatedAt(updater(state.messages)),
     })),
 
   clearMessages: () => set({ messages: [] }),

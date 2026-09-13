@@ -35,9 +35,18 @@ class ApiService {
   /**
    * Get conversation history
    */
-  async getConversationHistory(conversationId: string): Promise<Message[]> {
+  /**
+   * An anonymous visitor has no token, so the route authorises them by the user
+   * id the conversation belongs to (read from `user_id` on the query string).
+   * Omitting it made every widget history load fail with 403 "Not authorized
+   * for this conversation"; the transcript only ever appeared because the
+   * socket pushes it separately on join.
+   */
+  async getConversationHistory(conversationId: string, userId?: string): Promise<Message[]> {
     try {
-      const response = await this.api.get(`/conversation/${conversationId}/messages`);
+      const response = await this.api.get(`/conversation/${conversationId}/messages`, {
+        params: userId ? { user_id: userId } : undefined,
+      });
       return response.data.data || [];
     } catch (error) {
       console.error('Failed to load conversation history:', error);
