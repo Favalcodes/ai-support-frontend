@@ -69,7 +69,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ onClose, onMinimize }) =
   };
 
   return (
-    <div className="w-96 h-[600px] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-slide-up">
+    <div className="w-[calc(100vw-2rem)] sm:w-96 h-[calc(100dvh-7rem)] sm:h-[600px] max-h-[600px] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-slide-up">
       {/* Header */}
       <div className="bg-primary-500 p-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
