@@ -37,9 +37,50 @@ export const IntercomStyleWidget: React.FC<IntercomStyleWidgetProps> = ({
     conversation,
     user: chatUser,
     startConversation,
+    resumeStoredConversation,
   } = useChat(companyId);
 
+  // Null until the resume attempt settles, so the pre-chat form is not shown to
+  // a returning visitor for a frame before their conversation loads.
+  const [isResuming, setIsResuming] = useState(true);
+
   const { setConversation, setMessages } = useChatStore();
+
+  /**
+   * Pick the visitor's conversation back up on mount.
+   *
+   * Nothing about the visitor used to survive a page load, so every reload sent
+   * them through the pre-chat form again and, unless they retyped the same
+   * email, into a brand new conversation.
+   */
+  useEffect(() => {
+    let cancelled = false;
+
+    // An externally supplied user is authoritative; no stored record needed.
+    if (externalUser) {
+      setIsResuming(false);
+      return;
+    }
+
+    resumeStoredConversation()
+      .then((resumed) => {
+        if (cancelled) return;
+        if (resumed) {
+          setActiveTab('messages');
+          setMessagesView('chat');
+        }
+      })
+      .finally(() => {
+        if (!cancelled) setIsResuming(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+    // Runs once for the life of the widget: resuming twice would be pointless
+    // and would race the first render.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Auto-sync with external user if provided
   useEffect(() => {
@@ -112,7 +153,10 @@ export const IntercomStyleWidget: React.FC<IntercomStyleWidgetProps> = ({
 
     // Load conversation history
     try {
-      const history = await apiService.getConversationHistory(conversationId);
+      const history = await apiService.getConversationHistory(
+        conversationId,
+        chatUser?.id || externalUser?.id
+      );
       setMessages(history);
     } catch (error) {
       console.error('Failed to load conversation history:', error);
@@ -146,7 +190,7 @@ export const IntercomStyleWidget: React.FC<IntercomStyleWidgetProps> = ({
   };
 
   return (
-    <div className="w-[400px] h-[650px] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-slide-up">
+    <div className="w-[calc(100vw-2rem)] sm:w-[400px] h-[calc(100dvh-7rem)] sm:h-[650px] max-h-[650px] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-slide-up">
       {/* Header */}
       <ChatHeader
         companyName={companyName}
@@ -193,7 +237,13 @@ export const IntercomStyleWidget: React.FC<IntercomStyleWidgetProps> = ({
               />
             )}
 
-            {messagesView === 'form' && (
+            {messagesView === 'form' && isResuming && (
+              <div className="flex flex-1 items-center justify-center p-8 text-sm text-gray-500">
+                Loading your conversation...
+              </div>
+            )}
+
+            {messagesView === 'form' && !isResuming && (
               <PreChatFormView
                 onSubmit={handleFormSubmit}
                 companyId={companyId}

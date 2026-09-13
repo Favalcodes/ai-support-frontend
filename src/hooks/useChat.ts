@@ -2,6 +2,11 @@ import { useEffect, useRef, useCallback } from 'react';
 import { useChatStore } from '@/stores/chatStore';
 import { apiService } from '@/services/api.service';
 import { socketService } from '@/services/socket';
+import {
+  clearVisitorSession,
+  loadVisitorSession,
+  saveVisitorSession,
+} from '@/utils/visitorSession';
 import type { StartConversationRequest } from '@/types/chat.types';
 
 export const useChat = (companyId: string) => {
@@ -167,9 +172,25 @@ export const useChat = (companyId: string) => {
         setUser(response.user);
         setConversation(response.conversation);
 
+        /**
+         * Remember the visitor so a reload resumes instead of starting over.
+         * The server matches on email and reuses a conversation that is still
+         * active, so storing the address is what makes the resume possible.
+         */
+        saveVisitorSession(companyId, {
+          userId: response.user.id,
+          conversationId: response.conversation.id,
+          email: response.user.email,
+          firstName: response.user.first_name,
+          lastName: response.user.last_name,
+        });
+
         // If resuming conversation, load history
         if (!response.isNewConversation) {
-          const history = await apiService.getConversationHistory(response.conversation.id);
+          const history = await apiService.getConversationHistory(
+            response.conversation.id,
+            response.user.id
+          );
           setMessages(history);
         } else {
           // Add welcome message for new conversations
@@ -196,6 +217,31 @@ export const useChat = (companyId: string) => {
   );
 
   /**
+   * Resume the conversation this visitor was already in, if we remember them.
+   *
+   * Returns false when there is nothing stored, or when the stored visitor no
+   * longer resolves, so the caller can fall back to the pre-chat form.
+   */
+  const resumeStoredConversation = useCallback(async () => {
+    const stored = loadVisitorSession(companyId);
+    if (!stored) return false;
+
+    try {
+      await startConversation({
+        first_name: stored.firstName,
+        last_name: stored.lastName,
+        email: stored.email,
+      } as Omit<StartConversationRequest, 'company_id'>);
+      return true;
+    } catch (error) {
+      // Stale record: the company or visitor is gone. Forget it and start clean.
+      console.error('Failed to resume stored conversation:', error);
+      clearVisitorSession(companyId);
+      return false;
+    }
+  }, [companyId, startConversation]);
+
+  /**
    * Send a message
    */
   const sendMessage = useCallback(
@@ -213,8 +259,9 @@ export const useChat = (companyId: string) => {
         socketService.stopTyping(conversation.id);
 
         // Add user message optimistically
+        const optimisticId = `temp-${Date.now()}`;
         const userMessage = {
-          id: `temp-${Date.now()}`,
+          id: optimisticId,
           conversation_id: conversation.id,
           content: content.trim(),
           role: 'USER' as const,
@@ -244,11 +291,20 @@ export const useChat = (companyId: string) => {
              * dropped: the visitor saw their own message appear and never got an
              * answer, which looked exactly like the AI ignoring them.
              */
-            const { aiMessage } = await apiService.sendMessage(
-              conversation.id,
-              content.trim(),
-              user.id
-            );
+            const { userMessage: savedUserMessage, aiMessage } =
+              await apiService.sendMessage(conversation.id, content.trim(), user.id);
+
+            /**
+             * Swap the optimistic bubble for the stored row. Without this the
+             * temp message survived with its own client-side timestamp, and the
+             * next history load brought the real row back alongside it, so the
+             * visitor saw their question twice at two different times.
+             */
+            if (savedUserMessage) {
+              updateMessages((prevMessages) =>
+                prevMessages.map((m) => (m.id === optimisticId ? savedUserMessage : m))
+              );
+            }
 
             if (aiMessage) addMessage(aiMessage);
           } finally {
@@ -262,7 +318,7 @@ export const useChat = (companyId: string) => {
         setIsSendingMessage(false);
       }
     },
-    [conversation?.id, user?.id, addMessage, setIsAiTyping, setIsSendingMessage]
+    [conversation?.id, user?.id, addMessage, updateMessages, setIsAiTyping, setIsSendingMessage]
   );
 
   /**
@@ -299,6 +355,7 @@ export const useChat = (companyId: string) => {
 
     // Actions
     startConversation,
+    resumeStoredConversation,
     sendMessage,
     handleTyping,
   };
